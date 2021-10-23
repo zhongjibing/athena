@@ -1,0 +1,20 @@
+server:
+  port: 8092
+  servlet:
+    context-path: /${spring.application.name}
+spring:
+  application:
+    name: athena
+security:
+  oauth2:
+    client:
+      client-id: ${spring.application.name}
+      client-secret: test123456
+      access-token-uri: https://icezhg.com/zeus/oauth/token
+      user-authorization-uri: https://icezhg.com/zeus/oauth/authorize
+    resource:
+      jwt:
+        key-uri: https://icezhg.com/zeus/oauth/token_key
+logging:
+  level:
+    root: info
