@@ -1,5 +1,7 @@
 package com.icezhg.athena.filter;
 
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -12,7 +14,8 @@ import java.io.IOException;
 /**
  * Created by zhongjibing on 2021/10/16
  */
-@Component("webCorsFilter")
+//@Component("webCorsFilter")
+//@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter extends OncePerRequestFilter {
 
     @Override
