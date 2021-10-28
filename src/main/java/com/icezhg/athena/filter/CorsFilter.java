@@ -14,8 +14,8 @@ import java.io.IOException;
 /**
  * Created by zhongjibing on 2021/10/16
  */
-//@Component("webCorsFilter")
-//@Order(Ordered.HIGHEST_PRECEDENCE)
+@Component("webCorsFilter")
+@Order(Ordered.HIGHEST_PRECEDENCE)
 public class CorsFilter extends OncePerRequestFilter {
 
     @Override
