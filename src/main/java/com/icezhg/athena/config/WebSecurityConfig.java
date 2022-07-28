@@ -1,53 +1,53 @@
 package com.icezhg.athena.config;
 
-import com.icezhg.athena.security.JwtTokenProvider;
-import com.icezhg.athena.security.filter.JwtAuthenticationTokenFilter;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-import org.springframework.web.filter.CorsFilter;
+import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
+import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.registration.ClientRegistration;
+import org.springframework.security.oauth2.client.registration.InMemoryReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
+import org.springframework.security.oauth2.core.AuthorizationGrantType;
+import org.springframework.security.oauth2.core.ClientAuthenticationMethod;
+import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
+import org.springframework.security.web.server.SecurityWebFilterChain;
+import org.springframework.security.web.server.util.matcher.PathPatternParserServerWebExchangeMatcher;
+
 
 /**
  * Created by zhongjibing on 2021/10/15
  */
-@Configuration
-@EnableOAuth2Sso
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+//@Configuration(proxyBeanMethods = false)
+@EnableWebFluxSecurity
+public class WebSecurityConfig {
+
+    @Bean
+    public SecurityWebFilterChain springSecurityFilterChain(ServerHttpSecurity http) {
+        http.authorizeExchange(exchange -> exchange.anyExchange().authenticated());
+        http.oauth2Login();
+        return http.build();
+    }
 
 //    @Bean
-//    public CorsFilter corsFilter() {
-//        CorsConfiguration config = new CorsConfiguration();
-//        config.setAllowCredentials(true);
-//        config.addAllowedOrigin("*");
-//        config.addAllowedHeader("*");
-//        config.setMaxAge(18000L);
-//        config.addAllowedMethod("*");
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", config);
-//        return new CorsFilter(source);
+//    public ReactiveClientRegistrationRepository clientRegistrationRepository() {
+//        return new InMemoryReactiveClientRegistrationRepository(this.googleClientRegistration());
 //    }
 
-//    @Autowired
-//    private JwtTokenProvider jwtTokenProvider;
-
-    @Override
-    public void configure(HttpSecurity http) throws Exception {
-        http
-                .csrf().disable().cors().and()
-                .authorizeRequests()
-                .antMatchers(HttpMethod.OPTIONS).permitAll()
-                .anyRequest().authenticated().and()
-//                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-//                .and()
-//                .addFilter(new JwtAuthenticationTokenFilter(jwtTokenProvider))
-//                .headers().cacheControl()
-        ;
+    private ClientRegistration googleClientRegistration() {
+        return ClientRegistration.withRegistrationId("athena")
+                .clientId("athena")
+                .clientSecret("test123456")
+                .clientAuthenticationMethod(ClientAuthenticationMethod.CLIENT_SECRET_BASIC)
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .redirectUri("https://icezhg.com/zeus/")
+                .scope("openid", "profile", "email", "address", "phone")
+                .authorizationUri("https://icezhg.com/zeus/oauth/authorize")
+                .tokenUri("https://icezhg.com/zeus/oauth/token")
+                .userInfoUri("https://icezhg.com/zeus/oauth/authorize")
+                .userNameAttributeName(IdTokenClaimNames.SUB)
+                .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+                .clientName("athena")
+                .build();
     }
 }

@@ -1,11 +1,8 @@
 package com.icezhg.athena.controller;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 /**
  * Created by zhongjibing on 2021/10/27
@@ -13,10 +10,11 @@ import javax.servlet.http.HttpServletResponse;
 @Controller
 public class PageController {
 
+    @Value("${front.home-page}")
+    private String frontHomePage;
 
     @GetMapping({"/"})
-    public String home(HttpServletRequest request, HttpServletResponse response) {
-        System.out.println(request.getSession().getId());
-        return "redirect:http://localhost:8080/";
+    public String home() {
+        return "redirect:" + this.frontHomePage;
     }
 }

@@ -6,14 +6,11 @@ import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.oauth2.common.exceptions.InvalidTokenException;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import java.util.Date;
@@ -47,7 +44,7 @@ public class JwtTokenProvider {
         try {
             decodedJWT = JWT.require(Algorithm.HMAC256(secretKey)).build().verify(token);
         } catch (JWTVerificationException e) {
-            throw new InvalidTokenException("invalid token, " + e.getMessage());
+            throw new IllegalArgumentException("invalid token, " + e.getMessage());
         }
 
         String auth = decodedJWT.getClaims().get(AUTHORITIES_KEY).asString();

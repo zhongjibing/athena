@@ -1,20 +1,49 @@
 server:
   port: 8092
-  servlet:
-    context-path: /${spring.application.name}
 spring:
   application:
     name: athena
-security:
-  oauth2:
-    client:
-      client-id: ${spring.application.name}
-      client-secret: test123456
-      access-token-uri: https://icezhg.com/zeus/oauth/token
-      user-authorization-uri: https://icezhg.com/zeus/oauth/authorize
-    resource:
-      jwt:
-        key-uri: https://icezhg.com/zeus/oauth/token_key
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/zeus?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
+    username: admin
+    password: admin
+  security:
+    oauth2:
+      client:
+        registration:
+          athena:
+            provider: zeus
+            client-id: athena
+            client-secret: test123456
+            scope: openid
+            redirect-uri: https://icezhg.com/zeus/
+            client-authentication-method: client_secret_basic
+            authorization-grant-type: authorization-code
+        provider:
+          zeus:
+            authorization-uri: https://icezhg.com/zeus/oauth/authorize
+            token-uri: https://icezhg.com/zeus/oauth/token
+            user-info-uri: https://icezhg.com/zeus/oauth/token
+            user-info-authentication-method: https://icezhg.com/zeus/oauth/token
+            jwk-set-uri: https://icezhg.com/zeus/oauth/token
+            user-name-attribute: name
 logging:
   level:
     root: info
+front:
+  home-page: http://localhost:8099/admin/
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health, info
+
+
+#  spring.security.oauth2.client.provider.my-oauth-provider.authorization-uri=https://my-auth-server/oauth/authorize
+#  spring.security.oauth2.client.provider.my-oauth-provider.token-uri=https://my-auth-server/oauth/token
+#  spring.security.oauth2.client.provider.my-oauth-provider.user-info-uri=https://my-auth-server/userinfo
+#  spring.security.oauth2.client.provider.my-oauth-provider.user-info-authentication-method=header
+#  spring.security.oauth2.client.provider.my-oauth-provider.jwk-set-uri=https://my-auth-server/token_keys
+#  spring.security.oauth2.client.provider.my-oauth-provider.user-name-attribute=name
+
