@@ -6,10 +6,10 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 @EnableWebFlux
 @SpringBootApplication
-public class AthenaApplication {
+public class Application {
 
     public static void main(String[] args) {
-        SpringApplication.run(AthenaApplication.class, args);
+        SpringApplication.run(Application.class, args);
     }
 
 }

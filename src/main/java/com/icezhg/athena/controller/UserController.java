@@ -1,9 +1,8 @@
 package com.icezhg.athena.controller;
 
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,29 +19,20 @@ import java.util.stream.Collectors;
 @RequestMapping("/user")
 public class UserController {
 
-    @GetMapping("/hello")
-    public Mono<Object> hello() {
-        return Mono.just("hello, world!");
-    }
-
-    @GetMapping("/curuser")
+    @GetMapping
     public Mono<Object> current() {
-        return Mono.just(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-    }
-
-    @GetMapping("/is-login")
-    public Mono<Object> isLogin() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        boolean isLogin = authentication != null && authentication.isAuthenticated() && (!AnonymousAuthenticationToken.class.isAssignableFrom(authentication.getClass()));
-        return Mono.just(isLogin);
+        return ReactiveSecurityContextHolder.getContext().map(context -> context.getAuthentication().getPrincipal());
     }
 
     @GetMapping("/info")
     public Mono<Object> userInfo() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, Object> userInfo = new HashMap<>();
-        userInfo.put("name", authentication.getName());
-        userInfo.put("roles", authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
-        return Mono.just(userInfo);
+        return ReactiveSecurityContextHolder.getContext().map(context -> {
+            Authentication authentication = context.getAuthentication();
+            Map<String, Object> userInfo = new HashMap<>();
+            userInfo.put("name", authentication.getName());
+            userInfo.put("roles",
+                    authentication.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(Collectors.toList()));
+            return userInfo;
+        });
     }
 }
