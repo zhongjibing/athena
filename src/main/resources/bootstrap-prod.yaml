@@ -1,0 +1,30 @@
+spring:
+  security:
+    oauth2:
+      client:
+        registration:
+          athena:
+            provider: zeus
+            client-id: athena
+            client-secret: xxxx
+            scope: openid
+            redirect-uri: http://localhost:8092/login/oauth2/code/athena
+            authorization-grant-type: authorization_code
+        provider:
+          zeus:
+            authorization-uri: https://icezhg.com/zeus/oauth2/authorize
+            token-uri: https://icezhg.com/zeus/oauth2/token
+            user-info-uri: https://icezhg.com/zeus/userinfo
+            #            user-info-authentication-method: https://icezhg.com/zeus/oauth/token
+            jwk-set-uri: https://icezhg.com/zeus/oauth2/jwks
+            user-name-attribute: name
+  cloud:
+    nacos:
+      config:
+        server-addr: https://icezhg.com
+        namespace: d2932a5d-c73c-4e8c-a009-019c311f8f3c
+        username: nacos_auth
+        password: xxxx
+logging:
+  file:
+    name: /opt/athena/logs/athena.log
