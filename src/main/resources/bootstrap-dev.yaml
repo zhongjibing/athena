@@ -12,13 +12,9 @@ spring:
             authorization-grant-type: authorization_code
         provider:
           zeus:
-#            authorization-uri: https://icezhg.com/zeus/oauth/authorize
             authorization-uri: http://127.0.0.1:8288/zeus/oauth2/authorize
-#            token-uri: https://icezhg.com/zeus/oauth/token
             token-uri: http://127.0.0.1:8288/zeus/oauth2/token
-#            user-info-uri: https://icezhg.com/zeus/userinfo
             user-info-uri: http://127.0.0.1:8288/zeus/userinfo
-            #            user-info-authentication-method: https://icezhg.com/zeus/oauth/token
             jwk-set-uri: http://127.0.0.1:8288/zeus/oauth2/jwks
             user-name-attribute: name
   cloud:
