@@ -1,8 +1,10 @@
 package com.icezhg.athena.config;
 
+import com.icezhg.athena.security.WebFilterManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.web.reactive.EnableWebFluxSecurity;
 import org.springframework.security.config.web.server.ServerHttpSecurity;
+import org.springframework.security.oauth2.client.registration.ReactiveClientRegistrationRepository;
 import org.springframework.security.web.server.SecurityWebFilterChain;
 import org.springframework.web.reactive.config.EnableWebFlux;
 
@@ -14,7 +16,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 public class SecurityConfig {
 
     @Bean
-    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
+    public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http, WebFilterManager webFilterManager) {
         http
                 .authorizeExchange(authorize ->
                         authorize
@@ -22,22 +24,16 @@ public class SecurityConfig {
                                 .pathMatchers("/favicon.ico").permitAll()
                                 .anyExchange().authenticated()
                 )
-                .oauth2Login();
+                .oauth2Login().and()
+                .logout();
+
+        webFilterManager.configure(http);
 
         return http.build();
     }
 
-//    @Override
-//    public void configure(HttpSecurity http) throws Exception {
-//        http
-//                .csrf().disable().cors().and()
-//                .authorizeRequests()
-//                .antMatchers(HttpMethod.OPTIONS).permitAll()
-//                .anyRequest().authenticated().and()
-////                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-////                .and()
-////                .addFilter(new JwtAuthenticationTokenFilter(jwtTokenProvider))
-////                .headers().cacheControl()
-//        ;
-//    }
+    @Bean
+    WebFilterManager filterManager(ReactiveClientRegistrationRepository clientRegistrationRepository) {
+        return new WebFilterManager(clientRegistrationRepository);
+    }
 }
