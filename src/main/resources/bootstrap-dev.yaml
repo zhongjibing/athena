@@ -8,7 +8,8 @@ spring:
             client-id: athena
             client-secret: xxxx
             scope: openid
-            redirect-uri: http://127.0.0.1:8092/login/oauth2/code/athena
+#            redirect-uri: http://127.0.0.1:8092/login/oauth2/code/athena
+            redirect-uri: http://127.0.0.1:8090/
             authorization-grant-type: authorization_code
         provider:
           zeus:
