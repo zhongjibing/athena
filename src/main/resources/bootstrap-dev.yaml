@@ -1,12 +1,20 @@
 spring:
+  datasource:
+    url: "{cipher}AQBJlSsnt2k+Pq4EIHegcl2eSQDkfAhmEFYmJTxMNNsPSbfQRays9DdOnnSF7vYb2J2A5ORLybb2IuRfs0jimDFv7UxEetsZBCgQSdSgG768KSq7k39jQ92Wek+p+63VUgeJawGEdjz8yk8Xn6iSDerz5cgpyfuTfmtkEl7m0YpCuNLybVDXQ6BJBrDifgGoG8Akgm6wT1ZysPK9J1A08l5qDwBzLDfcrlLAr09YrtvjMv78ddh8VSRNn4K2hM1HpPp1YiCYA1ORZpvsuqRvkwYeaXUc1M2ZB3YJi4PQ6TKi8W51Wk3Lg2UwRsFW+WbcKdVhzubavIi2ss2l3gLwAWWGtqLEgFjn14864wbCs1Lv1wif2brzIB/JRiyoKckoAFebjaF9XXKuXyoDUflgesZW21BUkRKd7Ac5d6MSGjFoD9bGl7A2xG+1OlOeBZm/BNzliownk9A5o3nXrl/Nx/YnCyJX3PZu16gDh6LeDJ8yDAk7JzAC3vBEtTASViX80+F6czpm+/4uYDKAY8126Nqz30MdrcivhvkjlkGrrf4XMNlMeFZvx3RhdYW+8bVeR/hNVY/Qgzm2C5Y8HIRyuRuNvmdCWRhdpAZv9nKjF6+zei77h3ZenK4gEitk6U6iKi4="
+    username: "{cipher}AQB8n/CPa6gq0xRhAdAAbJKL31PszZiS8f2vyD2Sy/3pWQpSWtojF2zifo8IIhTuK+gb3U2tk+PI2E+o9aTc8L7deFNFHdX/EzF0EIWEsAXsYfnqaTFgkYbBohMH/Y7eoWv4AoULEJEHc42zgbl/omodhP/VTsSgpk29Lw3b/VcB1WaopwzPJbMEzqk9aBnYa9623klamr5AHCcCcVEShEHKlMzMxMw/3QIZVIEzj0f77tdFsB9drALD74cUzbL5lWMcxDlQLpoe8jxh02+N83sOz6SUNCMHZpId5lB8E69aixWmxYtNbLeXF0ROI+BY08ZTyo+5ahWsL3kpRah8YQd/OCGGdrEBcw4B9F2T5ndBQpOZn5E9JL7+xOPG2K1+hNY="
+    password: "{cipher}AQBFrPaY692l1PMOMfpMuhcX6PiG2lQx4NQwBRNFSSWZt2BewUMrXIACQDmVw3Ry6tT3OrBzFN3H7YNGWh43EXfypCNONLa1eG9dTSWqcKtADV37f17q46Dv+Vh8sjHTERviNzkvhO7bbnjnibWWvIIC8rxvrBau803GanOc1lBqy/cT4pdGGkk1Rm2ZxFF5AyaEbN1C0sN5fz5w99lbd8kOrvBurCSauV06Vn9tONZaSqfDgJiumiHxg3T4AhL9gQ2KuCfOiqMahBvqQ45ximw1E//pbURGg26TDVKxMk11rZFPM0POO0lj82BQqdMIag1WFAP0VLKSmbZQpKFRpPrfwDGEVSwe6KbWbI+8mkugqgECRHHX5zDhrkUhyy7ADHM="
+  redis:
+    host: "{cipher}AQBE83PlHjiAQEoT4u6koxj2Pb1WI64wfb7sJhYrjZl82kiRLflf6Z3sTayEefkCYtbldeG0g9UtzieRdhsNjYn7TTIrzBf2wRuxi6Uy3eZOjvf6zk4/J4YK//4EPPyvsb83Ow+yyQVD10OQskxMj3ZFOstlewQXVGhXAxnrS9iRagtm/kP8ks5qIBmfwh4B4jDdKeEAZ9RxmPp9DivERyuxw+WHlP3CpjZ8m3n3bSlZsnsnhP1iYimLRCUhTrZU27qEqeFdG52TJ21mjlbI/ySP4hIZGrsY+gmuMz7CQIOVWtx/mawu7z6TYHv2mrO0u10+mKjov4LuxcUrKeu639p5HcsdFTksIPjqpKlBJr3HxrICLnaTMyR1BEOS1iHmyRQ="
+    password: "{cipher}AQAJqVzwe6mRDd44q2Qcf9Tw0RdlYUot2u+unqes/AQ1deVJQjMbWdQ+d0p2/TpWKk6KF16a/zUYnbdv7gLRJdHeaFsrlnsVZDZnggXTI+Hr0kBgI7V9RWocwDaj5rBM4T/4eK55H3FqV9CNIOXNEwOQYFy4s42vm6Um8NPNl3uMviZFIpRRFh7yN5CEg+7itH6ATADQ6MRc8Nuj1oZgDFEzhctUlN+zbde6WBlDKcjDW2WWJBPD38D2kuEPNVE0DqtEDxfzgx9BU4XvlWDS/YLlU3jCAT1HDfqJnTqum+c6/WVInj8lUXceQgTRtvZIZ6XDHQ+3qGwu3owiQW0Dxa+4Orjo+HnLUYQW4bTsT5YLSsBo2Bm9QLnBJvDFCVRjnvjh1if3zsmZDAZuiyomuIxHFB+qZTOOA/p5N2aqFC6Uyg=="
+    database: 0
   security:
     oauth2:
       client:
         registration:
           athena:
             provider: zeus
-            client-id: athena
-            client-secret: xxxx
+            client-id: "{cipher}AQAnsEwUlgm7rC5dTdkEBJc1+9HWr85rqb1xcg9VUvykI+LIP+43EvQm6dc5WR7kl0bsvF+pUt8OKNcJEwotRLDygXPt9vak+9pYXl06922y71CAA/oRZJIF/YA6m3IhjRDp6trG5K8Ypmb4CUJy22gJj26052yf3fiyxtsSTXEhP+zzP8z76a4hPjGbr41LBxH+LHviqtOJR8LTQ9KakAFJkhZy8gRPcl6R33C0+EbkA7TS2FFnPAM0tp+NLwdPFNYc9uJxF92wijbbBh8gE9BuoNNBexO9EWCTkbCCmNhUqO7qcy4tvZzgeniFbdkemjJu6FKOWXt6bpCVcB7KsE+yPvjc44uF5ToomvUb2fhnDGZ0K2ehNrG+UxbHgie9NGE="
+            client-secret: "{cipher}AQCZhXRfxWNC4YvJmDGHPdlzF1+PfjN4sRKjzNig6FDbP1GcEnCvovO45SSFOOHYoH+IrhXvpaRXUhduhBCs+muuxXdmb0a2csg/h3GkvlGFZ2tC1H0CxIKXk5+1GqQUZpYleaWjOwPe9h9gbuGNIgOMA1T6xmq/bg8ldH/8dTilvYIm3UihqjmfauOdfPIc6qDb7IKNLUW/sMOwexbhyXkQKiLjgV3VLlf1m9bUlLA9v8eg3YpKvzHMkVRGNgC6jkBQgBo94/9l4Ox8ppBcp0+AqhZ/hAHub3Nv5CAr0I30OvyzDHlsoO5uhFOvh7z8epIhzwXEHNjd4i3rnz6KXcKKGw9AhMLVfnQ27cw6zSim6WPd7s48z9amdTbV62idfYU="
             scope: openid
             redirect-uri: http://127.0.0.1:8092/login/oauth2/code/athena
 #            redirect-uri: http://127.0.0.1:8090/
@@ -18,10 +26,10 @@ spring:
             user-info-uri: http://127.0.0.1:8288/zeus/userinfo
             jwk-set-uri: http://127.0.0.1:8288/zeus/oauth2/jwks
             user-name-attribute: name
-  cloud:
-    nacos:
-      config:
-        server-addr: https://icezhg.com
-        namespace: d2932a5d-c73c-4e8c-a009-019c311f8f3c
-        username: nacos_auth
-        password: xxxx
+logging:
+  level:
+    root: debug
+    com:
+      icezhg:
+        athena:
+          dao: debug

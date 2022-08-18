@@ -1,24 +1,19 @@
 package com.icezhg.athena.controller;
 
-import io.netty.buffer.UnpooledByteBufAllocator;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.core.io.buffer.DataBuffer;
-import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.server.reactive.ServerHttpRequest;
-import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import reactor.core.publisher.Mono;
 
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URI;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -29,28 +24,25 @@ public class AppController {
     private static final Logger log = LoggerFactory.getLogger(AppController.class);
 
     @GetMapping("/")
-    public Mono<Void> index(ServerHttpRequest request, ServerHttpResponse response) {
-        return Mono.fromRunnable(()->{
-            response.setStatusCode(HttpStatus.FOUND);
-            response.getHeaders().setLocation(URI.create("http://localhost:8090/login"));
-        });
+    public String index() {
+        return "redirect:http://127.0.0.1:8090/login";
     }
 
     @GetMapping("/favicon.ico")
-    public Mono<Void> favicon(ServerHttpResponse response) {
-        return response.writeWith(Mono.create(sink -> {
-            byte[] bytes = getGzipFileBytes("static/favicon.png");
-            if (bytes.length > 0) {
-                response.getHeaders().setContentType(MediaType.IMAGE_PNG);
-                response.getHeaders().set(HttpHeaders.CONTENT_ENCODING, "gzip");
-                NettyDataBufferFactory factory = new NettyDataBufferFactory(new UnpooledByteBufAllocator(false));
-                DataBuffer dataBuffer = factory.wrap(bytes);
-                sink.success(dataBuffer);
-            } else {
-                response.setStatusCode(HttpStatus.NOT_FOUND);
-                sink.success();
+    public void favicon(HttpServletResponse response) {
+        byte[] bytes = getGzipFileBytes("static/favicon.png");
+        if (bytes.length > 0) {
+            response.setContentType(MediaType.IMAGE_PNG_VALUE);
+            response.setHeader(HttpHeaders.CONTENT_ENCODING, "gzip");
+            try (ServletOutputStream out = response.getOutputStream()) {
+                out.write(bytes);
+                out.flush();
+            } catch (IOException e) {
+                log.error("send favicon data error: {}", e.getMessage());
             }
-        }));
+        } else {
+            response.setStatus(HttpStatus.NOT_FOUND.value());
+        }
     }
 
     private byte[] getGzipFileBytes(String path) {

@@ -1,5 +1,6 @@
 package com.icezhg.athena.util;
 
+
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -7,14 +8,15 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.json.JsonMapper;
+import org.springframework.security.jackson2.CoreJackson2Module;
 
 import java.io.InputStream;
+import java.io.Serial;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 
 /**
- * Created by zhongjibing on 2020/04/27
+ * Created by zhongjibing on 2019/07/25
  */
 public final class JsonUtil {
 
@@ -89,19 +91,20 @@ public final class JsonUtil {
     private static class ObjectMapperFactory {
 
         private static ObjectMapper getObjectMapper() {
-            ObjectMapper objectMapper = new ObjectMapper();
-            objectMapper.disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            return JsonMapper.builder()
+                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
                     .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
                     .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                    .configure(JsonParser.Feature.ALLOW_SINGLE_QUOTES, true)
-                    .configure(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES, true)
-                    .registerModule(new SimpleModule());
-            objectMapper.setDateFormat(new SimpleDateFormat("yyyy-MM-dd HH:mm:ss"));
-            return objectMapper;
+                    .enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES)
+                    .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
+                    .enable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
+                    .addModules(new CoreJackson2Module())
+                    .build();
         }
     }
 
-    public static class JsonParseException extends RuntimeException {
+    private static class JsonParseException extends RuntimeException {
+        @Serial
         private static final long serialVersionUID = -5271479650559751840L;
 
         JsonParseException(Throwable cause) {

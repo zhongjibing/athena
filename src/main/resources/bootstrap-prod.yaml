@@ -12,19 +12,11 @@ spring:
             authorization-grant-type: authorization_code
         provider:
           zeus:
-            authorization-uri: https://icezhg.com/zeus/oauth2/authorize
-            token-uri: https://icezhg.com/zeus/oauth2/token
-            user-info-uri: https://icezhg.com/zeus/userinfo
-            #            user-info-authentication-method: https://icezhg.com/zeus/oauth/token
-            jwk-set-uri: https://icezhg.com/zeus/oauth2/jwks
-            user-name-attribute: name
-  cloud:
-    nacos:
-      config:
-        server-addr: https://icezhg.com
-        namespace: d2932a5d-c73c-4e8c-a009-019c311f8f3c
-        username: nacos_auth
-        password: xxxx
+            authorization-uri: "{cipher}AQCF2rkYI5oRwM/7OgZ1g/WooFjV5qkQU3BuSL5O1F3lyHw5MW2bDhkNsXTipz9NwGvd8A3a6PSAkQ2dg9ycIfwe5QbuXTr+MneG1z4WUAb2gf/4n7uzCifXGi2GWYWJixnajN+esb5OPzzJhMPcvZdn9pLdCkTGuS5m7CBt+fLWHpAbLiRMVowo+/9ZjOabVoG5W87usQ6ywgZf9oVoq3/sxLCNoBVJG7r9AdKP9YjikboJdgMCWyICKFsXEXH/8YMcOyPW8wyBgCuQbeM3Zum9nvILjWwd6kW92zgxE5saXiBwQPIqbK+Vz+/jidbSozevaOhcT508MxeGvlZGXyNoMB1ZpEzFimD9mXuN6ieSxo/0iAoCwBsICxmkW9LJAt6M/0E4/mNc4jcJuvx/ufKHrvmCoxWiVYjdF8EJ010/ow=="
+            token-uri: "{cipher}AQAg+uMXan9JgNnj29x63dNr1GLO5vvd7qzXwfu+pEcBK0jCDS6sZl5xJwEfwSHz5j13RpRFilSYhZoqwe7W8OfZOj45DSZsoqRBtjaGQRVBGIl+YiAKx0AEr+rEIT+O0na1M3RYHxP4XzqRhzaM6l1xYJ56HknARePeSw7sb/hk9yyvK8QKzq7mIsJwg1OX+oLwhGqA8yjgVMKW2X54Z8fzyM80iJYswHa6TCuEa5ZgiFHNnSjgwCAJiHe1X0JiZ2Esht5mkOK6iHGDDVnNEbkDWPHFiafSeekkafKWaC8/qzBj00abya6gultR8muCa+pHlM71+Oz7P+JM9cEX0npMxxaorNOg9s1vUfxVgWiW6L6LQTLDS0dK7d3s+uTW1tXDwGKl/UbnTUPBBf3N/rzqjrgmd0HT6UEciH997uzeLA=="
+            user-info-uri: "{cipher}AQAU+vsbq8VeEBWqqv4kG7ah+Ovu94zSx0GwuOvK0W62AcM9dZik70K0SIM+Nv89mMTisu9qFU7rpL9y4PjRtkTI3xY7oCjl9NH2z3B/kXb7wPoe1zJiSQ50G3RZSRqNGsYBWVqtFfxj8X+7ZRdXq8B1uolkQOsq7Dx3L6Lum/6HpdpJCkbeWANdxErKkQre+ZyiyUTRWRmBM8FwDRh8fNxbXEDwwIweo8ksCSez/hrdlLbDPk3txxIFmfLrVjUPCU4Ts4Iy4a9CkNZneVDbrhHjAobJOJG9RoA3JzUN3Ub7nZI7E7bLbCH6y+wgE5RqL5RcszTGbVBa+zL+tAxTPNzXWe4l8kG96+I7xZ0VUM36xsvB0d17ntkZXSX7AMZJnF/QiodgFJxo23noz4ohUIMIWmyjWP2ZRM/82uSLNofApA=="
+            jwk-set-uri: "{cipher}AQAkJ8MnGc0JaDuk6+we+SmXBaidB43Dd8KpyUUAHBzvO0zn+eDQ/ATYOoMIrmCG5KF7dKTIhLne0rRjvhnHvP6kd41tBV0JstNCdq2AWz10uhT6uApn+d6Nqg0beBw/+1nkCFJVfaSjO7SbIb5SvkjXAaNjqONkcEjqjWTt5xtEYlvb+jYXhC4nEXhaE+m3sugnLh6YB3or9zf5K6m1AGLWZ8pSPyO6ujxyIoLHTeO52cmGjGAM81LTXlnf14Ld/aLuRn8F2ec/wQYGPdSfutJ6ViHbdmOHEgJU+otQ+adpIUIJcjknUT/EV3VV1il2+ZfddtxOgBt9KvUKCiVeAM0rBKshp7eQAF29EmzFzQP2Z5qfF7XjfHV1Q7KKhjYfGVtzGLK+/o7Riu0FzeGPwq3UgnooT4aFwy36a1g++9iRvg=="
+            user-name-attribute: "{cipher}AQCJ2m8DhdtMYouVobACFmsT6nKcX1C1Z2ZYmCNg+mkP4TADoOtkOGRFxwpjeIfys1IoKrZZmNtE8e37ZvkfpIzE+KAb4/zGFnbIWHm/6zE0ti6LoBs5hDkm4ADjFc8bFs9ouXqBHjhan6u1WYY9/Bonk+X0CkoXDZ5l0mKY9RhFR3d55E3dq8PBnTGAMFjKoQWw6+MK0NMfZ3DyAVqrTDUsCJspoEG9ylhLe5CPuTgHnLiXdwh3OUrBm2LTuXoTYJykB0ntNh+hZaIdo7ip7ytA+PoM8606XFnF+4UCNp4IeM7BaCgbheHdcGa71E39oXEKNkx0kQk/KVdMKf5k2zXvJ7cU5iz3V3ZRpqKubvgMvhiTZ/x8+cpT/LeNWrHj3mU="
 logging:
   file:
     name: /opt/athena/logs/athena.log
