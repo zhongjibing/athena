@@ -9,6 +9,7 @@ import org.springframework.core.io.buffer.NettyDataBufferFactory;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,6 +18,7 @@ import reactor.core.publisher.Mono;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.URI;
 import java.util.zip.GZIPOutputStream;
 
 /**
@@ -25,6 +27,14 @@ import java.util.zip.GZIPOutputStream;
 @Controller
 public class AppController {
     private static final Logger log = LoggerFactory.getLogger(AppController.class);
+
+    @GetMapping("/")
+    public Mono<Void> index(ServerHttpRequest request, ServerHttpResponse response) {
+        return Mono.fromRunnable(()->{
+            response.setStatusCode(HttpStatus.FOUND);
+            response.getHeaders().setLocation(URI.create("http://localhost:8090/login"));
+        });
+    }
 
     @GetMapping("/favicon.ico")
     public Mono<Void> favicon(ServerHttpResponse response) {

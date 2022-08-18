@@ -25,9 +25,6 @@ public class ApiFilter implements WebFilter {
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
         LogFactory.getLog(this.getClass()).info("apifilter: " + exchange.getRequest().getURI().toString());
-        return chain.filter(exchange).onErrorResume(Exception.class, e -> {
-            exchange.getResponse().setStatusCode(HttpStatus.UNAUTHORIZED);
-            return Mono.empty();
-        });
+        return chain.filter(exchange);
     }
 }
