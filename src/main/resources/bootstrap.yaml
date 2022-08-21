@@ -1,10 +1,12 @@
 server:
   port: 8092
+  servlet:
+    context-path: /athena
 spring:
   application:
     name: athena
   profiles:
-    active: dev
+    active: @spring.profiles.active@
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
 management:
@@ -25,3 +27,18 @@ encrypt:
     password: xxxxxx
   rsa:
     salt: 68656c6c6f776f726c64
+logging:
+  level:
+    com:
+      alibaba:
+        cloud:
+          nacos:
+            client:
+              NacosPropertySourceBuilder: error
+            refresh:
+              NacosContextRefresher: error
+        nacos:
+          client:
+            config:
+              impl:
+                ClientWorker: error

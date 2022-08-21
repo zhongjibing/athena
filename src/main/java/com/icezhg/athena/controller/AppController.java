@@ -3,6 +3,7 @@ package com.icezhg.athena.controller;
 import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -23,9 +24,13 @@ import java.util.zip.GZIPOutputStream;
 public class AppController {
     private static final Logger log = LoggerFactory.getLogger(AppController.class);
 
+    @Value("${home-page:/}")
+    private String homePage;
+
     @GetMapping("/")
     public String index() {
-        return "redirect:http://127.0.0.1:8090/login";
+        log.info("redirect: {}", homePage);
+        return "redirect:" + homePage;
     }
 
     @GetMapping("/favicon.ico")

@@ -1,5 +1,6 @@
 package com.icezhg.athena.controller;
 
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,15 +10,15 @@ import org.springframework.web.bind.annotation.RestController;
  * Created by zhongjibing on 2021/10/15
  */
 @RestController
-@RequestMapping("/user")
 public class UserController {
 
-    @GetMapping
-    public Object current() {
-        return userInfo();
+    @RequestMapping("/authenticated")
+    public Object authenticated() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return authentication != null && authentication.getPrincipal() != null;
     }
 
-    @GetMapping("/info")
+    @GetMapping("/user/info")
     public Object userInfo() {
         return SecurityContextHolder.getContext().getAuthentication().getPrincipal();
     }
