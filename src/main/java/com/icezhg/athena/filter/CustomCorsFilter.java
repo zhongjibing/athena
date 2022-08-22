@@ -5,6 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.web.cors.CorsUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -36,6 +37,7 @@ public class CustomCorsFilter extends OncePerRequestFilter {
             response.setHeader("Access-Control-Allow-Headers", "DNT,User-Agent,X-Requested-With,If-Modified-Since,Cache-Control,Content-Type,Access-Control-Expose-Headers,Token,isToken");
 
             if (HttpMethod.OPTIONS.matches(request.getMethod())) {
+                response.setStatus(HttpStatus.NO_CONTENT.value());
                 return;
             }
         }
