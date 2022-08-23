@@ -26,21 +26,14 @@ public class SecurityUtil {
             return false;
         }
 
-        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
-        if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
-            CsrfToken csrfToken =
-                    (CsrfToken) servletRequestAttributes.getRequest().getAttribute(CsrfToken.class.getName());
-            HttpServletResponse response = servletRequestAttributes.getResponse();
-            if (csrfToken != null && response != null) {
-                response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
-            }
-        }
+        setCsrfTokenHeader();
         return true;
     }
 
     public static UserInfo currentUserInfo() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication.getPrincipal() instanceof DefaultOidcUser oidcUser) {
+            setCsrfTokenHeader();
             return UserInfo.builder()
                     .name(oidcUser.getName())
                     .nickname(oidcUser.getNickName())
@@ -58,5 +51,17 @@ public class SecurityUtil {
                 .name("anonymousUser")
                 .authorities(List.of("ROLE_ANONYMOUS"))
                 .build();
+    }
+
+    private static void setCsrfTokenHeader() {
+        RequestAttributes requestAttributes = RequestContextHolder.getRequestAttributes();
+        if (requestAttributes instanceof ServletRequestAttributes servletRequestAttributes) {
+            CsrfToken csrfToken =
+                    (CsrfToken) servletRequestAttributes.getRequest().getAttribute(CsrfToken.class.getName());
+            HttpServletResponse response = servletRequestAttributes.getResponse();
+            if (csrfToken != null && response != null) {
+                response.setHeader(csrfToken.getHeaderName(), csrfToken.getToken());
+            }
+        }
     }
 }
