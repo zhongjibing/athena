@@ -27,7 +27,7 @@ public class WebSecurityConfiguration {
                 .authorizeRequests(authorizeRequests ->
                         authorizeRequests
                                 .mvcMatchers("/actuator/*").permitAll()
-                                .mvcMatchers("/authenticated").permitAll()
+                                .mvcMatchers("/authenticated", "/user/info").permitAll()
                                 .mvcMatchers("/favicon.*", "/css/**", "/fonts/**", "/img/**").permitAll()
                                 .anyRequest().authenticated()
                 )
