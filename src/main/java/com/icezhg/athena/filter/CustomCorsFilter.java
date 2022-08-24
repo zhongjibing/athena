@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
@@ -30,12 +31,12 @@ public class CustomCorsFilter extends OncePerRequestFilter {
         if (CorsUtils.isCorsRequest(request)) {
             String origin = request.getHeader("Origin");
             log.info("CORS request origin: [{}]{}", request.getMethod(), origin);
-            response.setHeader("Access-Control-Allow-Origin", origin);
-            response.setHeader("Access-Control-Allow-Methods", "POST, GET, PUT, DELETE, OPTIONS");
-            response.setHeader("Access-Control-Allow-Credentials", "true");
-            response.setHeader("Access-Control-Max-Age", "3600");
-            response.setHeader("Access-Control-Allow-Headers", "User-Agent,X-Requested-With,Content-Type,X-CSRF-TOKEN");
-            response.setHeader("Access-Control-Expose-Headers", "X-CSRF-TOKEN");
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_ORIGIN, origin);
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_METHODS, "POST, GET, PUT, DELETE, OPTIONS");
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_CREDENTIALS, "true");
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_MAX_AGE, "3600");
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_ALLOW_HEADERS, "User-Agent,X-Requested-With,Content-Type,X-CSRF-TOKEN");
+            response.setHeader(HttpHeaders.ACCESS_CONTROL_EXPOSE_HEADERS, "X-CSRF-TOKEN");
 
             if (HttpMethod.OPTIONS.matches(request.getMethod())) {
                 response.setStatus(HttpStatus.NO_CONTENT.value());

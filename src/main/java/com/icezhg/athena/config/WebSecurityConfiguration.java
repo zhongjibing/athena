@@ -10,6 +10,8 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.AccessDeniedHandlerImpl;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
+import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
+import org.springframework.security.web.util.matcher.AnyRequestMatcher;
 import org.springframework.security.web.util.matcher.MediaTypeRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
@@ -20,6 +22,9 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration {
+
+    private static final String LOGIN_URL = "/oauth2/authorization/athena";
+
     @Bean
     SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
         http
@@ -32,11 +37,15 @@ public class WebSecurityConfiguration {
                                 .anyRequest().authenticated()
                 )
                 .logout(logout ->
-                        logout.logoutUrl("/logout").deleteCookies("SESSION").invalidateHttpSession(true)
-                );
-        http.exceptionHandling(httpSecurity ->
+                        logout
+                                .logoutUrl("/logout")
+                                .defaultLogoutSuccessHandlerFor(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT), AnyRequestMatcher.INSTANCE)
+                                .deleteCookies("SESSION")
+                                .invalidateHttpSession(true)
+                )
+                .exceptionHandling(httpSecurity ->
                         httpSecurity
-                                .defaultAuthenticationEntryPointFor(new LoginUrlAuthenticationEntryPoint("/oauth2/authorization/athena"),
+                                .defaultAuthenticationEntryPointFor(new LoginUrlAuthenticationEntryPoint(LOGIN_URL),
                                         negatedJsonMediaTypeRequestMatcher())
                                 .defaultAuthenticationEntryPointFor(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)
                                         , jsonMediaTypeRequestMatcher())
