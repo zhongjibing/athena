@@ -30,14 +30,17 @@ public class RequestUrlPrintFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String query = request.getQueryString();
         String url = request.getRequestURL().toString() + (StringUtils.isBlank(query) ? "" : "?" + query);
-        logger.info("handle request: [{}] {}", request.getMethod(), url);
+        logger.info("handle[0]: {} - {}", request.getMethod(), url);
 
         watch.set(new StopWatch());
         watch.get().start();
 
-        chain.doFilter(request, response);
-
-        watch.get().stop();
-        logger.info("response status: {}, request time: {} ms.", response.getStatus(), watch.get().getTotalTimeMillis());
+        try {
+            chain.doFilter(request, response);
+        } finally {
+            watch.get().stop();
+            logger.info("handle[1]: {} - {}, status: {}, request time: {} ms.",
+                    request.getMethod(), url, response.getStatus(), watch.get().getTotalTimeMillis());
+        }
     }
 }
