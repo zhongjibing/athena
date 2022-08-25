@@ -5,6 +5,7 @@ import com.icezhg.athena.security.client.ClientLogoutProviderProperties;
 import com.icezhg.athena.security.client.ClientLogoutRegistration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationListener;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
@@ -53,13 +54,8 @@ public class ClientLogoutSuccessEventListener implements ApplicationListener<Log
 
     private void logout(OAuth2AuthenticationToken authentication, ClientLogoutRegistration registration) {
         MultiValueMap<String, String> headers = new LinkedMultiValueMap<>();
-        headers.put(ACCESS_TOKEN, List.of(((OidcUser) authentication.getPrincipal()).getIdToken().getTokenValue()));
-        headers.put("X-CSRF-TOKEN", List.of(((OidcUser) authentication.getPrincipal()).getIdToken().getClaimAsString("csrf")));
-
-        URI uri2 = UriComponentsBuilder.fromUriString("https://icezhg.com/zeus/oauth2/revoke").build().toUri();
-        RequestEntity<?> requestEntity2 = new RequestEntity<>(headers, HttpMethod.POST, uri2);
-        ResponseEntity<Object> response2 = restOperations.exchange(requestEntity2, Object.class);
-        System.out.println(response2.getStatusCode());
+        String bearer = "Bearer " + ((OidcUser) authentication.getPrincipal()).getIdToken().getTokenValue();
+        headers.put(HttpHeaders.AUTHORIZATION, List.of(bearer));
 
         URI uri = UriComponentsBuilder.fromUriString(registration.getUserLogoutUri()).build().toUri();
         RequestEntity<?> requestEntity = new RequestEntity<>(headers, HttpMethod.POST, uri);
