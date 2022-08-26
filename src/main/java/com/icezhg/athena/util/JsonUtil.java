@@ -1,15 +1,9 @@
 package com.icezhg.athena.util;
 
 
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import org.springframework.security.jackson2.CoreJackson2Module;
 
 import java.io.InputStream;
 import java.io.Serial;
@@ -85,21 +79,6 @@ public final class JsonUtil {
             return OBJECT_MAPPER.readValue(in, typeRef);
         } catch (Exception e) {
             throw new JsonParseException(e);
-        }
-    }
-
-    private static class ObjectMapperFactory {
-
-        private static ObjectMapper getObjectMapper() {
-            return JsonMapper.builder()
-                    .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
-                    .disable(SerializationFeature.FAIL_ON_EMPTY_BEANS)
-                    .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
-                    .enable(JsonParser.Feature.ALLOW_SINGLE_QUOTES)
-                    .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_PROPERTIES)
-                    .enable(SerializationFeature.WRITE_DATES_WITH_CONTEXT_TIME_ZONE)
-                    .addModules(new CoreJackson2Module())
-                    .build();
         }
     }
 
