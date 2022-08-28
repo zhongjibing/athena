@@ -7,7 +7,7 @@ spring:
             provider: zeus
             client-id: athena
             client-secret: "{cipher}AQCZhXRfxWNC4YvJmDGHPdlzF1+PfjN4sRKjzNig6FDbP1GcEnCvovO45SSFOOHYoH+IrhXvpaRXUhduhBCs+muuxXdmb0a2csg/h3GkvlGFZ2tC1H0CxIKXk5+1GqQUZpYleaWjOwPe9h9gbuGNIgOMA1T6xmq/bg8ldH/8dTilvYIm3UihqjmfauOdfPIc6qDb7IKNLUW/sMOwexbhyXkQKiLjgV3VLlf1m9bUlLA9v8eg3YpKvzHMkVRGNgC6jkBQgBo94/9l4Ox8ppBcp0+AqhZ/hAHub3Nv5CAr0I30OvyzDHlsoO5uhFOvh7z8epIhzwXEHNjd4i3rnz6KXcKKGw9AhMLVfnQ27cw6zSim6WPd7s48z9amdTbV62idfYU="
-            scope: openid
+            scope: openid,profile
             redirect-uri: http://icezhg.cn:${server.port}/athena/login/oauth2/code/athena
             authorization-grant-type: authorization_code
         provider:

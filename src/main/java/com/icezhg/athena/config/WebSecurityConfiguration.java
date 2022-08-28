@@ -1,5 +1,6 @@
 package com.icezhg.athena.config;
 
+import com.icezhg.athena.security.logout.Oauth2LogoutHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
@@ -40,6 +41,7 @@ public class WebSecurityConfiguration {
                         logout
                                 .logoutUrl("/logout")
                                 .defaultLogoutSuccessHandlerFor(new HttpStatusReturningLogoutSuccessHandler(HttpStatus.NO_CONTENT), AnyRequestMatcher.INSTANCE)
+                                .addLogoutHandler(new Oauth2LogoutHandler())
                                 .deleteCookies("SESSION")
                                 .invalidateHttpSession(true)
                 )
