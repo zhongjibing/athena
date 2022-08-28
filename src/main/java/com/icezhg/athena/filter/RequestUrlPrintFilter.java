@@ -32,7 +32,8 @@ public class RequestUrlPrintFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         String query = request.getQueryString();
         String url = request.getRequestURL().toString() + (StringUtils.isBlank(query) ? "" : "?" + query);
-        logger.info("handle[0]: [{}] {}\n{}", request.getMethod(), url, stringifyHeaders(request));
+        boolean debugEnabled = logger.isDebugEnabled();
+        logger.info("handle[0]: [{}] {}{}", request.getMethod(), url, debugEnabled ? stringifyHeaders(request) : "");
 
         watch.set(new StopWatch());
         watch.get().start();
@@ -42,14 +43,15 @@ public class RequestUrlPrintFilter extends OncePerRequestFilter {
         } finally {
             watch.get().stop();
 
-            logger.info("handle[1]: [{}] {}, response status: {}, duration: {} ms.\n{}",
-                    request.getMethod(), url, response.getStatus(), watch.get().getTotalTimeMillis(), stringifyHeaders(response));
+            logger.info("handle[1]: [{}] {}, response status: {}, duration: {} ms.{}",
+                    request.getMethod(), url, response.getStatus(), watch.get().getTotalTimeMillis(),
+                    debugEnabled ? stringifyHeaders(response) : "");
         }
     }
 
     private String stringifyHeaders(HttpServletRequest request) {
         Enumeration<String> headerNames = request.getHeaderNames();
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("\n");
         while (headerNames.hasMoreElements()) {
             String name = headerNames.nextElement();
             builder.append(name).append(": ").append(request.getHeader(name)).append("\n");
@@ -59,7 +61,7 @@ public class RequestUrlPrintFilter extends OncePerRequestFilter {
 
     private String stringifyHeaders(HttpServletResponse response) {
         Collection<String> headerNames = response.getHeaderNames();
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("\n");
         for (String name : headerNames) {
             builder.append(name).append(": ").append(response.getHeader(name)).append("\n");
         }
