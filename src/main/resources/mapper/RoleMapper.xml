@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.RoleDao">
+    <sql id="BaseColumns">
+        id, `name`, description, sort_index, data_scope, menu_check_strictly, dept_check_strictly, `status`,
+        create_by, update_by, remark, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.icezhg.athena.domain.Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_role (id, `name`, description,
+          sort_index, data_scope, menu_check_strictly,
+          dept_check_strictly, `status`, create_by,
+          update_by, remark, create_time,
+          update_time
+        ) VALUES ( #{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
+          #{sortIndex,jdbcType=INTEGER}, #{dataScope,jdbcType=INTEGER}, #{menuCheckStrictly,jdbcType=INTEGER},
+          #{deptCheckStrictly,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR},
+          #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
+          #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+
+    <sql id="findByUserIdStmt">
+        FROM t_role r, t_user_role ur
+        WHERE r.id = ur.role_id AND ur.user_id = #{userId}
+    </sql>
+
+    <sql id="findCondition">
+        <where>
+            <if test="name != null">
+                AND LOCATE(#{name,jdbcType=VARCHAR}, `name`) > 0
+            </if>
+            <if test="status != null">
+                AND `status` = #{status,jdbcType=CHAR}
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_role
+        <include refid="findCondition"/>
+    </select>
+
+    <select id="find" parameterType="map" resultType="com.icezhg.athena.domain.Role">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_role
+        <include refid="findCondition"/>
+        ORDER BY sort_index ASC
+        LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByUserId" parameterType="int" resultType="com.icezhg.athena.domain.Role">
+        SELECT r.id, r.name, r.description
+        <include refid="findByUserIdStmt"/>
+    </select>
+
+    <select id="findRoleNameByUserId" parameterType="int" resultType="string">
+        SELECT r.name
+        <include refid="findByUserIdStmt"/>
+    </select>
+
+    <select id="findRoleNameByResourceName" parameterType="string" resultType="string">
+        SELECT r.name
+        FROM t_role r, t_role_resource rr, t_resource res
+        WHERE r.id = rr.role_id  AND res.id = rr.resource_id  AND res.name = #{name}
+    </select>
+
+</mapper>
