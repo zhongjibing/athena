@@ -2,18 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.icezhg.athena.dao.RoleDao">
     <sql id="BaseColumns">
-        id, `name`, description, sort_index, data_scope, menu_check_strictly, dept_check_strictly, `status`,
+        id, `name`, description, order_num, data_scope, menu_check_strictly, dept_check_strictly, `status`,
         create_by, update_by, remark, create_time, update_time
     </sql>
 
     <insert id="insert" parameterType="com.icezhg.athena.domain.Role" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO sys_role (id, `name`, description,
-          sort_index, data_scope, menu_check_strictly,
+          order_num, data_scope, menu_check_strictly,
           dept_check_strictly, `status`, create_by,
           update_by, remark, create_time,
           update_time
         ) VALUES ( #{id,jdbcType=INTEGER}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR},
-          #{sortIndex,jdbcType=INTEGER}, #{dataScope,jdbcType=INTEGER}, #{menuCheckStrictly,jdbcType=INTEGER},
+          #{orderNum,jdbcType=INTEGER}, #{dataScope,jdbcType=INTEGER}, #{menuCheckStrictly,jdbcType=INTEGER},
           #{deptCheckStrictly,jdbcType=INTEGER}, #{status,jdbcType=CHAR}, #{createBy,jdbcType=VARCHAR},
           #{updateBy,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
           #{updateTime,jdbcType=TIMESTAMP}
@@ -46,7 +46,7 @@
         SELECT <include refid="BaseColumns"/>
         FROM sys_role
         <include refid="findCondition"/>
-        ORDER BY sort_index ASC
+        ORDER BY order_num ASC
         LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
     </select>
 
@@ -64,6 +64,12 @@
         SELECT r.name
         FROM t_role r, t_role_resource rr, t_resource res
         WHERE r.id = rr.role_id  AND res.id = rr.resource_id  AND res.name = #{name}
+    </select>
+
+    <select id="findCurrentRole" parameterType="int" resultType="com.icezhg.athena.domain.Role">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_role
+        WHERE id IN (SELECT role_id FROM sys_user_role WHERE user_id = #{userId,jdbcType=INTEGER})
     </select>
 
 </mapper>

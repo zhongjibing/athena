@@ -21,7 +21,7 @@ public class RoleController {
     }
 
     @GetMapping("/list")
-    public Object list(RoleQuery query) {
+    public PageResult list(RoleQuery query) {
         return new PageResult(roleService.count(query), roleService.find(query));
     }
 }

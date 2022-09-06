@@ -3,6 +3,7 @@ package com.icezhg.athena.service;
 import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.vo.RoleQuery;
+import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,5 +26,9 @@ public class RoleService {
 
     public List<Role> find(RoleQuery query) {
         return roleDao.find(query.toMap());
+    }
+
+    public List<Role> findCurrentRole() {
+        return roleDao.findCurrentRole(SecurityUtil.currentUserId());
     }
 }

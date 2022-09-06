@@ -30,4 +30,6 @@ public interface RoleDao {
     List<String> findRoleNameByUserId(Integer userId);
 
     List<String> findRoleNameByResourceName(String name);
+
+    List<Role> findCurrentRole(Integer userId);
 }
