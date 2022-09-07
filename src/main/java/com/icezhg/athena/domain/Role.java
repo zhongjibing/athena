@@ -1,14 +1,14 @@
 package com.icezhg.athena.domain;
 
 import lombok.Data;
-
-import java.util.Date;
+import lombok.EqualsAndHashCode;
 
 /**
  * Created by zhongjibing on 2020/03/18
  */
 @Data
-public class Role {
+@EqualsAndHashCode(callSuper = true)
+public class Role extends BaseEntity {
 
     private Integer id;
     private String name;
@@ -18,11 +18,6 @@ public class Role {
     private Integer menuCheckStrictly;
     private Integer deptCheckStrictly;
     private String status;
-    private String createBy;
-    private String updateBy;
-    private String remark;
-    private Date createTime;
-    private Date updateTime;
 
     public boolean isRoot() {
         return id != null && id == 0;

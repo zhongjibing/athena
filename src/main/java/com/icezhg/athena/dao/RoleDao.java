@@ -18,18 +18,15 @@ public interface RoleDao {
 
     int deleteById(Integer id);
 
-    Role findById(Integer id);
-
-    Role findByName(String name);
-
     int count(Map<String, Object> params);
+
     List<Role> find(Map<String, Object> params);
 
-    List<Role> findByUserId(Integer userId);
+//    List<Role> findByUserId(Integer userId);
 
-    List<String> findRoleNameByUserId(Integer userId);
+//    List<String> findRoleNameByUserId(Integer userId);
 
-    List<String> findRoleNameByResourceName(String name);
+//    List<String> findRoleNameByResourceName(String name);
 
     List<Role> findCurrentRole(Integer userId);
 }

@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.RoleDao">
+    <sql id="BaseColumns">
+        id, `name`, description, order_num, data_scope, menu_check_strictly, dept_check_strictly, `status`,
+        create_by, update_by, remark, create_time, update_time
+    </sql>
+
+    <insert id="insert" parameterType="com.icezhg.athena.domain.Role" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="name != null">name,</if>
+            <if test="description != null">description,</if>
+            <if test="orderNum != null">order_num,</if>
+            <if test="dataScope != null">data_scope,</if>
+            <if test="menuCheckStrictly != null">menu_check_strictly,</if>
+            <if test="deptCheckStrictly != null">dept_check_strictly,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="VALUES (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="name != null">#{name,jdbcType=VARCHAR},</if>
+            <if test="description != null">#{description,jdbcType=VARCHAR},</if>
+            <if test="orderNum != null">#{orderNum,jdbcType=INTEGER},</if>
+            <if test="dataScope != null">#{dataScope,jdbcType=TINYINT},</if>
+            <if test="menuCheckStrictly != null">#{menuCheckStrictly,jdbcType=TINYINT},</if>
+            <if test="deptCheckStrictly != null">#{deptCheckStrictly,jdbcType=TINYINT},</if>
+            <if test="status != null">#{status,jdbcType=CHAR},</if>
+            <if test="createBy != null">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateBy != null">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.icezhg.athena.domain.Role">
+        UPDATE sys_role
+        <set>
+            <if test="name != null">
+                `name` = #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="description != null">
+                description = #{description,jdbcType=VARCHAR},
+            </if>
+            <if test="orderNum != null">
+                order_num = #{orderNum,jdbcType=INTEGER},
+            </if>
+            <if test="dataScope != null">
+                data_scope =  #{dataScope,jdbcType=INTEGER},
+            </if>
+            <if test="menuCheckStrictly != null">
+                menu_check_strictly = #{menuCheckStrictly,jdbcType=INTEGER},
+            </if>
+            <if test="deptCheckStrictly != null">
+                dept_check_strictly = #{deptCheckStrictly,jdbcType=INTEGER},
+            </if>
+            <if test="status != null">
+                `status` = #{status,jdbcType=CHAR},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP}
+            </if>
+        </set>
+        WHERE id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM sys_role WHERE id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <sql id="findByUserIdStmt">
+        FROM t_role r, t_user_role ur
+        WHERE r.id = ur.role_id AND ur.user_id = #{userId}
+    </sql>
+
+    <sql id="findCondition">
+        <where>
+            <if test="name != null">
+                AND LOCATE(#{name,jdbcType=VARCHAR}, `name`) > 0
+            </if>
+            <if test="status != null">
+                AND `status` = #{status,jdbcType=CHAR}
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" parameterType="map" resultType="int">
+        SELECT COUNT(*)
+        FROM sys_role
+        <include refid="findCondition"/>
+    </select>
+
+    <select id="find" parameterType="map" resultType="com.icezhg.athena.domain.Role">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_role
+        <include refid="findCondition"/>
+        ORDER BY order_num ASC
+        LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByUserId" parameterType="int" resultType="com.icezhg.athena.domain.Role">
+        SELECT r.id, r.name, r.description
+        <include refid="findByUserIdStmt"/>
+    </select>
+
+    <select id="findRoleNameByUserId" parameterType="int" resultType="string">
+        SELECT r.name
+        <include refid="findByUserIdStmt"/>
+    </select>
+
+    <select id="findRoleNameByResourceName" parameterType="string" resultType="string">
+        SELECT r.name
+        FROM t_role r, t_role_resource rr, t_resource res
+        WHERE r.id = rr.role_id  AND res.id = rr.resource_id  AND res.name = #{name}
+    </select>
+
+    <select id="findCurrentRole" parameterType="int" resultType="com.icezhg.athena.domain.Role">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_role
+        WHERE id IN (SELECT role_id FROM sys_user_role WHERE user_id = #{userId,jdbcType=INTEGER})
+    </select>
+
+</mapper>

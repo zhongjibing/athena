@@ -26,8 +26,6 @@ import java.util.function.Supplier;
 
 /**
  * 服务器相关信息
- *
- * @author ruoyi
  */
 @Getter
 public class Server {

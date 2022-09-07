@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.DictDataDao">
+
+    <sql id="BaseColumns">
+        id,dict_sort,dict_label,
+        dict_value,dict_type,css_class,
+        list_class,is_default,status,
+        create_by,create_time,update_by,
+        update_time,remark
+    </sql>
+
+    <delete id="deleteById" parameterType="int">
+        DELETE FROM sys_dict_data WHERE  id = #{id,jdbcType=INTEGER}
+    </delete>
+
+    <insert id="insert" parameterType="com.icezhg.athena.domain.DictData" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_dict_data
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="dictSort != null">dict_sort,</if>
+            <if test="dictLabel != null">dict_label,</if>
+            <if test="dictValue != null">dict_value,</if>
+            <if test="dictType != null">dict_type,</if>
+            <if test="cssClass != null">css_class,</if>
+            <if test="listClass != null">list_class,</if>
+            <if test="isDefault != null">is_default,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=INTEGER},</if>
+            <if test="dictSort != null">#{dictSort,jdbcType=INTEGER},</if>
+            <if test="dictLabel != null">#{dictLabel,jdbcType=VARCHAR},</if>
+            <if test="dictValue != null">#{dictValue,jdbcType=VARCHAR},</if>
+            <if test="dictType != null">#{dictType,jdbcType=VARCHAR},</if>
+            <if test="cssClass != null">#{cssClass,jdbcType=VARCHAR},</if>
+            <if test="listClass != null">#{listClass,jdbcType=VARCHAR},</if>
+            <if test="isDefault != null">#{isDefault,jdbcType=CHAR},</if>
+            <if test="status != null">#{status,jdbcType=CHAR},</if>
+            <if test="createBy != null">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateBy != null">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.icezhg.athena.domain.DictData">
+        UPDATE sys_dict_data
+        <set>
+            <if test="dictSort != null">
+                dict_sort = #{dictSort,jdbcType=INTEGER},
+            </if>
+            <if test="dictLabel != null">
+                dict_label = #{dictLabel,jdbcType=VARCHAR},
+            </if>
+            <if test="dictValue != null">
+                dict_value = #{dictValue,jdbcType=VARCHAR},
+            </if>
+            <if test="dictType != null">
+                dict_type = #{dictType,jdbcType=VARCHAR},
+            </if>
+            <if test="cssClass != null">
+                css_class = #{cssClass,jdbcType=VARCHAR},
+            </if>
+            <if test="listClass != null">
+                list_class = #{listClass,jdbcType=VARCHAR},
+            </if>
+            <if test="isDefault != null">
+                is_default = #{isDefault,jdbcType=CHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=CHAR},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        WHERE   id = #{id,jdbcType=INTEGER}
+    </update>
+
+    <select id="findByType" parameterType="string" resultType="com.icezhg.athena.domain.DictData">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_dict_data
+        WHERE status = '0' AND dict_type = #{dictType}
+        ORDER BY dict_sort ASC
+    </select>
+</mapper>
