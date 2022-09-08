@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class RoleQuery extends PageQuery {
+    private Integer id;
     private String name;
     private String status;
 }

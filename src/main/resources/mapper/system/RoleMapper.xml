@@ -74,11 +74,14 @@
                 update_time = #{updateTime,jdbcType=TIMESTAMP}
             </if>
         </set>
-        WHERE id = #{id,jdbcType=INTEGER}
+        WHERE id = #{id,jdbcType=INTEGER} AND id > 0
     </update>
 
-    <delete id="deleteById" parameterType="int">
-        DELETE FROM sys_role WHERE id = #{id,jdbcType=INTEGER}
+    <delete id="deleteByIds" parameterType="list">
+        DELETE FROM sys_role WHERE id > 0 AND id IN
+        <foreach collection="list" item="item" open=" (" separator=", " close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
     </delete>
 
     <sql id="findByUserIdStmt">
@@ -88,6 +91,10 @@
 
     <sql id="findCondition">
         <where>
+            id > 0
+            <if test="id != null">
+                AND id = #{id,jdbcType=INTEGER}
+            </if>
             <if test="name != null">
                 AND LOCATE(#{name,jdbcType=VARCHAR}, `name`) > 0
             </if>

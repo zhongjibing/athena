@@ -11,6 +11,7 @@ import java.util.List;
  */
 @Data
 public class RoleInfo {
+    private Integer id;
     @NotBlank
     @Size(max = 16)
     private String name;

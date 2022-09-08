@@ -13,5 +13,7 @@ public interface RoleMenuDao {
 
     int batchInsert(List<RoleMenu> records);
 
-    int batchDelete(List<RoleMenu> records);
+    int deleteByRoleIds(List<Integer> roleIds);
+
+    List<Integer> findMenuIdsByRoleId(Integer roleId);
 }

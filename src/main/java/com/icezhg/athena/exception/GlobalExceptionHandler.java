@@ -55,8 +55,8 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(ErrorCodeException.class)
     public ResponseEntity<Object> handleErrorCodeException(Exception ex) throws Exception {
-        log.warn("handle error: {}", ex.getCause().getMessage());
-        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        log.warn("handle error: {}", ex.getMessage());
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(Exception.class)

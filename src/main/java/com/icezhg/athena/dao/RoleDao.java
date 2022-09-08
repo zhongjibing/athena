@@ -16,8 +16,6 @@ public interface RoleDao {
 
     int update(Role role);
 
-    int deleteById(Integer id);
-
     int count(Map<String, Object> params);
 
     List<Role> find(Map<String, Object> params);
@@ -29,4 +27,6 @@ public interface RoleDao {
 //    List<String> findRoleNameByResourceName(String name);
 
     List<Role> findCurrentRole(Integer userId);
+
+    int deleteByIds(List<Integer> roleIds);
 }

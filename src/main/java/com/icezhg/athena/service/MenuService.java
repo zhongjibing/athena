@@ -1,11 +1,13 @@
 package com.icezhg.athena.service;
 
 import com.icezhg.athena.dao.MenuDao;
+import com.icezhg.athena.dao.RoleDao;
+import com.icezhg.athena.dao.RoleMenuDao;
 import com.icezhg.athena.domain.Menu;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.vo.MenuTree;
+import com.icezhg.athena.vo.RoleMenuTree;
 import com.icezhg.authorization.core.SecurityUtil;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -22,19 +24,18 @@ public class MenuService {
 
     private final MenuDao menuDao;
 
-    private RoleService roleService;
+    private final RoleDao roleDao;
 
-    public MenuService(MenuDao menuDao) {
+    private final RoleMenuDao roleMenuDao;
+
+    public MenuService(MenuDao menuDao, RoleDao roleDao, RoleMenuDao roleMenuDao) {
         this.menuDao = menuDao;
-    }
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
+        this.roleDao = roleDao;
+        this.roleMenuDao = roleMenuDao;
     }
 
     public List<Menu> list() {
-        List<Role> roles = roleService.findCurrentRole();
+        List<Role> roles = roleDao.findCurrentRole(SecurityUtil.currentUserId());
         if (hasRootRole(roles)) {
             return menuDao.listAll();
         }
@@ -93,5 +94,9 @@ public class MenuService {
             }
         }
         return false;
+    }
+
+    public RoleMenuTree buildRoleMenuTreeSelect(Integer roleId) {
+        return new RoleMenuTree(roleMenuDao.findMenuIdsByRoleId(roleId), buildMenuTreeSelect());
     }
 }

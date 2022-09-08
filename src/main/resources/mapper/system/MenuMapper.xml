@@ -9,7 +9,7 @@
     <select id="findByUserId" parameterType="int" resultType="com.icezhg.athena.domain.Menu">
         SELECT <include refid="BaseColumns"/>
         FROM sys_menu
-        WHERE ID IN (
+        WHERE id IN (
             SELECT menu_id
             FROM sys_role_menu rm, sys_user_role  ur
             WHERE rm.role_id = ur.role_id AND ur.user_id = #{userId,jdbcType=INTEGER}
@@ -19,6 +19,5 @@
     <select id="listAll" resultType="com.icezhg.athena.domain.Menu">
         SELECT <include refid="BaseColumns"/> FROM sys_menu
     </select>
-
 
 </mapper>
