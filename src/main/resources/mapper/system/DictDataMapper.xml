@@ -4,7 +4,7 @@
 
     <sql id="BaseColumns">
         id,dict_sort,dict_label,
-        dict_value,dict_type,css_class,
+        dict_value,dict_value_type,dict_type,css_class,
         list_class,is_default,status,
         create_by,create_time,update_by,
         update_time,remark
@@ -21,6 +21,7 @@
             <if test="dictSort != null">dict_sort,</if>
             <if test="dictLabel != null">dict_label,</if>
             <if test="dictValue != null">dict_value,</if>
+            <if test="dictValueType != null">dict_value_type,</if>
             <if test="dictType != null">dict_type,</if>
             <if test="cssClass != null">css_class,</if>
             <if test="listClass != null">list_class,</if>
@@ -37,6 +38,7 @@
             <if test="dictSort != null">#{dictSort,jdbcType=INTEGER},</if>
             <if test="dictLabel != null">#{dictLabel,jdbcType=VARCHAR},</if>
             <if test="dictValue != null">#{dictValue,jdbcType=VARCHAR},</if>
+            <if test="dictValueType != null">#{dictValueType,jdbcType=VARCHAR},</if>
             <if test="dictType != null">#{dictType,jdbcType=VARCHAR},</if>
             <if test="cssClass != null">#{cssClass,jdbcType=VARCHAR},</if>
             <if test="listClass != null">#{listClass,jdbcType=VARCHAR},</if>
@@ -61,6 +63,9 @@
             </if>
             <if test="dictValue != null">
                 dict_value = #{dictValue,jdbcType=VARCHAR},
+            </if>
+            <if test="dictValueType != null">
+                dict_value_type = #{dictValueType,jdbcType=VARCHAR},
             </if>
             <if test="dictType != null">
                 dict_type = #{dictType,jdbcType=VARCHAR},

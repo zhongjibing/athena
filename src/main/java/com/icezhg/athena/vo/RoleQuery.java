@@ -11,5 +11,6 @@ import lombok.Setter;
 public class RoleQuery extends PageQuery {
     private Integer id;
     private String name;
+    private String roleKey;
     private String status;
 }

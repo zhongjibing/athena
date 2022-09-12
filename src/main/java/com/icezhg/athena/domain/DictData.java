@@ -28,6 +28,11 @@ public class DictData {
     private String dictValue;
 
     /**
+     * 字典键值类型
+     */
+    private String dictValueType;
+
+    /**
      * 字典类型
      */
     private String dictType;

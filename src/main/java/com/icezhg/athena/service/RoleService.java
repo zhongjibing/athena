@@ -7,6 +7,7 @@ import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.RoleMenu;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
+import com.icezhg.athena.vo.UserQuery;
 import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +57,7 @@ public class RoleService {
 
     public boolean checkUnique(RoleInfo role) {
         RoleQuery query = new RoleQuery();
-        query.setName(role.getName());
+        query.setRoleKey(role.getRoleKey());
         List<Role> roles = find(query);
         return roles.isEmpty() || Objects.equals(role.getId(), roles.get(0).getId());
     }
@@ -90,6 +91,15 @@ public class RoleService {
         return role;
     }
 
+    public int changeStatus(RoleInfo roleInfo) {
+        Role role = new Role();
+        role.setId(roleInfo.getId());
+        role.setStatus(roleInfo.getStatus());
+        role.setUpdateTime(new Date());
+        role.setUpdateBy(SecurityUtil.currentUserName());
+        return roleDao.update(role);
+    }
+
     private List<RoleMenu> buildRoleMenus(Integer roleId, List<Integer> menuIds) {
         return menuIds.stream().map(menuId -> new RoleMenu(roleId, menuId)).collect(Collectors.toList());
     }
@@ -98,8 +108,8 @@ public class RoleService {
         Role newRole = new Role();
         newRole.setId(role.getId());
         newRole.setName(role.getName());
-        newRole.setDescription(role.getDescription());
-        newRole.setOrderNum(role.getOrderNum());
+        newRole.setRoleKey(role.getRoleKey());
+        newRole.setRoleSort(role.getRoleSort());
         newRole.setDataScope(role.getDataScope());
         newRole.setMenuCheckStrictly(role.isMenuCheckStrictly() ? Constants.YES : Constants.NO);
         newRole.setDeptCheckStrictly(role.isDeptCheckStrictly() ? Constants.YES : Constants.NO);
@@ -113,8 +123,8 @@ public class RoleService {
         if (role != null) {
             roleInfo.setId(role.getId());
             roleInfo.setName(role.getName());
-            roleInfo.setDescription(role.getDescription());
-            roleInfo.setOrderNum(role.getOrderNum());
+            roleInfo.setRoleKey(role.getRoleKey());
+            roleInfo.setRoleSort(role.getRoleSort());
             roleInfo.setDataScope(role.getDataScope());
             roleInfo.setMenuCheckStrictly(role.getMenuCheckStrictly() == Constants.YES);
             roleInfo.setDeptCheckStrictly(role.getDeptCheckStrictly() == Constants.YES);
@@ -128,5 +138,9 @@ public class RoleService {
     public int deleteRoles(List<Integer> roleIds) {
         roleMenuDao.deleteByRoleIds(roleIds);
         return roleDao.deleteByIds(roleIds);
+    }
+
+    public Object listAllocatedUsers(String roleId, UserQuery query) {
+        return null;
     }
 }

@@ -5,6 +5,7 @@ import com.icezhg.athena.service.RoleService;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
+import com.icezhg.athena.vo.UserQuery;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -60,5 +61,15 @@ public class RoleController {
     @GetMapping("/{roleId}")
     public RoleInfo get(@PathVariable Integer roleId) {
         return roleService.findRoleInfo(roleId);
+    }
+
+    @PutMapping("/changeStatus")
+    public int changeStatus(@RequestBody RoleInfo roleInfo) {
+        return roleService.changeStatus(roleInfo);
+    }
+
+    @GetMapping("/{roleId}/allocatedUsers")
+    public Object allocatedUsers(@PathVariable String roleId, UserQuery query) {
+        return roleService.listAllocatedUsers(roleId, query);
     }
 }

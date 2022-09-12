@@ -1,15 +1,15 @@
-package com.icezhg.athena.domain;
+package com.icezhg.athena.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
  * Created by zhongjibing on 2020/03/15
  */
 @Data
-public class User {
+public class UserInfo {
 
     /**
      * 用户id
@@ -20,12 +20,6 @@ public class User {
      * 用户名
      */
     private String username;
-
-    /**
-     * 密码
-     */
-    @JsonIgnore
-    private transient String password;
 
     /**
      * 姓名
@@ -63,19 +57,9 @@ public class User {
     private Date deadline;
 
     /**
-     * 创建者
-     */
-    private String createBy;
-
-    /**
      * 创建时间
      */
     private Date createTime;
-
-    /**
-     * 更新者
-     */
-    private String updateBy;
 
     /**
      * 更新时间
@@ -101,4 +85,29 @@ public class User {
      * 备注
      */
     private String remark;
+
+    public boolean isAccountExpired() {
+        return deadline != null && deadline.getTime() < Calendar.getInstance().getTimeInMillis();
+    }
+
+    public boolean isCredentialsExpired() {
+        Date credentialsCreateTime = credentialsUpdateTime != null ? credentialsUpdateTime : createTime;
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, -6);
+        return credentialsCreateTime.getTime() < calendar.getTimeInMillis();
+    }
+
+    public String getAccountLocked() {
+        return String.valueOf(accountLocked);
+    }
+
+    public void setAccountLocked(Integer accountLocked) {
+        this.accountLocked = accountLocked;
+    }
+
+    public void setAccountLocked(String accountLocked) {
+        if (accountLocked != null && accountLocked.length() > 0) {
+            this.accountLocked = Integer.parseInt(accountLocked);
+        }
+    }
 }

@@ -48,17 +48,17 @@ public interface Constants {
     String TYPE_BUTTON = "F";
 
     /** Layout组件标识 */
-    public final static String LAYOUT = "Layout";
+    String LAYOUT = "Layout";
 
     /** ParentView组件标识 */
-    public final static String PARENT_VIEW = "ParentView";
+    String PARENT_VIEW = "ParentView";
 
     /** InnerLink组件标识 */
-    public final static String INNER_LINK = "InnerLink";
+    String INNER_LINK = "InnerLink";
 
     /** 校验返回结果码 */
-    public final static String UNIQUE = "0";
-    public final static String NOT_UNIQUE = "1";
+    String UNIQUE = "0";
+    String NOT_UNIQUE = "1";
 
     /** 用户名长度限制 */
     int USERNAME_MIN_LENGTH = 2;
@@ -70,4 +70,6 @@ public interface Constants {
 
     int YES = 1;
     int NO = 0;
+
+    String DEFAULT_PASSWD = "12345678";
 }
