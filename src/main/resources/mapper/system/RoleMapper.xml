@@ -119,11 +119,17 @@
         LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
     </select>
 
-    <select id="findCurrentRole" parameterType="int" resultType="com.icezhg.athena.domain.Role">
+    <select id="findAuthRoles" parameterType="long" resultType="com.icezhg.athena.domain.Role">
         SELECT <include refid="BaseColumns"/>
         FROM sys_role
         WHERE status = '0'
-          AND id IN (SELECT role_id FROM sys_user_role WHERE user_id = #{userId,jdbcType=INTEGER})
+          AND id IN (SELECT role_id FROM sys_user_role WHERE user_id = #{userId,jdbcType=BIGINT})
+    </select>
+
+    <select id="listAll" resultType="com.icezhg.athena.domain.Role">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_role
+        WHERE id > 0 AND status = '0'
     </select>
 
 </mapper>

@@ -6,7 +6,7 @@
         perms, icon, create_by, update_by, remark, create_time, update_time
     </sql>
 
-    <select id="findByUserId" parameterType="int" resultType="com.icezhg.athena.domain.Menu">
+    <select id="findByUserId" parameterType="long" resultType="com.icezhg.athena.domain.Menu">
         SELECT <include refid="BaseColumns"/>
         FROM sys_menu
         WHERE id IN (

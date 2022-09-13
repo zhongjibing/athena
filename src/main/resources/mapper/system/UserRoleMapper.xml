@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.UserRoleDao">
+
+    <insert id="addUserRoles">
+        insert into sys_user_role (user_id, role_id) values
+        <foreach collection="roleIds" item="item" open="(" separator="), (" close=")">
+            #{userId,jdbcType=BIGINT}, #{item,jdbcType=INTEGER}
+        </foreach>
+    </insert>
+
+    <delete id="deleteUserRoles">
+        delete from sys_user_role
+        where user_id = #{userId,jdbcType=BIGINT} and role_id in
+        <foreach collection="roleIds" item="item" open="(" separator=", " close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
+    </delete>
+</mapper>

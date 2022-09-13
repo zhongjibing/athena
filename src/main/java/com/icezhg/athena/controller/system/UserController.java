@@ -2,7 +2,9 @@ package com.icezhg.athena.controller.system;
 
 import com.icezhg.athena.service.UserService;
 import com.icezhg.athena.vo.PageResult;
+import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;
+import com.icezhg.athena.vo.UserPasswd;
 import com.icezhg.athena.vo.UserQuery;
 import com.icezhg.athena.vo.UserStatus;
 import com.icezhg.commons.exception.ErrorCodeException;
@@ -14,6 +16,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * Created by zhongjibing on 2022/09/10.
@@ -58,5 +62,20 @@ public class UserController {
     @PutMapping("/changeStatus")
     public int changeStatus(@RequestBody UserStatus userStatus) {
         return userService.changeStatus(userStatus);
+    }
+
+    @PutMapping("/resetPasswd")
+    public int resetPasswd(@RequestBody UserPasswd userPasswd) {
+        return userService.resetPasswd(userPasswd);
+    }
+
+    @GetMapping("/{userId}/auth")
+    public UserAuth findUserAuth(@PathVariable Long userId) {
+        return userService.findAuth(userId);
+    }
+
+    @PutMapping("/{userId}/auth")
+    public UserAuth updateUserAuth(@PathVariable Long userId, @RequestBody List<Integer> roleIds) {
+        return userService.updateUserAuth(userId, roleIds);
     }
 }

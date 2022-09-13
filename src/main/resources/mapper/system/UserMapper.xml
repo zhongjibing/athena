@@ -178,4 +178,8 @@
         LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
     </select>
 
+    <select id="findUserPasswd" parameterType="long" resultType="string">
+        select password from sys_user where id = #{userId,jdbcType=BIGINT}
+    </select>
+
 </mapper>

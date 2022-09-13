@@ -23,4 +23,5 @@ public interface UserDao {
 
     UserInfo findById(Long id);
 
+    String findUserPasswd(Long userId);
 }

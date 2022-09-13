@@ -52,7 +52,7 @@ public class RoleService {
     }
 
     public List<Role> findCurrentRole() {
-        return roleDao.findCurrentRole(SecurityUtil.currentUserId());
+        return roleDao.findAuthRoles(SecurityUtil.currentUserId());
     }
 
     public boolean checkUnique(RoleInfo role) {
@@ -138,6 +138,11 @@ public class RoleService {
     public int deleteRoles(List<Integer> roleIds) {
         roleMenuDao.deleteByRoleIds(roleIds);
         return roleDao.deleteByIds(roleIds);
+    }
+
+
+    public List<Role> listAll() {
+        return roleDao.listAll();
     }
 
     public Object listAllocatedUsers(String roleId, UserQuery query) {

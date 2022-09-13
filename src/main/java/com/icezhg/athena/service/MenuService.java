@@ -35,7 +35,7 @@ public class MenuService {
     }
 
     public List<Menu> list() {
-        List<Role> roles = roleDao.findCurrentRole(SecurityUtil.currentUserId());
+        List<Role> roles = roleDao.findAuthRoles(SecurityUtil.currentUserId());
         if (hasRootRole(roles)) {
             return menuDao.listAll();
         }

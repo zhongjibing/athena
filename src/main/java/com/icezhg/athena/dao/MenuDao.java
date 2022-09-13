@@ -10,7 +10,7 @@ import java.util.List;
  */
 @Repository
 public interface MenuDao {
-    List<Menu> findByUserId(Integer currentUserId);
+    List<Menu> findByUserId(Long currentUserId);
 
     List<Menu> listAll();
 }
