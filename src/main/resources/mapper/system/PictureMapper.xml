@@ -3,7 +3,7 @@
 <mapper namespace="com.icezhg.athena.dao.PictureDao">
 
     <resultMap id="BaseResultMap" type="com.icezhg.athena.domain.Picture">
-            <id property="id" column="id" jdbcType="BIGINT"/>
+            <id property="id" column="id" jdbcType="VARCHAR"/>
             <result property="name" column="name" jdbcType="VARCHAR"/>
             <result property="md5" column="md5" jdbcType="VARCHAR"/>
             <result property="type" column="type" jdbcType="VARCHAR"/>
@@ -22,19 +22,19 @@
         b.data
     </sql>
 
-    <select id="findById" parameterType="long" resultMap="BaseResultMap">
+    <select id="findById" parameterType="string" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List" />
         from sys_picture p, sys_binary_data b
-        where p.md5 = b.md5 and p.id = #{id,jdbcType=BIGINT}
+        where p.md5 = b.md5 and p.id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <delete id="deleteById" parameterType="long">
+    <delete id="deleteById" parameterType="string">
         delete from sys_picture
-        where  id = #{id,jdbcType=BIGINT}
+        where  id = #{id,jdbcType=VARCHAR}
     </delete>
 
-    <insert id="insert" parameterType="com.icezhg.athena.domain.Picture" useGeneratedKeys="true" keyProperty="id">
+    <insert id="insert" parameterType="com.icezhg.athena.domain.Picture">
         insert into sys_picture
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
@@ -48,7 +48,7 @@
             <if test="remark != null">remark,</if>
         </trim>
         <trim prefix="values (" suffix=")" suffixOverrides=",">
-            <if test="id != null">#{id,jdbcType=BIGINT},</if>
+            <if test="id != null">#{id,jdbcType=VARCHAR},</if>
             <if test="name != null">#{name,jdbcType=VARCHAR},</if>
             <if test="md5 != null">#{md5,jdbcType=VARCHAR},</if>
             <if test="type != null">#{type,jdbcType=VARCHAR},</if>
@@ -79,7 +79,7 @@
                     remark = #{remark,jdbcType=VARCHAR},
                 </if>
         </set>
-        where   id = #{id,jdbcType=BIGINT}
+        where   id = #{id,jdbcType=VARCHAR}
     </update>
 
     <sql id="findCondition">
@@ -104,6 +104,13 @@
         <include refid="findCondition" />
         ORDER BY id ASC
         LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByAvatar" parameterType="string" resultType="com.icezhg.athena.domain.Picture">
+        select
+        <include refid="Base_Column_List" />
+        from sys_picture p, sys_binary_data b, sys_avatar_picture a
+        where p.md5 = b.md5 and p.id = a.picture_id and a.avatar = #{avatar,jdbcType=VARCHAR}
     </select>
 
 </mapper>

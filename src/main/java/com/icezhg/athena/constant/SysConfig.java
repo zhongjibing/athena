@@ -5,4 +5,5 @@ package com.icezhg.athena.constant;
  */
 public interface SysConfig {
     String INIT_PASSWD = "sys.user.initPassword";
+    String DEFAULT_AVATAR_PICTURE = "sys.user.defaultAvatar";
 }

@@ -12,9 +12,9 @@ import java.util.List;
 @Repository
 public interface PictureDao {
 
-    Picture findById(Long id);
+    Picture findById(String id);
 
-    int deleteById(Long id);
+    int deleteById(String id);
 
     int insert(Picture record);
 
@@ -24,4 +24,5 @@ public interface PictureDao {
 
     List<Picture> find(NameQuery query);
 
+    Picture findByAvatar(String avatar);
 }

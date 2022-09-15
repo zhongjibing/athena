@@ -9,7 +9,7 @@ public class Picture {
     /**
      * 主键
      */
-    private Long id;
+    private String id;
 
     /**
      * 名称

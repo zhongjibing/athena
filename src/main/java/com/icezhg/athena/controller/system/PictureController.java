@@ -39,8 +39,11 @@ public class PictureController {
     }
 
     @GetMapping("/{id}")
-    public void readImage(@PathVariable Long id, HttpServletResponse response) {
+    public void readImage(@PathVariable String id, HttpServletResponse response) {
         Picture picture = pictureService.findById(id);
+        if (picture == null) {
+            picture = pictureService.findByAvatar(id);
+        }
         if (picture != null) {
             byte[] bytes = getGzipBytes(picture.getData());
             response.setContentType(picture.getType());

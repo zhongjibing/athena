@@ -2,9 +2,11 @@ package com.icezhg.athena.service;
 
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.constant.SysConfig;
+import com.icezhg.athena.dao.AvatarPictureDao;
 import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.dao.UserDao;
 import com.icezhg.athena.dao.UserRoleDao;
+import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.User;
 import com.icezhg.athena.vo.Query;
@@ -44,14 +46,17 @@ public class UserService {
 
     private final UserRoleDao userRoleDao;
 
+    private final AvatarPictureDao avatarPictureDao;
+
     private PasswordEncoder passwordEncoder;
 
     private ConfigService configService;
 
-    public UserService(UserDao userDao, RoleDao roleDao, UserRoleDao userRoleDao) {
+    public UserService(UserDao userDao, RoleDao roleDao, UserRoleDao userRoleDao, AvatarPictureDao avatarPictureDao) {
         this.userDao = userDao;
         this.roleDao = roleDao;
         this.userRoleDao = userRoleDao;
+        this.avatarPictureDao = avatarPictureDao;
     }
 
     @Autowired
@@ -71,8 +76,13 @@ public class UserService {
         return users.isEmpty() || Objects.equals(userInfo.getId(), users.get(0).getId());
     }
 
+    @Transactional
     public UserInfo save(UserInfo userInfo) {
+        AvatarPicture avatarPicture = AvatarPicture.create(configService);
+        avatarPictureDao.create(avatarPicture);
+
         User newUser = buildUser(userInfo, true);
+        newUser.setAvatar(avatarPicture.avatar());
         newUser.setCreateTime(new Date());
         newUser.setCreateBy(SecurityUtil.currentUserName());
         newUser.setUpdateTime(new Date());

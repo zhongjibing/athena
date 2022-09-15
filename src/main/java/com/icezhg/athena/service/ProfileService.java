@@ -1,7 +1,9 @@
 package com.icezhg.athena.service;
 
+import com.icezhg.athena.dao.AvatarPictureDao;
 import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.dao.UserDao;
+import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.User;
 import com.icezhg.athena.vo.Profile;
@@ -26,11 +28,14 @@ public class ProfileService {
 
     private final RoleDao roleDao;
 
+    private final AvatarPictureDao avatarPictureDao;
+
     private PasswordEncoder passwordEncoder;
 
-    public ProfileService(UserDao userDao, RoleDao roleDao) {
+    public ProfileService(UserDao userDao, RoleDao roleDao, AvatarPictureDao avatarPictureDao) {
         this.userDao = userDao;
         this.roleDao = roleDao;
+        this.avatarPictureDao = avatarPictureDao;
     }
 
     @Autowired
@@ -85,5 +90,9 @@ public class ProfileService {
         user.setUpdateBy(SecurityUtil.currentUserName());
         userDao.update(user);
         return buildProfile();
+    }
+
+    public void updateAvatar(AvatarPicture avatarPicture) {
+        avatarPictureDao.update(avatarPicture);
     }
 }

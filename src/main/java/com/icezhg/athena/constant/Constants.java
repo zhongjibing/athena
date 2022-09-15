@@ -72,4 +72,6 @@ public interface Constants {
     int NO = 0;
 
     String DEFAULT_PASSWD = "12345678";
+
+    int MAX_UPLOAD_FILENAME_LEN = 64;
 }
