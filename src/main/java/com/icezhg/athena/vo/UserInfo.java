@@ -2,6 +2,8 @@ package com.icezhg.athena.vo;
 
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -19,11 +21,15 @@ public class UserInfo {
     /**
      * 用户名
      */
+    @NotBlank
+    @Size(max = 20, min = 2)
     private String username;
 
     /**
      * 姓名
      */
+    @NotBlank
+    @Size(max = 20, min = 2)
     private String nickname;
 
     /**

@@ -10,8 +10,22 @@
         update_time,remark
     </sql>
 
-    <delete id="deleteById" parameterType="int">
-        DELETE FROM sys_dict_data WHERE  id = #{id,jdbcType=INTEGER}
+    <delete id="deleteByTypeIds" parameterType="list">
+        delete from
+            sys_dict_data
+        where dict_type in (
+            select dict_type from sys_dict_type where id in
+            <foreach collection="list" item="item" open="(" separator=", " close=")">#{item,jdbcType=INTEGER}</foreach>
+        )
+    </delete>
+
+    <delete id="deleteByIds" parameterType="list">
+        delete from
+            sys_dict_data
+        where id in
+        <foreach collection="list" item="item" open="(" separator=", " close=")">
+              #{item,jdbcType=INTEGER}
+        </foreach>
     </delete>
 
     <insert id="insert" parameterType="com.icezhg.athena.domain.DictData" useGeneratedKeys="true" keyProperty="id">
@@ -100,5 +114,39 @@
         FROM sys_dict_data
         WHERE status = '0' AND dict_type = #{dictType}
         ORDER BY dict_sort ASC
+    </select>
+
+    <select id="findById" parameterType="int" resultType="com.icezhg.athena.domain.DictData">
+        SELECT <include refid="BaseColumns"/>
+        FROM sys_dict_data
+        WHERE id = #{id,jdbcType=INTEGER}
+    </select>
+
+    <sql id="findCondition">
+        <where>
+            <if test="dictType != null">
+                and locate(#{dictType,jdbcType=VARCHAR}, dict_type) > 0
+            </if>
+            <if test="dictLabel != null">
+                and locate(#{dictLabel,jdbcType=VARCHAR}, dict_label) > 0
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=VARCHAR}
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" parameterType="map" resultType="java.lang.Integer">
+        select count(*) from sys_dict_data
+        <include refid="findCondition"/>
+    </select>
+
+    <select id="find" parameterType="map" resultType="com.icezhg.athena.domain.DictData">
+        select
+        <include refid="BaseColumns"/>
+        from sys_dict_data
+        <include refid="findCondition" />
+        ORDER BY id ASC
+        LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
     </select>
 </mapper>

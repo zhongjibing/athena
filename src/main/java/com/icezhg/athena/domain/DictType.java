@@ -1,12 +1,14 @@
 package com.icezhg.athena.domain;
 
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 字典类型表
  */
 @Data
-public class DictType {
+@EqualsAndHashCode(callSuper = true)
+public class DictType extends BaseEntity{
     /**
      * 字典主键
      */

@@ -13,6 +13,7 @@ import java.util.Map;
 public interface Query {
     default Map<String, Object> toMap() {
         Map<String, Object> map = new HashMap<>();
+        map.put("isFuzzyQuery", isFuzzyQuery());
         addFieldValues(this.getClass(), map);
 
         Class<?> clazz = this.getClass().getSuperclass();
@@ -31,5 +32,9 @@ public interface Query {
             Object value = ReflectionUtils.getField(field, this);
             map.put(field.getName(), value);
         }
+    }
+
+    default boolean isFuzzyQuery() {
+        return true;
     }
 }

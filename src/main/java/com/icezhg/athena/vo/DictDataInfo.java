@@ -1,16 +1,15 @@
-package com.icezhg.athena.domain;
+package com.icezhg.athena.vo;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 
 /**
- * 字典数据表
+ * Created by zhongjibing on 2022/09/17.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
-public class DictData extends BaseEntity{
+public class DictDataInfo {
     /**
      * 字典编码
      */
@@ -24,11 +23,15 @@ public class DictData extends BaseEntity{
     /**
      * 字典标签
      */
+    @NotBlank
+    @Size(max = 32)
     private String dictLabel;
 
     /**
      * 字典键值
      */
+    @NotBlank
+    @Size(max = 64)
     private String dictValue;
 
     /**
@@ -39,6 +42,8 @@ public class DictData extends BaseEntity{
     /**
      * 字典类型
      */
+    @NotBlank
+    @Size(max = 32)
     private String dictType;
 
     /**
@@ -60,4 +65,8 @@ public class DictData extends BaseEntity{
      * 状态（0正常 1停用）
      */
     private String status;
+    /**
+     * 备注
+     */
+    private String remark;
 }

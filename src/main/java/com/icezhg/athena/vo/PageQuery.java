@@ -6,7 +6,7 @@ import lombok.Getter;
  * Created by zhongjibing on 2022/09/04.
  */
 @Getter
-public class PageQuery implements Query {
+public class PageQuery extends FuzzyQuery {
     private int pageNum = 1;
     private int pageSize = 10;
     private int offset = 0;

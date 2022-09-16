@@ -27,6 +27,8 @@ public class RoleInfo {
     /**
      * 权限字符
      */
+    @NotBlank
+    @Size(max = 16)
     private String roleKey;
 
     /**
