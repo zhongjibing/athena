@@ -24,7 +24,7 @@ encrypt:
   key-store:
     alias: alias-key
     location: classpath:certs/icezhg.com.jks
-    password: xxxxxx
+    password: 8yjU7p33
   rsa:
     salt: 68656c6c6f776f726c64
 logging:

@@ -1,6 +1,5 @@
 package com.icezhg.athena.domain;
 
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -9,7 +8,6 @@ import lombok.EqualsAndHashCode;
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
-@JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)
 public class DictData extends BaseEntity{
     /**
      * 字典编码

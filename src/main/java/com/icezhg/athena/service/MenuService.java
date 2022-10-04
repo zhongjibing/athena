@@ -1,16 +1,20 @@
 package com.icezhg.athena.service;
 
+import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.dao.MenuDao;
 import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.dao.RoleMenuDao;
 import com.icezhg.athena.domain.Menu;
 import com.icezhg.athena.domain.Role;
+import com.icezhg.athena.vo.MenuInfo;
+import com.icezhg.athena.vo.MenuQuery;
 import com.icezhg.athena.vo.MenuTree;
 import com.icezhg.athena.vo.RoleMenuTree;
 import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -34,26 +38,47 @@ public class MenuService {
         this.roleMenuDao = roleMenuDao;
     }
 
-    public List<Menu> list() {
+    public MenuInfo save(MenuInfo menuInfo) {
+        Menu menu = menuInfo.toMenu();
+        menu.setCreateBy(SecurityUtil.currentUserName());
+        menu.setCreateTime(new Date());
+        menu.setUpdateBy(SecurityUtil.currentUserName());
+        menu.setUpdateTime(new Date());
+        menuDao.insert(menu);
+        menuInfo.setId(menu.getId());
+        return menuInfo;
+    }
+
+    public MenuInfo update(MenuInfo menuInfo) {
+        Menu menu = menuInfo.toMenu();
+        menu.setUpdateBy(SecurityUtil.currentUserName());
+        menu.setUpdateTime(new Date());
+        menuDao.update(menu);
+        return menuInfo;
+    }
+
+    public List<MenuInfo> listRoleMenus() {
         List<Role> roles = roleDao.findAuthRoles(SecurityUtil.currentUserId());
-        if (hasRootRole(roles)) {
-            return menuDao.listAll();
+        MenuQuery query = new MenuQuery();
+        query.setStatus(Constants.NORMAL);
+        if (!hasRootRole(roles)) {
+            query.setUserId(SecurityUtil.currentUserId());
         }
-        return menuDao.findByUserId(SecurityUtil.currentUserId());
+        return menuDao.list(query.toMap());
     }
 
     public List<MenuTree> buildMenuTreeSelect() {
-        return buildMenuTree(list());
+        return buildMenuTree(listRoleMenus());
     }
 
-    public List<MenuTree> buildMenuTree(List<Menu> menus) {
+    public List<MenuTree> buildMenuTree(List<MenuInfo> menus) {
         Set<Integer> menuIds = new HashSet<>();
-        for (Menu menu : menus) {
+        for (MenuInfo menu : menus) {
             menuIds.add(menu.getId());
         }
 
         List<MenuTree> returnList = new ArrayList<>();
-        for (Menu menu : menus) {
+        for (MenuInfo menu : menus) {
             // 如果是顶级节点, 遍历该父节点的所有子节点
             if (!menuIds.contains(menu.getParentId())) {
                 MenuTree treeNode = recursionFn(menus, menu);
@@ -63,23 +88,23 @@ public class MenuService {
         return returnList;
     }
 
-    private MenuTree recursionFn(List<Menu> menus, Menu menu) {
+    private MenuTree recursionFn(List<MenuInfo> menus, MenuInfo menu) {
         MenuTree treeNode = new MenuTree();
         treeNode.setId(menu.getId());
         treeNode.setLabel(menu.getName());
         treeNode.setMenu(menu);
         List<MenuTree> children = new LinkedList<>();
-        List<Menu> childList = getChildList(menus, menu);
-        for (Menu child : childList) {
+        List<MenuInfo> childList = getChildList(menus, menu);
+        for (MenuInfo child : childList) {
             children.add(recursionFn(menus, child));
         }
         treeNode.setChildren(children);
         return treeNode;
     }
 
-    private List<Menu> getChildList(List<Menu> menus, Menu menu) {
-        List<Menu> tlist = new ArrayList<>();
-        for (Menu item : menus) {
+    private List<MenuInfo> getChildList(List<MenuInfo> menus, MenuInfo menu) {
+        List<MenuInfo> tlist = new ArrayList<>();
+        for (MenuInfo item : menus) {
             if (item.getParentId().intValue() == menu.getId().intValue()) {
                 tlist.add(item);
             }
@@ -98,5 +123,17 @@ public class MenuService {
 
     public RoleMenuTree buildRoleMenuTreeSelect(Integer roleId) {
         return new RoleMenuTree(roleMenuDao.findMenuIdsByRoleId(roleId), buildMenuTreeSelect());
+    }
+
+    public List<MenuInfo> list(MenuQuery query) {
+        return menuDao.list(query.toMap());
+    }
+
+    public MenuInfo findMenu(Integer menuId) {
+        return menuDao.findById(menuId);
+    }
+
+    public int delete(Integer menuId) {
+        return menuDao.deleteById(menuId);
     }
 }

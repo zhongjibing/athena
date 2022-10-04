@@ -13,6 +13,6 @@ public class MenuTree {
 
     private Integer id;
     private String label;
-    private Menu menu;
+    private MenuInfo menu;
     private List<MenuTree> children;
 }

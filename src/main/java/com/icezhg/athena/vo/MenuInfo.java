@@ -1,14 +1,15 @@
-package com.icezhg.athena.domain;
+package com.icezhg.athena.vo;
 
+import com.icezhg.athena.domain.Menu;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
+
+import java.util.Date;
 
 /**
  * Created by zhongjibing on 2022/09/07.
  */
 @Data
-@EqualsAndHashCode(callSuper = true)
-public class Menu extends BaseEntity {
+public class MenuInfo {
 
     /**
      * 菜单ID
@@ -79,4 +80,32 @@ public class Menu extends BaseEntity {
      * 菜单图标
      */
     private String icon;
+    /**
+     * 创建时间
+     */
+    private Date createTime;
+    /**
+     * 备注
+     */
+    private String remark;
+
+    public Menu toMenu() {
+        Menu menu = new Menu();
+        menu.setId(id);
+        menu.setName(name);
+        menu.setParentId(parentId);
+        menu.setOrderNum(orderNum);
+        menu.setPath(path);
+        menu.setComponent(component);
+        menu.setQuery(query);
+        menu.setIsFrame(isFrame);
+        menu.setIsCache(isCache);
+        menu.setType(type);
+        menu.setVisible(visible);
+        menu.setStatus(status);
+        menu.setPerms(perms);
+        menu.setIcon(icon);
+        menu.setRemark(remark);
+        return menu;
+    }
 }

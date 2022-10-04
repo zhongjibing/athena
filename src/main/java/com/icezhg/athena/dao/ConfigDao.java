@@ -16,7 +16,7 @@ public interface ConfigDao {
 
     int update(Config record);
 
-    int deleteById(Integer id);
+    int deleteByIds(List<Integer> ids);
 
     Config findById(Integer id);
 

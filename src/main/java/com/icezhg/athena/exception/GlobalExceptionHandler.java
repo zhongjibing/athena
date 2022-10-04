@@ -14,6 +14,7 @@ import org.springframework.http.converter.HttpMessageNotWritableException;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.BindException;
+import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -33,10 +34,22 @@ public class GlobalExceptionHandler {
         throw ex;
     }
 
+    @ExceptionHandler({HttpRequestMethodNotSupportedException.class})
+    public ResponseEntity<Object> handleBadRequest(HttpRequestMethodNotSupportedException ex) throws Exception {
+        log.error("handle error: {}", ex.getMessage());
+        return new ResponseEntity<>(RespResult.error("Method Not Allowed"), HttpStatus.METHOD_NOT_ALLOWED);
+    }
+
+    @ExceptionHandler({MethodArgumentNotValidException.class})
+    public ResponseEntity<Object> handleBadRequest(MethodArgumentNotValidException ex) throws Exception {
+        log.error("handle error: {}", ex.getMessage());
+        return new ResponseEntity<>(RespResult.error("Bad Parameters"), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler({ServletException.class, TypeMismatchException.class, HttpMessageNotReadableException.class,
-            MethodArgumentNotValidException.class, BindException.class})
+            BindException.class})
     public ResponseEntity<Object> handleBadRequest(Exception ex) throws Exception {
-        log.error("handle error: {}", ex.getMessage(), ex);
+        log.error("handle error: {}", ex.getMessage());
         return new ResponseEntity<>(RespResult.error(ex.getMessage()), HttpStatus.BAD_REQUEST);
     }
 
@@ -44,7 +57,7 @@ public class GlobalExceptionHandler {
             HttpMessageNotWritableException.class})
     public ResponseEntity<Object> handleInternalException(Exception ex) throws Exception {
         log.error("handle error: {}", ex.getMessage(), ex);
-        return new ResponseEntity<>(RespResult.error("system busy"), HttpStatus.OK);
+        return new ResponseEntity<>(RespResult.error("System Busy"), HttpStatus.OK);
     }
 
     @ExceptionHandler(DataAccessException.class)

@@ -36,19 +36,22 @@
         where  `key` = #{key,jdbcType=VARCHAR}
     </select>
 
-    <delete id="deleteById" parameterType="int">
+    <delete id="deleteByIds" parameterType="list">
         delete from sys_config
-        where  id = #{id,jdbcType=INTEGER}
+        where id in
+        <foreach collection="list" item="item" open="(" separator=", " close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
     </delete>
 
     <insert id="insert" parameterType="com.icezhg.athena.domain.Config" useGeneratedKeys="true" keyProperty="id">
         insert into sys_config
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="id != null">id,</if>
-            <if test="name != null">name,</if>
-            <if test="key != null">key,</if>
-            <if test="value != null">value,</if>
-            <if test="type != null">type,</if>
+            <if test="name != null">`name`,</if>
+            <if test="key != null">`key`,</if>
+            <if test="value != null">`value`,</if>
+            <if test="type != null">`type`,</if>
             <if test="createBy != null">create_by,</if>
             <if test="createTime != null">create_time,</if>
             <if test="updateBy != null">update_by,</if>
@@ -102,11 +105,27 @@
             <if test="id != null">
                 AND id = #{id,jdbcType=INTEGER}
             </if>
-            <if test="name != null">
-                AND LOCATE(#{name,jdbcType=VARCHAR}, `name`) > 0
+            <if test="isFuzzyQuery">
+                <if test="name != null">
+                    AND LOCATE(#{name,jdbcType=VARCHAR}, `name`) > 0
+                </if>
+                <if test="key != null">
+                    AND LOCATE(#{key,jdbcType=VARCHAR}, `key`) > 0
+                </if>
             </if>
-            <if test="key != null">
-                AND `key` = #{key,jdbcType=VARCHAR}
+            <if test="!isFuzzyQuery">
+                <if test="name != null">
+                    AND `name` = #{name,jdbcType=VARCHAR}
+                </if>
+                <if test="key != null">
+                    AND `key` = #{key,jdbcType=VARCHAR}
+                </if>
+            </if>
+            <if test="type != null">
+                AND `type` = #{type,jdbcType=CHAR}
+            </if>
+            <if test="beginTime != null and endTime != null">
+                AND create_time BETWEEN #{beginTime,jdbcType=TIMESTAMP} AND #{endTime,jdbcType=TIMESTAMP}
             </if>
         </where>
     </sql>

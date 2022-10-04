@@ -24,7 +24,7 @@ spring:
         server-addr: https://icezhg.com
         namespace: 17a69aa2-6772-47ad-93b2-339f24e4ce8b
         username: nacos_auth
-        password: xxxx
+        password: 6uij8dQ3SMKGksNh
 logging:
   file:
     name: /opt/athena/logs/athena.log
