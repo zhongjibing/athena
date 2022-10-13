@@ -60,48 +60,39 @@ public class Router {
     private List<Router> children;
 
     @Getter
-    @Setter
     @JsonInclude(JsonInclude.Include.NON_EMPTY)
     public static class Meta {
         /**
          * 设置该路由在侧边栏和面包屑中展示的名字
          */
-        private String title;
+        private final String title;
 
         /**
          * 设置该路由的图标，对应路径src/assets/icons/svg
          */
-        private String icon;
+        private final String icon;
 
         /**
          * 设置为true，则不会被 <keep-alive>缓存
          */
-        private boolean noCache;
+        private final boolean noCache;
 
         /**
          * 内链地址（http(s)://开头）
          */
-        private String link;
+        private final String link;
 
 
-        public Meta(String title, String icon)
-        {
-            this.title = title;
-            this.icon = icon;
+        public Meta(String title, String icon) {
+            this(title, icon, false, null);
         }
 
-        public Meta(String title, String icon, boolean noCache)
-        {
-            this.title = title;
-            this.icon = icon;
-            this.noCache = noCache;
+        public Meta(String title, String icon, boolean noCache) {
+            this(title, icon, noCache, null);
         }
 
-        public Meta(String title, String icon, String link)
-        {
-            this.title = title;
-            this.icon = icon;
-            this.link = link;
+        public Meta(String title, String icon, String link) {
+            this(title, icon, false, link);
         }
 
         public Meta(String title, String icon, boolean noCache, String link) {

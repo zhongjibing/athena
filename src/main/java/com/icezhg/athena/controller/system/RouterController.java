@@ -23,6 +23,6 @@ public class RouterController {
 
     @GetMapping
     public List<Router> routers() {
-        return routerService.buildRouters();
+        return routerService.listRouters();
     }
 }

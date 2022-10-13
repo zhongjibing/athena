@@ -33,10 +33,17 @@ public interface Constants {
     String SYS_YES = "Y";
 
     /** 是否菜单外链（是） */
-    String YES_FRAME = "0";
+    int YES_FRAME = 1;
 
     /** 是否菜单外链（否） */
-    String NO_FRAME = "1";
+    int NO_FRAME = 0;
+
+    int YES_CACHE = 1;
+
+    /** 是否菜单外链（否） */
+    int NO_CACHE = 0;
+
+    int TOP_MENU_PARENT = 0;
 
     /** 菜单类型（目录） */
     String TYPE_DIR = "M";
@@ -74,4 +81,8 @@ public interface Constants {
     String DEFAULT_PASSWD = "12345678";
 
     int MAX_UPLOAD_FILENAME_LEN = 64;
+
+
+    String HTTP_SCHEMA = "http://";
+    String HTTPS_SCHEMA = "https://";
 }

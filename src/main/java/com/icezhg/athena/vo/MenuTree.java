@@ -1,6 +1,5 @@
 package com.icezhg.athena.vo;
 
-import com.icezhg.athena.domain.Menu;
 import lombok.Data;
 
 import java.util.List;
