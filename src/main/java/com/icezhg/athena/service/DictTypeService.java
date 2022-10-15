@@ -1,32 +1,17 @@
 package com.icezhg.athena.service;
 
-import com.icezhg.athena.dao.DictDataDao;
-import com.icezhg.athena.dao.DictTypeDao;
 import com.icezhg.athena.domain.DictData;
 import com.icezhg.athena.domain.DictType;
 import com.icezhg.athena.vo.DictQuery;
 import com.icezhg.athena.vo.DictTypeInfo;
-import com.icezhg.authorization.core.SecurityUtil;
-import org.springframework.stereotype.Service;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * 字典 业务层处理
  */
-@Service
-public class DictTypeService {
+public interface DictTypeService {
 
-    private final DictTypeDao dictTypeDao;
-
-    private final DictDataDao dictDataDao;
-
-    public DictTypeService(DictTypeDao dictTypeDao, DictDataDao dictDataDao) {
-        this.dictTypeDao = dictTypeDao;
-        this.dictDataDao = dictDataDao;
-    }
 
     /**
      * 根据字典类型查询字典数据
@@ -34,78 +19,21 @@ public class DictTypeService {
      * @param dictType 字典类型
      * @return 字典数据集合信息
      */
-    public List<DictData> findDictDataByType(String dictType) {
-        return dictDataDao.findByType(dictType);
-    }
+    List<DictData> findDictDataByType(String dictType);
 
-    public int count(DictQuery query) {
-        return dictTypeDao.count(query.toMap());
-    }
+    int count(DictQuery query);
 
-    public List<DictType> find(DictQuery query) {
-        return dictTypeDao.find(query.toMap());
-    }
+    List<DictType> find(DictQuery query);
 
-    public DictTypeInfo findById(Integer id) {
-        return buildDictTypeInfo(dictTypeDao.findById(id));
-    }
+    DictTypeInfo findById(Integer id);
 
-    public boolean checkUnique(DictTypeInfo typeInfo) {
-        DictQuery query = new DictQuery();
-        query.setDictType(typeInfo.getDictType());
-        List<DictType> dictTypes = find(query);
-        return dictTypes.isEmpty() || Objects.equals(typeInfo.getId(), dictTypes.get(0).getId());
-    }
+    boolean checkUnique(DictTypeInfo typeInfo);
 
-    public DictTypeInfo save(DictTypeInfo typeInfo) {
-        DictType dictType = buildDictType(typeInfo);
-        dictType.setCreateBy(SecurityUtil.currentUserName());
-        dictType.setCreateTime(new Date());
-        dictType.setUpdateBy(SecurityUtil.currentUserName());
-        dictType.setUpdateTime(new Date());
-        dictTypeDao.insert(dictType);
-        typeInfo.setId(dictType.getId());
-        return typeInfo;
-    }
+    DictTypeInfo save(DictTypeInfo typeInfo);
 
-    public DictTypeInfo update(DictTypeInfo typeInfo) {
-        DictType dictType = buildDictType(typeInfo);
-        dictType.setUpdateBy(SecurityUtil.currentUserName());
-        dictType.setUpdateTime(new Date());
-        dictTypeDao.update(dictType);
-        return findById(typeInfo.getId());
-    }
+    DictTypeInfo update(DictTypeInfo typeInfo);
 
-    private DictType buildDictType(DictTypeInfo typeInfo) {
-        DictType dictType = new DictType();
-        dictType.setId(typeInfo.getId());
-        dictType.setDictName(typeInfo.getDictName());
-        dictType.setDictType(typeInfo.getDictType());
-        dictType.setStatus(typeInfo.getStatus());
-        dictType.setRemark(typeInfo.getRemark());
-        return dictType;
-    }
+    int deleteByIds(List<Integer> ids);
 
-    private DictTypeInfo buildDictTypeInfo(DictType dictType) {
-        DictTypeInfo typeInfo = new DictTypeInfo();
-        if (dictType != null) {
-            typeInfo.setId(dictType.getId());
-            typeInfo.setDictName(dictType.getDictName());
-            typeInfo.setDictType(dictType.getDictType());
-            typeInfo.setStatus(dictType.getStatus());
-            typeInfo.setRemark(dictType.getRemark());
-        }
-        return typeInfo;
-    }
-
-    public int deleteByIds(List<Integer> ids) {
-        dictDataDao.deleteByTypeIds(ids);
-        return dictTypeDao.deleteByIds(ids);
-    }
-
-    public List<DictTypeInfo> listOptions() {
-        DictQuery query = new DictQuery();
-        query.setPageSize(Integer.MAX_VALUE);
-        return find(query).stream().map(this::buildDictTypeInfo).toList();
-    }
+    List<DictTypeInfo> listOptions();
 }

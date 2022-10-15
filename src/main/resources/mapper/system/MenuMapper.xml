@@ -61,6 +61,10 @@
         where  id = #{id,jdbcType=INTEGER}
     </select>
 
+    <select id="hasChildren" parameterType="int" resultType="_boolean">
+        select count(*) from (select id from sys_menu where parent_id = #{parentId,jdbcType=INTEGER} limit 1) t
+    </select>
+
     <delete id="deleteById" parameterType="int">
         delete from sys_menu
         where  id = #{id,jdbcType=INTEGER}

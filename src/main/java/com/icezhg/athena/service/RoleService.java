@@ -1,151 +1,38 @@
 package com.icezhg.athena.service;
 
-import com.icezhg.athena.constant.Constants;
-import com.icezhg.athena.dao.RoleDao;
-import com.icezhg.athena.dao.RoleMenuDao;
 import com.icezhg.athena.domain.Role;
-import com.icezhg.athena.domain.RoleMenu;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
 import com.icezhg.athena.vo.UserQuery;
-import com.icezhg.authorization.core.SecurityUtil;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
-import java.util.Date;
 import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Created by zhongjibing on 2020/03/18
  */
-@Service
-public class RoleService {
+public interface RoleService {
 
-    private final RoleDao roleDao;
+    int count(RoleQuery query);
 
-    private final RoleMenuDao roleMenuDao;
+    List<Role> find(RoleQuery query);
 
-    public RoleService(RoleDao roleDao, RoleMenuDao roleMenuDao) {
-        this.roleDao = roleDao;
-        this.roleMenuDao = roleMenuDao;
-    }
+    Role findById(Integer roleId);
 
-    public int count(RoleQuery query) {
-        return roleDao.count(query.toMap());
-    }
+    RoleInfo findRoleInfo(Integer roleId);
 
-    public List<Role> find(RoleQuery query) {
-        return roleDao.find(query.toMap());
-    }
+    List<Role> findCurrentRole();
 
-    public Role findById(Integer roleId) {
-        RoleQuery query = new RoleQuery();
-        query.setId(roleId);
-        return find(query).stream().findFirst().orElse(null);
-    }
+    boolean checkUnique(RoleInfo role);
 
-    public RoleInfo findRoleInfo(Integer roleId) {
-        return buildRoleInfo(findById(roleId));
-    }
+    RoleInfo save(RoleInfo role);
 
-    public List<Role> findCurrentRole() {
-        return roleDao.findAuthRoles(SecurityUtil.currentUserId());
-    }
+    RoleInfo update(RoleInfo role);
 
-    public boolean checkUnique(RoleInfo role) {
-        RoleQuery query = new RoleQuery();
-        query.setRoleKey(role.getRoleKey());
-        List<Role> roles = find(query);
-        return roles.isEmpty() || Objects.equals(role.getId(), roles.get(0).getId());
-    }
+    int changeStatus(RoleInfo roleInfo);
 
-    @Transactional
-    public RoleInfo save(RoleInfo role) {
-        Role newRole = buildRole(role);
-        newRole.setCreateTime(new Date());
-        newRole.setCreateBy(SecurityUtil.currentUserName());
-        newRole.setUpdateTime(new Date());
-        newRole.setUpdateBy(SecurityUtil.currentUserName());
-        roleDao.insert(newRole);
-        if (!CollectionUtils.isEmpty(role.getMenuIds())) {
-            roleMenuDao.batchInsert(buildRoleMenus(newRole.getId(), role.getMenuIds()));
-        }
-        role.setId(newRole.getId());
-        return role;
-    }
+    int deleteRoles(List<Integer> roleIds);
 
-    @Transactional
-    public RoleInfo update(RoleInfo role) {
-        Role existing = buildRole(role);
-        existing.setUpdateTime(new Date());
-        existing.setUpdateBy(SecurityUtil.currentUserName());
-        roleDao.update(existing);
-        roleMenuDao.deleteByRoleIds(List.of(role.getId()));
-        if (!CollectionUtils.isEmpty(role.getMenuIds())) {
-            roleMenuDao.batchInsert(buildRoleMenus(existing.getId(), role.getMenuIds()));
-        }
+    List<Role> listAll();
 
-        return role;
-    }
-
-    public int changeStatus(RoleInfo roleInfo) {
-        Role role = new Role();
-        role.setId(roleInfo.getId());
-        role.setStatus(roleInfo.getStatus());
-        role.setUpdateTime(new Date());
-        role.setUpdateBy(SecurityUtil.currentUserName());
-        return roleDao.update(role);
-    }
-
-    private List<RoleMenu> buildRoleMenus(Integer roleId, List<Integer> menuIds) {
-        return menuIds.stream().map(menuId -> new RoleMenu(roleId, menuId)).collect(Collectors.toList());
-    }
-
-    private Role buildRole(RoleInfo role) {
-        Role newRole = new Role();
-        newRole.setId(role.getId());
-        newRole.setName(role.getName());
-        newRole.setRoleKey(role.getRoleKey());
-        newRole.setRoleSort(role.getRoleSort());
-        newRole.setDataScope(role.getDataScope());
-        newRole.setMenuCheckStrictly(role.isMenuCheckStrictly() ? Constants.YES : Constants.NO);
-        newRole.setDeptCheckStrictly(role.isDeptCheckStrictly() ? Constants.YES : Constants.NO);
-        newRole.setStatus(role.getStatus());
-        newRole.setRemark(role.getRemark());
-        return newRole;
-    }
-
-    private RoleInfo buildRoleInfo(Role role) {
-        RoleInfo roleInfo = new RoleInfo();
-        if (role != null) {
-            roleInfo.setId(role.getId());
-            roleInfo.setName(role.getName());
-            roleInfo.setRoleKey(role.getRoleKey());
-            roleInfo.setRoleSort(role.getRoleSort());
-            roleInfo.setDataScope(role.getDataScope());
-            roleInfo.setMenuCheckStrictly(role.getMenuCheckStrictly() == Constants.YES);
-            roleInfo.setDeptCheckStrictly(role.getDeptCheckStrictly() == Constants.YES);
-            roleInfo.setStatus(role.getStatus());
-            roleInfo.setRemark(role.getRemark());
-        }
-        return roleInfo;
-    }
-
-    @Transactional
-    public int deleteRoles(List<Integer> roleIds) {
-        roleMenuDao.deleteByRoleIds(roleIds);
-        return roleDao.deleteByIds(roleIds);
-    }
-
-
-    public List<Role> listAll() {
-        return roleDao.listAll();
-    }
-
-    public Object listAllocatedUsers(String roleId, UserQuery query) {
-        return null;
-    }
+    Object listAllocatedUsers(String roleId, UserQuery query);
 }

@@ -18,4 +18,5 @@ public class UserQuery extends NameQuery {
     private Date beginTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date endTime;
+    private Integer roleId;
 }

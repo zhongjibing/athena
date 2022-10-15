@@ -101,4 +101,12 @@ public class User {
      * 备注
      */
     private String remark;
+
+    public boolean isRoot() {
+        return isRoot(this.id);
+    }
+
+    public static boolean isRoot(Long userId) {
+        return userId != null && userId == 0L;
+    }
 }

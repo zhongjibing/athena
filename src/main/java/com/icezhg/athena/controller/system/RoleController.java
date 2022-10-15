@@ -1,7 +1,8 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.service.RoleService;
+import com.icezhg.athena.service.UserService;
+import com.icezhg.athena.vo.PageQuery;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
@@ -28,8 +29,11 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    public RoleController(RoleService roleService) {
+    private final UserService userService;
+
+    public RoleController(RoleService roleService, UserService userService) {
         this.roleService = roleService;
+        this.userService = userService;
     }
 
     @PostMapping
@@ -69,7 +73,11 @@ public class RoleController {
     }
 
     @GetMapping("/{roleId}/allocatedUsers")
-    public Object allocatedUsers(@PathVariable String roleId, UserQuery query) {
-        return roleService.listAllocatedUsers(roleId, query);
+    public PageResult allocatedUsers(@PathVariable Integer roleId, PageQuery pageQuery) {
+        UserQuery userQuery = new UserQuery();
+        userQuery.setRoleId(roleId);
+        userQuery.setPageNum(pageQuery.getPageNum());
+        userQuery.setPageSize(pageQuery.getPageSize());
+        return new PageResult(userService.count(userQuery), userService.find(userQuery));
     }
 }

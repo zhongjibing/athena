@@ -159,6 +159,13 @@
             <if test="beginTime != null and endTime != null">
                 and create_time between #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
             </if>
+            <if test="roleId != null">
+                and id in (
+                    select ur.user_id
+                    from sys_user_role ur, sys_role  r
+                    where ur.role_id = r.id and r.id = #{roleId,jdbcType=INTEGER}
+                )
+            </if>
         </where>
     </sql>
 

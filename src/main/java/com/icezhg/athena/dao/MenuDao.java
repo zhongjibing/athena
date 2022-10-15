@@ -22,4 +22,6 @@ public interface MenuDao {
     MenuInfo findById(Integer id);
 
     int deleteById(Integer id);
+
+    boolean hasChildren(Integer parentId);
 }

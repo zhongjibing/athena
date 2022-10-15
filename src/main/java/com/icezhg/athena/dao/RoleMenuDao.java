@@ -16,4 +16,6 @@ public interface RoleMenuDao {
     int deleteByRoleIds(List<Integer> roleIds);
 
     List<Integer> findMenuIdsByRoleId(Integer roleId);
+
+    boolean checkMenuExistRole(Integer menuId);
 }

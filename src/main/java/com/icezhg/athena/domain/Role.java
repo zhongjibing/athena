@@ -77,7 +77,7 @@ public class Role extends BaseEntity {
      */
     private String remark;
 
-    public boolean isRoot() {
-        return id != null && id == 0;
+    public boolean isAdmin() {
+        return id != null && id == 1;
     }
 }
