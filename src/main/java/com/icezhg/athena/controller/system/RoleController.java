@@ -1,8 +1,9 @@
 package com.icezhg.athena.controller.system;
 
 import com.icezhg.athena.service.RoleService;
+import com.icezhg.athena.service.UserRoleService;
 import com.icezhg.athena.service.UserService;
-import com.icezhg.athena.vo.PageQuery;
+import com.icezhg.athena.vo.NameQuery;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
@@ -29,11 +30,11 @@ public class RoleController {
 
     private final RoleService roleService;
 
-    private final UserService userService;
+    private final UserRoleService userRoleService;
 
-    public RoleController(RoleService roleService, UserService userService) {
+    public RoleController(RoleService roleService, UserRoleService userRoleService) {
         this.roleService = roleService;
-        this.userService = userService;
+        this.userRoleService = userRoleService;
     }
 
     @PostMapping
@@ -73,11 +74,23 @@ public class RoleController {
     }
 
     @GetMapping("/{roleId}/allocatedUsers")
-    public PageResult allocatedUsers(@PathVariable Integer roleId, PageQuery pageQuery) {
-        UserQuery userQuery = new UserQuery();
-        userQuery.setRoleId(roleId);
-        userQuery.setPageNum(pageQuery.getPageNum());
-        userQuery.setPageSize(pageQuery.getPageSize());
-        return new PageResult(userService.count(userQuery), userService.find(userQuery));
+    public PageResult allocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
+        return userRoleService.listAllocatedUsers(roleId, nameQuery);
     }
+
+    @GetMapping("/{roleId}/unallocatedUsers")
+    public PageResult unallocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
+        return userRoleService.listUnallocatedUsers(roleId, nameQuery);
+    }
+
+    @PostMapping("/{roleId}/authUser")
+    public void authUser(@PathVariable Integer roleId, @RequestBody List<Long> userIds) {
+        userRoleService.authUser(roleId, userIds);
+    }
+
+    @DeleteMapping("/{roleId}/authUser")
+    public void authUserCancel(@PathVariable Integer roleId, @RequestBody List<Long> userIds) {
+        userRoleService.cancelAuth(roleId, userIds);
+    }
+
 }

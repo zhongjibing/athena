@@ -34,5 +34,4 @@ public interface RoleService {
 
     List<Role> listAll();
 
-    Object listAllocatedUsers(String roleId, UserQuery query);
 }

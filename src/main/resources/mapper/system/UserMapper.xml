@@ -162,8 +162,15 @@
             <if test="roleId != null">
                 and id in (
                     select ur.user_id
-                    from sys_user_role ur, sys_role  r
-                    where ur.role_id = r.id and r.id = #{roleId,jdbcType=INTEGER}
+                      from sys_user_role ur, sys_role  r
+                     where ur.role_id = r.id and r.id = #{roleId,jdbcType=INTEGER}
+                )
+            </if>
+            <if test="nonRoleId != null">
+                and id not in (
+                    select ur.user_id
+                      from sys_user_role ur, sys_role  r
+                     where ur.role_id = r.id and r.id = #{nonRoleId,jdbcType=INTEGER}
                 )
             </if>
         </where>

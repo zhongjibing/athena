@@ -3,18 +3,13 @@ package com.icezhg.athena.service.impl;
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.constant.SysConfig;
 import com.icezhg.athena.dao.AvatarPictureDao;
-import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.dao.UserDao;
-import com.icezhg.athena.dao.UserRoleDao;
 import com.icezhg.athena.domain.AvatarPicture;
-import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.User;
 import com.icezhg.athena.service.ConfigService;
 import com.icezhg.athena.service.UserService;
 import com.icezhg.athena.util.MaskSensitiveUtil;
 import com.icezhg.athena.vo.Query;
-import com.icezhg.athena.vo.RoleAuth;
-import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.UserPasswd;
 import com.icezhg.athena.vo.UserQuery;
@@ -29,12 +24,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Objects;
-import java.util.Set;
-import java.util.stream.Collectors;
 
 /**
  * Created by zhongjibing on 2020/03/15
@@ -45,20 +36,14 @@ public class UserServiceImpl implements UserService {
 
     private final UserDao userDao;
 
-    private final RoleDao roleDao;
-
-    private final UserRoleDao userRoleDao;
-
     private final AvatarPictureDao avatarPictureDao;
 
     private PasswordEncoder passwordEncoder;
 
     private ConfigService configService;
 
-    public UserServiceImpl(UserDao userDao, RoleDao roleDao, UserRoleDao userRoleDao, AvatarPictureDao avatarPictureDao) {
+    public UserServiceImpl(UserDao userDao, AvatarPictureDao avatarPictureDao) {
         this.userDao = userDao;
-        this.roleDao = roleDao;
-        this.userRoleDao = userRoleDao;
         this.avatarPictureDao = avatarPictureDao;
     }
 
@@ -171,53 +156,4 @@ public class UserServiceImpl implements UserService {
         return userDao.update(user);
     }
 
-    @Override
-    public UserAuth findAuth(Long userId) {
-        UserAuth userAuth = new UserAuth();
-        UserInfo userInfo = userDao.findById(userId);
-        if (userInfo != null) {
-            userAuth.setId(userInfo.getId());
-            userAuth.setUsername(userInfo.getUsername());
-            userAuth.setNickname(userInfo.getNickname());
-        }
-
-        Set<Integer> grantedRoles = roleDao.findAuthRoles(userId).stream().map(Role::getId).collect(Collectors.toSet());
-        List<RoleAuth> roleAuths = roleDao.listAll().stream().map(role -> {
-            RoleAuth roleAuth = new RoleAuth();
-            roleAuth.setId(role.getId());
-            roleAuth.setName(role.getName());
-            roleAuth.setRoleKey(role.getRoleKey());
-            roleAuth.setRoleSort(role.getRoleSort());
-            roleAuth.setCreateTime(role.getCreateTime());
-            roleAuth.setRemark(role.getRemark());
-            roleAuth.setGranted(grantedRoles.contains(role.getId()));
-            return roleAuth;
-        }).toList();
-        userAuth.setRoleAuths(roleAuths);
-        return userAuth;
-    }
-
-    @Override
-    @Transactional
-    public UserAuth updateUserAuth(Long userId, List<Integer> roleIds) {
-        Set<Integer> delRoles = roleDao.findAuthRoles(userId).stream().map(Role::getId).collect(Collectors.toSet());
-        Set<Integer> addRoles = new HashSet<>(roleIds);
-        Iterator<Integer> iterator = addRoles.iterator();
-        while (iterator.hasNext()) {
-            Integer roleId = iterator.next();
-            if (delRoles.contains(roleId)) {
-                delRoles.remove(roleId);
-                iterator.remove();
-            }
-        }
-
-        if (!addRoles.isEmpty()) {
-            userRoleDao.addUserRoles(userId, addRoles);
-        }
-        if (!delRoles.isEmpty()) {
-            userRoleDao.deleteUserRoles(userId, delRoles);
-        }
-
-        return findAuth(userId);
-    }
 }

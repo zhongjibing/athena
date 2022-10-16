@@ -3,6 +3,7 @@ package com.icezhg.athena.dao;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -11,7 +12,11 @@ import java.util.Set;
 @Repository
 public interface UserRoleDao {
 
-    void addUserRoles(@Param("userId") Long userId, @Param("roleIds") Set<Integer> roleIds);
+    int addUserRoles(@Param("userId") Long userId, @Param("roleIds") Set<Integer> roleIds);
 
-    void deleteUserRoles(@Param("userId") Long userId, @Param("roleIds") Set<Integer> roleIds);
+    int deleteUserRoles(@Param("userId") Long userId, @Param("roleIds") Set<Integer> roleIds);
+
+    int addRoleUsers(@Param("roleId") Integer roleId, @Param("userIds") List<Long> userIds);
+
+    int deleteRoleUsers(@Param("roleId") Integer roleId, @Param("userIds") List<Long> userIds);
 }

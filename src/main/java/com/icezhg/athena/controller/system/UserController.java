@@ -1,5 +1,6 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.service.UserRoleService;
 import com.icezhg.athena.service.UserService;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.UserAuth;
@@ -28,8 +29,11 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    private final UserRoleService userRoleService;
+
+    public UserController(UserService userService, UserRoleService userRoleService) {
         this.userService = userService;
+        this.userRoleService = userRoleService;
     }
 
     @PostMapping
@@ -71,11 +75,11 @@ public class UserController {
 
     @GetMapping("/{userId}/auth")
     public UserAuth findUserAuth(@PathVariable Long userId) {
-        return userService.findAuth(userId);
+        return userRoleService.findAuth(userId);
     }
 
     @PutMapping("/{userId}/auth")
     public UserAuth updateUserAuth(@PathVariable Long userId, @RequestBody List<Integer> roleIds) {
-        return userService.updateUserAuth(userId, roleIds);
+        return userRoleService.updateUserAuth(userId, roleIds);
     }
 }

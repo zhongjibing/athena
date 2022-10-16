@@ -1,7 +1,6 @@
 package com.icezhg.athena.service;
 
 import com.icezhg.athena.vo.Query;
-import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.UserPasswd;
 import com.icezhg.athena.vo.UserStatus;
@@ -29,7 +28,4 @@ public interface UserService {
 
     int resetPasswd(UserPasswd userPasswd);
 
-    UserAuth findAuth(Long userId);
-
-    UserAuth updateUserAuth(Long userId, List<Integer> roleIds);
 }

@@ -8,7 +8,6 @@ import com.icezhg.athena.domain.RoleMenu;
 import com.icezhg.athena.service.RoleService;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
-import com.icezhg.athena.vo.UserQuery;
 import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,6 +27,7 @@ public class RoleServiceImpl implements RoleService {
     private final RoleDao roleDao;
 
     private final RoleMenuDao roleMenuDao;
+
 
     public RoleServiceImpl(RoleDao roleDao, RoleMenuDao roleMenuDao) {
         this.roleDao = roleDao;
@@ -156,8 +156,4 @@ public class RoleServiceImpl implements RoleService {
         return roleDao.listAll();
     }
 
-    @Override
-    public Object listAllocatedUsers(String roleId, UserQuery query) {
-        return null;
-    }
 }
