@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -62,10 +63,16 @@ public class OnlineUserServiceImpl implements OnlineUserService {
             return null;
         });
 
+        List<String> keyList = keys.stream().map(key -> (String) key).toList();
         List<OnlineUser> onlineUsers = new ArrayList<>(sessions.size());
-        for (Object session : sessions) {
+        for (int i = 0; i < sessions.size(); i++) {
+            Object session = sessions.get(i);
             if (session instanceof Map<?, ?> detail) {
-                onlineUsers.add(buildOnlineUser(detail));
+                OnlineUser onlineUser = buildOnlineUser(detail);
+                String sessionId = StringUtils.substringAfterLast(keyList.get(i), ":");
+                onlineUser.setSessionId(sessionId);
+
+                onlineUsers.add(onlineUser);
             }
         }
         return onlineUsers;
@@ -75,14 +82,14 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         OnlineUser.OnlineUserBuilder builder = OnlineUser.builder();
         detail.forEach((key, value) -> {
             if (Objects.equals(key, "creationTime")) {
-                builder.loginTime(formatDateTime((String) value));
+                builder.loginTime(formatDateTime((Long) value));
             } else if (Objects.equals(key, "sessionAttr:SPRING_SECURITY_CONTEXT")) {
                 RefOptional.of(value)
                         .cast(SecurityContext.class).map(SecurityContext::getAuthentication).map(Authentication::getPrincipal)
                         .cast(DefaultOidcUser.class).map(DefaultOidcUser::getUserInfo)
                         .ifPresent(userInfo -> buildBuilder(builder, userInfo));
             } else if (Objects.equals(key, "lastAccessedTime")) {
-                builder.lastAccessedTime(formatDateTime((String) value));
+                builder.lastAccessedTime(formatDateTime((Long) value));
             }
         });
         return builder.build();
@@ -112,8 +119,11 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         if (StringUtils.isNotBlank(query.getLoginIp())) {
             stream = stream.filter(user -> StringUtils.equals(user.getLoginIp(), query.getLoginIp()));
         }
-        int total = (int) stream.count();
-        List<OnlineUser> result = stream.skip(query.getOffset()).limit(query.getPageSize()).toList();
+
+        List<OnlineUser> filtered = stream.toList();
+        int total = filtered.size();
+        List<OnlineUser> result = filtered.stream().skip(query.getOffset()).limit(query.getPageSize()).toList();
+
         return new PageResult(total, result);
     }
 
@@ -123,10 +133,18 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         }
         try {
             long millis = Long.parseLong(text);
-            return DateFormatUtils.format(millis, Constants.DEFAULT_DATETIME_FORMAT_PATTERN, Constants.DEFAULT_LOCALE);
+            return formatDateTime(millis);
         } catch (NumberFormatException ignored) {
         }
 
         return "";
+    }
+
+    private String formatDateTime(Long millis) {
+        if (millis == null) {
+            return "";
+        }
+
+        return DateFormatUtils.format(millis, Constants.DEFAULT_DATETIME_FORMAT_PATTERN, Constants.DEFAULT_LOCALE);
     }
 }
