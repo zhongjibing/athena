@@ -1,11 +1,11 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.dao.RoleMenuDao;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.RoleMenu;
-import com.icezhg.athena.service.RoleService;
+import com.icezhg.athena.service.system.RoleService;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
 import com.icezhg.authorization.core.SecurityUtil;

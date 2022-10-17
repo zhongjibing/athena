@@ -1,8 +1,8 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.dao.ConfigDao;
 import com.icezhg.athena.domain.Config;
-import com.icezhg.athena.service.ConfigService;
+import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.vo.ConfigInfo;
 import com.icezhg.athena.vo.ConfigQuery;
 import com.icezhg.athena.vo.Query;

@@ -1,7 +1,7 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.service.UserRoleService;
-import com.icezhg.athena.service.UserService;
+import com.icezhg.athena.service.system.UserRoleService;
+import com.icezhg.athena.service.system.UserService;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;

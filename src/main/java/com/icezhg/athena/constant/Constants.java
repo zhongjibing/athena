@@ -1,5 +1,7 @@
 package com.icezhg.athena.constant;
 
+import java.util.Locale;
+
 /**
  * 用户常量信息
  */
@@ -85,4 +87,8 @@ public interface Constants {
 
     String HTTP_SCHEMA = "http://";
     String HTTPS_SCHEMA = "https://";
+
+    String DEFAULT_DATETIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
+
+    Locale DEFAULT_LOCALE = Locale.CHINA;
 }

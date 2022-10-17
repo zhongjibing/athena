@@ -1,4 +1,4 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.dao.AvatarPictureDao;
 import com.icezhg.athena.dao.RoleDao;
@@ -6,7 +6,7 @@ import com.icezhg.athena.dao.UserDao;
 import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.User;
-import com.icezhg.athena.service.ProfileService;
+import com.icezhg.athena.service.system.ProfileService;
 import com.icezhg.athena.vo.Profile;
 import com.icezhg.athena.vo.ProfilePasswd;
 import com.icezhg.athena.vo.UserInfo;

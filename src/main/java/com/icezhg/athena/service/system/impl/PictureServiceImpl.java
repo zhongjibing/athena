@@ -1,11 +1,11 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.dao.BinaryDataDao;
 import com.icezhg.athena.dao.PictureDao;
 import com.icezhg.athena.domain.BinaryData;
 import com.icezhg.athena.domain.Picture;
-import com.icezhg.athena.service.PictureService;
+import com.icezhg.athena.service.system.PictureService;
 import com.icezhg.athena.util.IdGenerator;
 import com.icezhg.athena.vo.NameQuery;
 import com.icezhg.authorization.core.SecurityUtil;

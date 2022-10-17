@@ -1,7 +1,7 @@
 package com.icezhg.athena.controller.system;
 
 import com.icezhg.athena.domain.Picture;
-import com.icezhg.athena.service.PictureService;
+import com.icezhg.athena.service.system.PictureService;
 import com.icezhg.commons.exception.ErrorCodeException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;

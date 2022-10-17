@@ -1,6 +1,6 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.service.DictTypeService;
+import com.icezhg.athena.service.system.DictTypeService;
 import com.icezhg.athena.vo.DictQuery;
 import com.icezhg.athena.vo.DictTypeInfo;
 import com.icezhg.athena.vo.PageResult;

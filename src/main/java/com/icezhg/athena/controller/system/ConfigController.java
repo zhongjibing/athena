@@ -1,6 +1,6 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.service.ConfigService;
+import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.vo.ConfigInfo;
 import com.icezhg.athena.vo.ConfigQuery;
 import com.icezhg.athena.vo.PageResult;

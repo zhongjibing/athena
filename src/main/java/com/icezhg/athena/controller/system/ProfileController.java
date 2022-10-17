@@ -2,9 +2,9 @@ package com.icezhg.athena.controller.system;
 
 import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.Picture;
-import com.icezhg.athena.service.ConfigService;
-import com.icezhg.athena.service.PictureService;
-import com.icezhg.athena.service.ProfileService;
+import com.icezhg.athena.service.system.ConfigService;
+import com.icezhg.athena.service.system.PictureService;
+import com.icezhg.athena.service.system.ProfileService;
 import com.icezhg.athena.vo.Profile;
 import com.icezhg.athena.vo.ProfilePasswd;
 import com.icezhg.authorization.core.SecurityUtil;

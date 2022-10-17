@@ -1,10 +1,10 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.dao.RoleDao;
 import com.icezhg.athena.dao.UserDao;
 import com.icezhg.athena.dao.UserRoleDao;
 import com.icezhg.athena.domain.Role;
-import com.icezhg.athena.service.UserRoleService;
+import com.icezhg.athena.service.system.UserRoleService;
 import com.icezhg.athena.util.MaskSensitiveUtil;
 import com.icezhg.athena.vo.NameQuery;
 import com.icezhg.athena.vo.PageResult;

@@ -1,8 +1,8 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.dao.DictDataDao;
 import com.icezhg.athena.domain.DictData;
-import com.icezhg.athena.service.DictDataService;
+import com.icezhg.athena.service.system.DictDataService;
 import com.icezhg.athena.vo.DictDataInfo;
 import com.icezhg.athena.vo.DictQuery;
 import com.icezhg.authorization.core.SecurityUtil;

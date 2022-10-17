@@ -1,13 +1,11 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.service.RoleService;
-import com.icezhg.athena.service.UserRoleService;
-import com.icezhg.athena.service.UserService;
+import com.icezhg.athena.service.system.RoleService;
+import com.icezhg.athena.service.system.UserRoleService;
 import com.icezhg.athena.vo.NameQuery;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.RoleInfo;
 import com.icezhg.athena.vo.RoleQuery;
-import com.icezhg.athena.vo.UserQuery;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,10 +1,10 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.dao.DictDataDao;
 import com.icezhg.athena.dao.DictTypeDao;
 import com.icezhg.athena.domain.DictData;
 import com.icezhg.athena.domain.DictType;
-import com.icezhg.athena.service.DictTypeService;
+import com.icezhg.athena.service.system.DictTypeService;
 import com.icezhg.athena.vo.DictQuery;
 import com.icezhg.athena.vo.DictTypeInfo;
 import com.icezhg.authorization.core.SecurityUtil;

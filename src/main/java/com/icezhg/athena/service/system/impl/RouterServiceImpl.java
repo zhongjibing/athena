@@ -1,8 +1,8 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.constant.Constants;
-import com.icezhg.athena.service.MenuService;
-import com.icezhg.athena.service.RouterService;
+import com.icezhg.athena.service.system.MenuService;
+import com.icezhg.athena.service.system.RouterService;
 import com.icezhg.athena.vo.MenuInfo;
 import com.icezhg.athena.vo.MenuTree;
 import com.icezhg.athena.vo.Router;

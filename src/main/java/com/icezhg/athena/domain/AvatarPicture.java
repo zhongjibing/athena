@@ -1,7 +1,5 @@
 package com.icezhg.athena.domain;
 
-import com.icezhg.athena.constant.SysConfig;
-import com.icezhg.athena.service.ConfigService;
 import com.icezhg.athena.util.IdGenerator;
 
 /**
@@ -14,9 +12,5 @@ public record AvatarPicture(
 
     public AvatarPicture(String pictureId) {
         this(IdGenerator.generateId(), pictureId);
-    }
-
-    public static AvatarPicture create(ConfigService configService) {
-        return new AvatarPicture(configService.findConfig(SysConfig.DEFAULT_AVATAR_PICTURE));
     }
 }

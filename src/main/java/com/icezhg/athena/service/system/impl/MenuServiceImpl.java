@@ -1,4 +1,4 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.dao.MenuDao;
@@ -7,7 +7,7 @@ import com.icezhg.athena.dao.RoleMenuDao;
 import com.icezhg.athena.domain.Menu;
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.User;
-import com.icezhg.athena.service.MenuService;
+import com.icezhg.athena.service.system.MenuService;
 import com.icezhg.athena.vo.MenuInfo;
 import com.icezhg.athena.vo.MenuQuery;
 import com.icezhg.athena.vo.MenuTree;

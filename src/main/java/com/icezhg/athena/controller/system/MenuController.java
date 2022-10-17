@@ -1,6 +1,6 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.service.MenuService;
+import com.icezhg.athena.service.system.MenuService;
 import com.icezhg.athena.vo.MenuInfo;
 import com.icezhg.athena.vo.MenuQuery;
 import com.icezhg.athena.vo.MenuTree;

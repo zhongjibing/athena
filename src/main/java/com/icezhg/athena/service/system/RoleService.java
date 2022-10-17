@@ -1,4 +1,4 @@
-package com.icezhg.athena.service;
+package com.icezhg.athena.service.system;
 
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.vo.RoleInfo;

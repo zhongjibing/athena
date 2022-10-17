@@ -1,4 +1,4 @@
-package com.icezhg.athena.service.impl;
+package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.constant.SysConfig;
@@ -6,8 +6,8 @@ import com.icezhg.athena.dao.AvatarPictureDao;
 import com.icezhg.athena.dao.UserDao;
 import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.User;
-import com.icezhg.athena.service.ConfigService;
-import com.icezhg.athena.service.UserService;
+import com.icezhg.athena.service.system.ConfigService;
+import com.icezhg.athena.service.system.UserService;
 import com.icezhg.athena.util.MaskSensitiveUtil;
 import com.icezhg.athena.vo.Query;
 import com.icezhg.athena.vo.UserInfo;
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     @Override
     @Transactional
     public UserInfo save(UserInfo userInfo) {
-        AvatarPicture avatarPicture = AvatarPicture.create(configService);
+        AvatarPicture avatarPicture = defaultAvatarPicture();
         avatarPictureDao.create(avatarPicture);
 
         User newUser = buildUser(userInfo, true);
@@ -89,6 +89,10 @@ public class UserServiceImpl implements UserService {
         existing.setUpdateBy(SecurityUtil.currentUserName());
         userDao.update(existing);
         return userInfo;
+    }
+
+    private AvatarPicture defaultAvatarPicture() {
+        return new AvatarPicture(configService.findConfig(SysConfig.DEFAULT_AVATAR_PICTURE));
     }
 
     private User buildUser(UserInfo userInfo, boolean newUser) {

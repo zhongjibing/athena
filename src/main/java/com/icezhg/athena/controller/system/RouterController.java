@@ -1,6 +1,6 @@
 package com.icezhg.athena.controller.system;
 
-import com.icezhg.athena.service.RouterService;
+import com.icezhg.athena.service.system.RouterService;
 import com.icezhg.athena.vo.Router;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

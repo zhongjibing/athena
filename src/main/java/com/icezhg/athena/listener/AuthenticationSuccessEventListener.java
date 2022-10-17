@@ -1,6 +1,6 @@
 package com.icezhg.athena.listener;
 
-import com.icezhg.athena.service.UserService;
+import com.icezhg.athena.service.system.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
