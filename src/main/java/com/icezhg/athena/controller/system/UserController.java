@@ -6,7 +6,7 @@ import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.UserPasswd;
-import com.icezhg.athena.vo.UserQuery;
+import com.icezhg.athena.vo.query.UserQuery;
 import com.icezhg.athena.vo.UserStatus;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.springframework.validation.annotation.Validated;

@@ -2,7 +2,7 @@ package com.icezhg.athena.controller.system;
 
 import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.vo.ConfigInfo;
-import com.icezhg.athena.vo.ConfigQuery;
+import com.icezhg.athena.vo.query.ConfigQuery;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.springframework.validation.annotation.Validated;

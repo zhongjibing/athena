@@ -1,7 +1,7 @@
 package com.icezhg.athena.controller.monitor;
 
 import com.icezhg.athena.service.monitor.OnlineUserService;
-import com.icezhg.athena.vo.OnlineUserQuery;
+import com.icezhg.athena.vo.query.OnlineUserQuery;
 import com.icezhg.athena.vo.PageResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;

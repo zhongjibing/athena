@@ -2,7 +2,7 @@ package com.icezhg.athena.service.system;
 
 import com.icezhg.athena.domain.DictData;
 import com.icezhg.athena.vo.DictDataInfo;
-import com.icezhg.athena.vo.DictQuery;
+import com.icezhg.athena.vo.query.DictQuery;
 
 import java.util.List;
 

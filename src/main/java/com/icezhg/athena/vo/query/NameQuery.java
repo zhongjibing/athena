@@ -1,4 +1,4 @@
-package com.icezhg.athena.vo;
+package com.icezhg.athena.vo.query;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,6 +8,6 @@ import lombok.Setter;
  */
 @Setter
 @Getter
-public class KeyQuery extends PageQuery{
-    private String key;
+public class NameQuery extends PageQuery{
+    private String name;
 }

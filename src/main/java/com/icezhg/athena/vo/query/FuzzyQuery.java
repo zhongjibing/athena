@@ -1,4 +1,4 @@
-package com.icezhg.athena.vo;
+package com.icezhg.athena.vo.query;
 
 /**
  * Created by zhongjibing on 2022/09/17.

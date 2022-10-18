@@ -9,7 +9,7 @@ import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.User;
 import com.icezhg.athena.service.system.MenuService;
 import com.icezhg.athena.vo.MenuInfo;
-import com.icezhg.athena.vo.MenuQuery;
+import com.icezhg.athena.vo.query.MenuQuery;
 import com.icezhg.athena.vo.MenuTree;
 import com.icezhg.athena.vo.RoleMenuTree;
 import com.icezhg.authorization.core.SecurityUtil;

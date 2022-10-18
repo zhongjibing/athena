@@ -1,7 +1,7 @@
 package com.icezhg.athena.service.system;
 
 import com.icezhg.athena.domain.Picture;
-import com.icezhg.athena.vo.NameQuery;
+import com.icezhg.athena.vo.query.NameQuery;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;

@@ -1,10 +1,10 @@
 package com.icezhg.athena.dao;
 
 import com.icezhg.athena.domain.Picture;
-import com.icezhg.athena.vo.NameQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by zhongjibing on 2022/09/10.
@@ -20,9 +20,9 @@ public interface PictureDao {
 
     int update(Picture record);
 
-    int count(NameQuery query);
+    int count(Map<String, Object> query);
 
-    List<Picture> find(NameQuery query);
+    List<Picture> find(Map<String, Object> query);
 
     Picture findByAvatar(String avatar);
 }

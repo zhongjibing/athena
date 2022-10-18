@@ -5,7 +5,7 @@ import com.icezhg.athena.dao.DictTypeDao;
 import com.icezhg.athena.domain.DictData;
 import com.icezhg.athena.domain.DictType;
 import com.icezhg.athena.service.system.DictTypeService;
-import com.icezhg.athena.vo.DictQuery;
+import com.icezhg.athena.vo.query.DictQuery;
 import com.icezhg.athena.vo.DictTypeInfo;
 import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;

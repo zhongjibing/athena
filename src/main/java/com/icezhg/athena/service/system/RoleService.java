@@ -2,8 +2,7 @@ package com.icezhg.athena.service.system;
 
 import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.vo.RoleInfo;
-import com.icezhg.athena.vo.RoleQuery;
-import com.icezhg.athena.vo.UserQuery;
+import com.icezhg.athena.vo.query.RoleQuery;
 
 import java.util.List;
 

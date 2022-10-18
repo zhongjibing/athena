@@ -1,4 +1,4 @@
-package com.icezhg.athena.vo;
+package com.icezhg.athena.vo.query;
 
 import lombok.Getter;
 import lombok.Setter;

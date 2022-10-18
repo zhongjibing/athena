@@ -2,7 +2,7 @@ package com.icezhg.athena.service.system;
 
 import com.icezhg.athena.domain.Config;
 import com.icezhg.athena.vo.ConfigInfo;
-import com.icezhg.athena.vo.Query;
+import com.icezhg.athena.vo.query.Query;
 
 import java.util.List;
 

@@ -90,14 +90,14 @@
         </where>
     </sql>
 
-    <select id="count" parameterType="com.icezhg.athena.vo.NameQuery" resultType="int">
+    <select id="count" parameterType="map" resultType="int">
         select
         count(*)
         from sys_picture
         <include refid="findCondition" />
     </select>
 
-    <select id="find" parameterType="com.icezhg.athena.vo.NameQuery" resultMap="BaseResultMap">
+    <select id="find" parameterType="map" resultMap="BaseResultMap">
         select
         <include refid="Base_Column_List"/>
         from sys_picture

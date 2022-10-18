@@ -7,7 +7,7 @@ import com.icezhg.athena.domain.BinaryData;
 import com.icezhg.athena.domain.Picture;
 import com.icezhg.athena.service.system.PictureService;
 import com.icezhg.athena.util.IdGenerator;
-import com.icezhg.athena.vo.NameQuery;
+import com.icezhg.athena.vo.query.NameQuery;
 import com.icezhg.authorization.core.SecurityUtil;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.apache.commons.codec.digest.DigestUtils;
@@ -100,12 +100,12 @@ public class PictureServiceImpl implements PictureService {
 
     @Override
     public int count(NameQuery query) {
-        return pictureDao.count(query);
+        return pictureDao.count(query.toMap());
     }
 
     @Override
     public List<Picture> find(NameQuery query) {
-        return pictureDao.find(query);
+        return pictureDao.find(query.toMap());
     }
 
     @Override

@@ -1,7 +1,7 @@
 package com.icezhg.athena.service.system;
 
 import com.icezhg.athena.vo.MenuInfo;
-import com.icezhg.athena.vo.MenuQuery;
+import com.icezhg.athena.vo.query.MenuQuery;
 import com.icezhg.athena.vo.MenuTree;
 import com.icezhg.athena.vo.RoleMenuTree;
 

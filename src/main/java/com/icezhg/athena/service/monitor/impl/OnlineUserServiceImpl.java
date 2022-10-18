@@ -4,7 +4,7 @@ import com.icezhg.athena.constant.CacheKey;
 import com.icezhg.athena.constant.Constants;
 import com.icezhg.athena.service.monitor.OnlineUserService;
 import com.icezhg.athena.vo.OnlineUser;
-import com.icezhg.athena.vo.OnlineUserQuery;
+import com.icezhg.athena.vo.query.OnlineUserQuery;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.commons.util.RefOptional;
 import org.apache.commons.lang3.StringUtils;

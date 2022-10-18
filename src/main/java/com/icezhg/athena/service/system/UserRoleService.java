@@ -1,6 +1,6 @@
 package com.icezhg.athena.service.system;
 
-import com.icezhg.athena.vo.NameQuery;
+import com.icezhg.athena.vo.query.NameQuery;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.UserAuth;
 

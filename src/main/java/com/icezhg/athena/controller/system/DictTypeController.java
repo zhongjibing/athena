@@ -1,7 +1,7 @@
 package com.icezhg.athena.controller.system;
 
 import com.icezhg.athena.service.system.DictTypeService;
-import com.icezhg.athena.vo.DictQuery;
+import com.icezhg.athena.vo.query.DictQuery;
 import com.icezhg.athena.vo.DictTypeInfo;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.commons.exception.ErrorCodeException;

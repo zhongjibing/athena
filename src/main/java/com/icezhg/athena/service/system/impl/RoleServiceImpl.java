@@ -7,7 +7,7 @@ import com.icezhg.athena.domain.Role;
 import com.icezhg.athena.domain.RoleMenu;
 import com.icezhg.athena.service.system.RoleService;
 import com.icezhg.athena.vo.RoleInfo;
-import com.icezhg.athena.vo.RoleQuery;
+import com.icezhg.athena.vo.query.RoleQuery;
 import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

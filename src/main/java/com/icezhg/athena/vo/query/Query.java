@@ -1,4 +1,4 @@
-package com.icezhg.athena.vo;
+package com.icezhg.athena.vo.query;
 
 
 import org.springframework.util.ReflectionUtils;

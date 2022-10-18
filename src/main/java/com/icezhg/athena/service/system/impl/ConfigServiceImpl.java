@@ -4,8 +4,8 @@ import com.icezhg.athena.dao.ConfigDao;
 import com.icezhg.athena.domain.Config;
 import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.vo.ConfigInfo;
-import com.icezhg.athena.vo.ConfigQuery;
-import com.icezhg.athena.vo.Query;
+import com.icezhg.athena.vo.query.ConfigQuery;
+import com.icezhg.athena.vo.query.Query;
 import com.icezhg.authorization.core.SecurityUtil;
 import org.springframework.stereotype.Service;
 

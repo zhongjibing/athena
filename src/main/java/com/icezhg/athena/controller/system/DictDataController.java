@@ -4,7 +4,7 @@ import com.icezhg.athena.domain.DictData;
 import com.icezhg.athena.service.system.DictDataService;
 import com.icezhg.athena.service.system.DictTypeService;
 import com.icezhg.athena.vo.DictDataInfo;
-import com.icezhg.athena.vo.DictQuery;
+import com.icezhg.athena.vo.query.DictQuery;
 import com.icezhg.athena.vo.PageResult;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;

@@ -1,6 +1,6 @@
 package com.icezhg.athena.service.system;
 
-import com.icezhg.athena.vo.Query;
+import com.icezhg.athena.vo.query.Query;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.UserPasswd;
 import com.icezhg.athena.vo.UserStatus;
