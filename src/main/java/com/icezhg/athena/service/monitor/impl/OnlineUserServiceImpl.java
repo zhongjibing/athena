@@ -9,6 +9,7 @@ import com.icezhg.athena.vo.PageResult;
 import com.icezhg.commons.util.RefOptional;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
+import org.apache.commons.lang3.time.DateUtils;
 import org.springframework.data.redis.core.RedisCallback;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.RedisSerializer;
@@ -18,6 +19,7 @@ import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
 import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -25,7 +27,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -75,6 +76,9 @@ public class OnlineUserServiceImpl implements OnlineUserService {
                 onlineUsers.add(onlineUser);
             }
         }
+
+        onlineUsers.sort((o1, o2) -> (int) (parseTime(o2.getLoginTime()) - parseTime(o1.getLoginTime())));
+
         return onlineUsers;
     }
 
@@ -146,5 +150,13 @@ public class OnlineUserServiceImpl implements OnlineUserService {
         }
 
         return DateFormatUtils.format(millis, Constants.DEFAULT_DATETIME_FORMAT_PATTERN, Constants.DEFAULT_LOCALE);
+    }
+
+    private long parseTime(String datetime) {
+        try {
+            return DateUtils.parseDate(datetime, Constants.DEFAULT_LOCALE, Constants.DEFAULT_DATETIME_FORMAT_PATTERN).getTime();
+        } catch (ParseException ignored) {
+        }
+        return 0L;
     }
 }
