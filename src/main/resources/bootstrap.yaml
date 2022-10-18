@@ -9,6 +9,12 @@ spring:
     active: @spring.profiles.active@
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
+  quartz:
+    job-store-type: jdbc
+    wait-for-jobs-to-complete-on-shutdown: true
+  sleuth:
+    quartz:
+      enabled: true
 management:
   endpoints:
     web:
