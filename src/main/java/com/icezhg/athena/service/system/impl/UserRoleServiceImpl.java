@@ -13,7 +13,7 @@ import com.icezhg.athena.vo.RoleAuth;
 import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.query.UserQuery;
-import com.icezhg.commons.exception.ParameterException;
+import com.icezhg.commons.exception.InvalidParameterException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -119,7 +119,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public void authUser(Integer roleId, List<Long> userIds) {
         if (roleId == null || userIds == null || userIds.isEmpty()) {
-            throw new ParameterException("", "parameter error");
+            throw new InvalidParameterException("", "parameter error");
         }
 
         List<Long> actual = userIds.stream().filter(item -> item != null && item > 0L).collect(Collectors.toList());
@@ -129,7 +129,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public void cancelAuth(Integer roleId, List<Long> userIds) {
         if (roleId == null || userIds == null || userIds.isEmpty()) {
-            throw new ParameterException("", "parameter error");
+            throw new InvalidParameterException("", "parameter error");
         }
 
         userRoleDao.deleteRoleUsers(roleId, userIds);

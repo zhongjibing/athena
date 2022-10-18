@@ -13,7 +13,7 @@ import com.icezhg.athena.vo.query.MenuQuery;
 import com.icezhg.athena.vo.MenuTree;
 import com.icezhg.athena.vo.RoleMenuTree;
 import com.icezhg.authorization.core.SecurityUtil;
-import com.icezhg.commons.exception.DataStateException;
+import com.icezhg.commons.exception.InvalidDataStateException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -154,11 +154,11 @@ public class MenuServiceImpl implements MenuService {
     public int delete(Integer menuId) {
         boolean hasChild = menuDao.hasChildren(menuId);
         if (hasChild) {
-            throw new DataStateException("", "存在子菜单,不允许删除");
+            throw new InvalidDataStateException("", "存在子菜单,不允许删除");
         }
         boolean hasRole = roleMenuDao.checkMenuExistRole(menuId);
         if (hasRole) {
-            throw new DataStateException("", "菜单已分配,不允许删除");
+            throw new InvalidDataStateException("", "菜单已分配,不允许删除");
         }
         return menuDao.deleteById(menuId);
     }

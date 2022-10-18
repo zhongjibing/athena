@@ -6,7 +6,7 @@ import com.icezhg.athena.service.monitor.OnlineUserService;
 import com.icezhg.athena.vo.OnlineUser;
 import com.icezhg.athena.vo.query.OnlineUserQuery;
 import com.icezhg.athena.vo.PageResult;
-import com.icezhg.commons.util.RefOptional;
+import com.icezhg.commons.util.OptRef;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.time.DateFormatUtils;
 import org.apache.commons.lang3.time.DateUtils;
@@ -88,7 +88,7 @@ public class OnlineUserServiceImpl implements OnlineUserService {
             if (Objects.equals(key, "creationTime")) {
                 builder.loginTime(formatDateTime((Long) value));
             } else if (Objects.equals(key, "sessionAttr:SPRING_SECURITY_CONTEXT")) {
-                RefOptional.of(value)
+                OptRef.of(value)
                         .cast(SecurityContext.class).map(SecurityContext::getAuthentication).map(Authentication::getPrincipal)
                         .cast(DefaultOidcUser.class).map(DefaultOidcUser::getUserInfo)
                         .ifPresent(userInfo -> buildBuilder(builder, userInfo));
