@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.TaskLogDao">
+
+    <resultMap id="BaseResultMap" type="com.icezhg.athena.domain.TaskLog">
+            <id property="id" column="id" jdbcType="BIGINT"/>
+            <result property="taskName" column="task_name" jdbcType="VARCHAR"/>
+            <result property="taskGroup" column="task_group" jdbcType="VARCHAR"/>
+            <result property="invokeTarget" column="invoke_target" jdbcType="VARCHAR"/>
+            <result property="message" column="message" jdbcType="VARCHAR"/>
+            <result property="status" column="status" jdbcType="CHAR"/>
+            <result property="exceptionInfo" column="exception_info" jdbcType="VARCHAR"/>
+            <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,task_name,task_group,
+        invoke_target,message,status,
+        exception_info,create_time
+    </sql>
+
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.icezhg.athena.domain.TaskLog" useGeneratedKeys="true">
+        insert into sys_task_log
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+                <if test="id != null">id,</if>
+                <if test="taskName != null">task_name,</if>
+                <if test="taskGroup != null">task_group,</if>
+                <if test="invokeTarget != null">invoke_target,</if>
+                <if test="message != null">message,</if>
+                <if test="status != null">status,</if>
+                <if test="exceptionInfo != null">exception_info,</if>
+                <if test="createTime != null">create_time,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+                <if test="id != null">#{id,jdbcType=BIGINT},</if>
+                <if test="taskName != null">#{taskName,jdbcType=VARCHAR},</if>
+                <if test="taskGroup != null">#{taskGroup,jdbcType=VARCHAR},</if>
+                <if test="invokeTarget != null">#{invokeTarget,jdbcType=VARCHAR},</if>
+                <if test="message != null">#{message,jdbcType=VARCHAR},</if>
+                <if test="status != null">#{status,jdbcType=CHAR},</if>
+                <if test="exceptionInfo != null">#{exceptionInfo,jdbcType=VARCHAR},</if>
+                <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+        </trim>
+    </insert>
+
+    <sql id="findCondition">
+        <where>
+            <if test="name != null">
+                and (
+                LOCATE(#{name,jdbcType=VARCHAR}, username) > 0
+                or LOCATE(#{name,jdbcType=VARCHAR}, nickname) > 0
+                )
+            </if>
+            <if test="beginTime != null and endTime != null">
+                and create_time between #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" parameterType="map" resultType="_int">
+        select count(*)
+        from sys_task_log
+        <include refid="findCondition" />
+    </select>
+
+    <select id="find" parameterType="java.lang.Long" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from sys_task_log
+        <include refid="findCondition" />
+        ORDER BY id ASC
+        LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+</mapper>
