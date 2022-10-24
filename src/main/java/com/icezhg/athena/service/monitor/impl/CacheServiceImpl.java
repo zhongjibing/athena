@@ -1,6 +1,7 @@
 package com.icezhg.athena.service.monitor.impl;
 
 import com.icezhg.athena.service.monitor.CacheService;
+import com.icezhg.commons.cache.MemCache;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.connection.RedisServerCommands;
 import org.springframework.data.redis.core.RedisCallback;
@@ -12,7 +13,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Properties;
-import java.util.function.Supplier;
 
 @Service
 public class CacheServiceImpl implements CacheService {
@@ -49,34 +49,5 @@ public class CacheServiceImpl implements CacheService {
                 .orElse(List.of());
         result.put("commandStats", pieList);
         return result;
-    }
-
-    private static class MemCache<D> {
-
-        private final Supplier<D> supplier;
-        private final long expiretime;
-        private volatile long timestamp;
-        private volatile D data;
-
-        public MemCache(Supplier<D> supplier) {
-            this.supplier = supplier;
-            this.expiretime = 60 * 1000L;
-        }
-
-        public D getData() {
-            if (isExpired()) {
-                synchronized (this) {
-                    if (isExpired()) {
-                        this.data = supplier.get();
-                        this.timestamp = System.currentTimeMillis();
-                    }
-                }
-            }
-            return this.data;
-        }
-
-        private boolean isExpired() {
-            return System.currentTimeMillis() > timestamp + expiretime;
-        }
     }
 }

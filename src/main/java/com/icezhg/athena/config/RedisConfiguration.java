@@ -1,6 +1,7 @@
 package com.icezhg.athena.config;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.icezhg.authorization.core.util.ObjectMapperFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -14,6 +15,7 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.security.oauth2.client.jackson2.OAuth2ClientJackson2Module;
 
 import java.time.Duration;
 
@@ -36,7 +38,9 @@ public class RedisConfiguration {
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
         Jackson2JsonRedisSerializer<Object> defaultSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
-        defaultSerializer.setObjectMapper(ObjectMapperFactory.getObjectMapper());
+        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+        objectMapper.registerModule(new OAuth2ClientJackson2Module());
+        defaultSerializer.setObjectMapper(objectMapper);
         return defaultSerializer;
     }
 

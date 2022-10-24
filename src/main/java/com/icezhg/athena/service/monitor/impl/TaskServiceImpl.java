@@ -2,10 +2,12 @@ package com.icezhg.athena.service.monitor.impl;
 
 import com.icezhg.athena.dao.TaskDao;
 import com.icezhg.athena.domain.Task;
+import com.icezhg.athena.quartz.ScheduleUtil;
 import com.icezhg.athena.service.monitor.TaskService;
 import com.icezhg.athena.vo.TaskInfo;
 import com.icezhg.athena.vo.query.Query;
 import com.icezhg.authorization.core.SecurityUtil;
+import com.icezhg.commons.exception.InvalidParameterException;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -43,6 +45,11 @@ public class TaskServiceImpl implements TaskService {
         task.setUpdateBy(username);
         task.setCreateTime(new Date());
         task.setUpdateTime(new Date());
+        int insert = taskDao.insert(task);
+        if (insert > 0) {
+            taskInfo.setId(task.getId());
+            ScheduleUtil.create(taskInfo);
+        }
         return findById(task.getId());
     }
 
@@ -51,13 +58,20 @@ public class TaskServiceImpl implements TaskService {
         Task task = taskInfo.toTask();
         task.setUpdateBy(SecurityUtil.currentUserName());
         task.setUpdateTime(new Date());
-        taskDao.update(task);
+        int update = taskDao.update(task);
+        if (update > 0) {
+            ScheduleUtil.create(taskInfo);
+        }
         return findById(taskInfo.getId());
     }
 
     @Override
     public void removeTask(Long id) {
-        taskDao.delete(id);
+        TaskInfo taskinfo = taskDao.findById(id);
+        if (taskinfo != null) {
+            ScheduleUtil.remove(taskinfo);
+            taskDao.delete(id);
+        }
     }
 
     @Override
@@ -67,11 +81,18 @@ public class TaskServiceImpl implements TaskService {
         task.setStatus(taskInfo.getStatus());
         task.setUpdateBy(SecurityUtil.currentUserName());
         task.setUpdateTime(new Date());
-        taskDao.update(task);
+        int update = taskDao.update(task);
+        if (update > 0) {
+            ScheduleUtil.create(findById(task.getId()));
+        }
     }
 
     @Override
     public void runTask(Long id) {
-
+        TaskInfo task = taskDao.findById(id);
+        if (task == null) {
+            throw new InvalidParameterException("", "task not exist");
+        }
+        ScheduleUtil.runOnce(task);
     }
 }

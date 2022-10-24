@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/monitor/task")
 public class TaskController {
-
 
     private final TaskService taskService;
 
@@ -24,12 +24,12 @@ public class TaskController {
     }
 
     @PostMapping
-    public TaskInfo addTask(TaskInfo task) {
+    public TaskInfo addTask(@RequestBody TaskInfo task) {
         return taskService.addTask(task);
     }
 
     @PutMapping
-    public TaskInfo updateTask(TaskInfo task) {
+    public TaskInfo updateTask(@RequestBody TaskInfo task) {
         return taskService.updateTask(task);
     }
 
@@ -49,7 +49,7 @@ public class TaskController {
     }
 
     @PutMapping("/changeStatus")
-    public void changeTaskStatus(TaskInfo task) {
+    public void changeTaskStatus(@RequestBody TaskInfo task) {
         taskService.changeTaskStatus(task);
     }
 
