@@ -51,6 +51,7 @@ public class ScheduleUtil implements Schedule {
 
         try {
             if (scheduler.checkExists(jobDetail.getKey())) {
+                scheduler.pauseJob(jobDetail.getKey());
                 scheduler.deleteJob(jobDetail.getKey());
             }
 
