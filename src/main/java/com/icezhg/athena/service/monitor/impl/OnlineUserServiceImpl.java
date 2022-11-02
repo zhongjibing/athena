@@ -73,7 +73,9 @@ public class OnlineUserServiceImpl implements OnlineUserService {
                 String sessionId = StringUtils.substringAfterLast(keyList.get(i), ":");
                 onlineUser.setSessionId(sessionId);
 
-                onlineUsers.add(onlineUser);
+                if (StringUtils.isNotEmpty(onlineUser.getId())) {
+                    onlineUsers.add(onlineUser);
+                }
             }
         }
 
