@@ -5,6 +5,8 @@ server:
 spring:
   application:
     name: athena
+  config:
+    import: optional:file:/usr/local/etc/athena/application.properties
   profiles:
     active: prod
   datasource:
