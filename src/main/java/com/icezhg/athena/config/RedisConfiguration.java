@@ -37,11 +37,9 @@ public class RedisConfiguration {
 
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        Jackson2JsonRedisSerializer<Object> defaultSerializer = new Jackson2JsonRedisSerializer<>(Object.class);
         ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
         objectMapper.registerModule(new OAuth2ClientJackson2Module());
-        defaultSerializer.setObjectMapper(objectMapper);
-        return defaultSerializer;
+        return new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
     }
 
     @Bean

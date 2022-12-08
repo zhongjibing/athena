@@ -1,9 +1,10 @@
 package com.icezhg.athena.vo;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Data;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Size;
+
 
 /**
  * Created by zhongjibing on 2021/01/11

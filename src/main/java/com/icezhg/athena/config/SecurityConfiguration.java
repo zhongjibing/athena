@@ -22,10 +22,10 @@ public class SecurityConfiguration {
     @Bean
     public AuthorizeRequestCustomizer<HttpSecurity> customAuthorizeRequestCustomizer() {
         return authorizeRequests -> authorizeRequests
-                .mvcMatchers("/actuator/*").permitAll()
-                .mvcMatchers("/authenticated").permitAll()
-                .mvcMatchers("/favicon.*", "/css/**", "/fonts/**", "/img/**").permitAll()
-                .mvcMatchers(HttpMethod.GET, "/picture/*").permitAll()
+                .requestMatchers("/actuator/*").permitAll()
+                .requestMatchers("/authenticated").permitAll()
+                .requestMatchers("/favicon.*", "/css/**", "/fonts/**", "/img/**").permitAll()
+                .requestMatchers(HttpMethod.GET, "/picture/*").permitAll()
                 .anyRequest().authenticated();
     }
 }

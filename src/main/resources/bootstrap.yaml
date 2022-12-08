@@ -6,7 +6,7 @@ spring:
   application:
     name: athena
   profiles:
-    active: @spring.profiles.active@
+    active: prod
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
   quartz:
@@ -26,25 +26,4 @@ mybatis:
     cache-enabled: false
     jdbc-type-for-null: null
   mapper-locations: classpath:mapper/**/*.xml
-encrypt:
-  key-store:
-    alias: alias-key
-    location: classpath:certs/icezhg.com.jks
-    password: xxxx
-  rsa:
-    salt: xxxx
-logging:
-  level:
-    com:
-      alibaba:
-        cloud:
-          nacos:
-            client:
-              NacosPropertySourceBuilder: error
-            refresh:
-              NacosContextRefresher: error
-        nacos:
-          client:
-            config:
-              impl:
-                ClientWorker: error
+

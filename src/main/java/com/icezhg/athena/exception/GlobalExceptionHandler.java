@@ -2,6 +2,7 @@ package com.icezhg.athena.exception;
 
 import com.icezhg.commons.entity.RespResult;
 import com.icezhg.commons.exception.ErrorCodeException;
+import jakarta.servlet.ServletException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.TypeMismatchException;
@@ -19,7 +20,6 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
-import javax.servlet.ServletException;
 
 /**
  * Created by zhongjibing on 2022/08/13.
