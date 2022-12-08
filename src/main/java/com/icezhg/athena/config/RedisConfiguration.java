@@ -2,6 +2,7 @@ package com.icezhg.athena.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.icezhg.authorization.core.serial.AuthenticationExceptionMixIn;
 import com.icezhg.authorization.core.util.ObjectMapperFactory;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -15,12 +16,16 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import org.springframework.security.authentication.AccountExpiredException;
+import org.springframework.security.authentication.CredentialsExpiredException;
+import org.springframework.security.authentication.DisabledException;
+import org.springframework.security.authentication.LockedException;
 import org.springframework.security.oauth2.client.jackson2.OAuth2ClientJackson2Module;
 
 import java.time.Duration;
 
 @EnableCaching
-@Configuration
+@Configuration(proxyBeanMethods = false)
 public class RedisConfiguration {
 
     @Bean
@@ -29,7 +34,7 @@ public class RedisConfiguration {
         template.setConnectionFactory(redisConnectionFactory);
         template.setKeySerializer(RedisSerializer.string());
         template.setHashKeySerializer(RedisSerializer.string());
-        template.setDefaultSerializer(springSessionDefaultRedisSerializer());
+        template.setDefaultSerializer(Jackson2JsonRedisSerializerHolder.INSTANCE);
         template.setEnableDefaultSerializer(true);
 
         return template;
@@ -37,9 +42,7 @@ public class RedisConfiguration {
 
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
-        ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
-        objectMapper.registerModule(new OAuth2ClientJackson2Module());
-        return new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
+        return Jackson2JsonRedisSerializerHolder.INSTANCE;
     }
 
     @Bean
@@ -48,11 +51,25 @@ public class RedisConfiguration {
                 .builder(redisConnectionFactory)
                 .cacheDefaults(RedisCacheConfiguration.defaultCacheConfig()
                         .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(StringRedisSerializer.UTF_8))
-                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(springSessionDefaultRedisSerializer()))
+                        .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(Jackson2JsonRedisSerializerHolder.INSTANCE))
                         .disableCachingNullValues()
                         .prefixCacheNameWith("athena:")
                         .entryTtl(Duration.ofMinutes(30L))
                 )
                 .build();
+    }
+
+    private static class Jackson2JsonRedisSerializerHolder {
+        private static final RedisSerializer<Object> INSTANCE;
+
+        static {
+            ObjectMapper objectMapper = ObjectMapperFactory.getObjectMapper();
+            objectMapper.registerModule(new OAuth2ClientJackson2Module());
+            objectMapper.addMixIn(AccountExpiredException.class, AuthenticationExceptionMixIn.class);
+            objectMapper.addMixIn(CredentialsExpiredException.class, AuthenticationExceptionMixIn.class);
+            objectMapper.addMixIn(DisabledException.class, AuthenticationExceptionMixIn.class);
+            objectMapper.addMixIn(LockedException.class, AuthenticationExceptionMixIn.class);
+            INSTANCE = new Jackson2JsonRedisSerializer<>(objectMapper, Object.class);
+        }
     }
 }
