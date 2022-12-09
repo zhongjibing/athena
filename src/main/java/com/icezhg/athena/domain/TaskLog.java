@@ -15,14 +15,9 @@ public class TaskLog {
     private Long id;
 
     /**
-     * 任务名称
+     * 任务id
      */
-    private String taskName;
-
-    /**
-     * 任务组名
-     */
-    private String taskGroup;
+    private Long taskId;
 
     /**
      * 调用目标字符串
@@ -43,6 +38,16 @@ public class TaskLog {
      * 异常信息
      */
     private String exceptionInfo;
+
+    /**
+     * 执行开始时间
+     */
+    private Date startTime;
+
+    /**
+     * 执行结束时间
+     */
+    private Date stopTime;
 
     /**
      * 创建时间

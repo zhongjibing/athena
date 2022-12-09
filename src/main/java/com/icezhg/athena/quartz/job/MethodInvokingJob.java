@@ -1,13 +1,10 @@
 package com.icezhg.athena.quartz.job;
 
-import com.icezhg.athena.service.monitor.TaskService;
 import com.icezhg.athena.util.ApplicationContextUtil;
 import com.icezhg.athena.vo.TaskInfo;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
-import org.quartz.JobDataMap;
-import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
@@ -21,17 +18,7 @@ import java.util.stream.Collectors;
 public class MethodInvokingJob extends QuartzJob {
 
     @Override
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        JobDataMap jobDataMap = context.getJobDetail().getJobDataMap();
-        long taskId = jobDataMap.getLong("taskId");
-        log.info("exec task: {}", taskId);
-
-        TaskService taskService = ApplicationContextUtil.getBean(TaskService.class);
-        TaskInfo taskInfo = taskService.findById(taskId);
-        if (taskInfo == null) {
-            throw new JobExecutionException("task info not exist. id=" + taskId);
-        }
-
+    protected void executeInternal(TaskInfo taskInfo) throws JobExecutionException {
         try {
             String invokeTarget = taskInfo.getInvokeTarget();
             String executableName = extractExecutableName(invokeTarget);
