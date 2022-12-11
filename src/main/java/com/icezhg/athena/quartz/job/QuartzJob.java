@@ -62,7 +62,9 @@ public abstract class QuartzJob implements Job {
     private TaskLog createTaskLog(long taskId) {
         TaskLog taskLog = new TaskLog();
         taskLog.setTaskId(taskId);
-        taskLog.setStartTime(new Date());
+        Date now = new Date();
+        taskLog.setStartTime(now);
+        taskLog.setCreateTime(now);
         return taskLog;
     }
 
