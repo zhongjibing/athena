@@ -16,8 +16,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class QuartzJob implements Job {
+
+    private final AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -35,15 +38,19 @@ public abstract class QuartzJob implements Job {
                 throw new JobExecutionException("task info not exist. id=" + taskId);
             }
 
+            if (counter.incrementAndGet() % 2 > 0) {
+                throw new JobExecutionException("customer exception happened");
+            }
+
             executeInternal(taskInfo);
 
             successLog(taskLog, taskInfo);
         } catch (JobExecutionException ex) {
             errorLog(taskLog, taskInfo, ex);
             throw ex;
+        } finally {
+            saveTaskLog(taskLog);
         }
-
-        saveTaskLog(taskLog);
     }
 
     protected abstract void executeInternal(TaskInfo taskInfo) throws JobExecutionException;
@@ -64,7 +71,9 @@ public abstract class QuartzJob implements Job {
         taskLog.setStatus(Constants.NORMAL);
         taskLog.setInvokeTarget(taskInfo.getInvokeTarget());
         long cost = taskLog.getStopTime().getTime() - taskLog.getStartTime().getTime();
-        taskLog.setMessage(String.format("[%s] %s - 耗时 %d ms.", taskInfo.getTaskGroup(), taskInfo.getTaskName(), cost));
+        String message = String.format("task is successfully executed, taking %d ms.", cost);
+        taskLog.setMessage(message);
+        getLogger().info("[{}] {}", taskLog.getTaskId(), message);
     }
 
     private void errorLog(TaskLog taskLog, TaskInfo taskInfo, JobExecutionException ex) {
@@ -72,18 +81,14 @@ public abstract class QuartzJob implements Job {
         taskLog.setStatus(Constants.EXCEPTION);
         if (taskInfo != null) {
             taskLog.setInvokeTarget(taskLog.getInvokeTarget());
-            long cost = taskLog.getStopTime().getTime() - taskLog.getStartTime().getTime();
-            taskLog.setMessage(String.format("[%s] %s - 耗时 %d ms.", taskInfo.getTaskGroup(), taskInfo.getTaskName(), cost));
-        } else {
-            long cost = taskLog.getStopTime().getTime() - taskLog.getStartTime().getTime();
-            taskLog.setMessage(String.format("[%s] %s - 耗时 %d ms.", "unknown", "unknown", cost));
         }
 
-        String message = ExceptionUtils.getMessage(ex);
-        String rootCauseMessage = ExceptionUtils.getRootCauseMessage(ex);
-        String stackTrace = ExceptionUtils.getStackTrace(ex);
-        String exceptionInfo = String.format("%s\n\n%s\n\n%s", message, rootCauseMessage, stackTrace);
+        long cost = taskLog.getStopTime().getTime() - taskLog.getStartTime().getTime();
+        String message = String.format("task is failed to execute, taking %d ms.", cost);
+        taskLog.setMessage(message);
+        String exceptionInfo = ExceptionUtils.getStackTrace(ex);
         taskLog.setExceptionInfo(StringUtils.substring(exceptionInfo, 0, 2000));
+        getLogger().info("[{}] {}\n{}", taskLog.getTaskId(), message, exceptionInfo);
     }
 
     private void saveTaskLog(TaskLog taskLog) {
