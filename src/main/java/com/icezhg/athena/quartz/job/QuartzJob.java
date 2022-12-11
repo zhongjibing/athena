@@ -16,11 +16,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.Date;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public abstract class QuartzJob implements Job {
-
-    private final AtomicInteger counter = new AtomicInteger(0);
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -36,10 +33,6 @@ public abstract class QuartzJob implements Job {
             taskInfo = taskService.findById(taskId);
             if (taskInfo == null) {
                 throw new JobExecutionException("task info not exist. id=" + taskId);
-            }
-
-            if (counter.incrementAndGet() % 2 > 0) {
-                throw new JobExecutionException("customer exception happened");
             }
 
             executeInternal(taskInfo);
