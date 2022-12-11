@@ -76,7 +76,7 @@ public class MethodInvokingJob extends QuartzJob {
             } else if (c == ')') {
                 if (!stack.isEmpty() && stack.peek() == '(') {
                     if (!builder.isEmpty()) {
-                        args.add(popString(builder));
+                        args.add(popString(builder).trim());
                     }
                     stack.pop();
 
@@ -94,6 +94,9 @@ public class MethodInvokingJob extends QuartzJob {
                     } else if (stack.peek() == '"') {
                         builder.append(c);
                     } else {
+                        if (!builder.isEmpty()) {
+                            args.add(popString(builder).trim());
+                        }
                         stack.push(c);
                     }
                 } else {
@@ -107,6 +110,9 @@ public class MethodInvokingJob extends QuartzJob {
                     } else if (stack.peek() == '\'') {
                         builder.append(c);
                     } else {
+                        if (!builder.isEmpty()) {
+                            args.add(popString(builder).trim());
+                        }
                         stack.push(c);
                     }
                 } else {
@@ -118,7 +124,7 @@ public class MethodInvokingJob extends QuartzJob {
                 }
             } else if (c == ',') {
                 if (!builder.isEmpty()) {
-                    args.add(popString(builder));
+                    args.add(popString(builder).trim());
                 }
             } else {
                 builder.append(c);
@@ -172,5 +178,12 @@ public class MethodInvokingJob extends QuartzJob {
         public String toString() {
             return type.getName() + ": " + String.valueOf(value);
         }
+    }
+
+    public static void main(String[] args) {
+        String target = "test.test.test('a\"1\"' , 1.0, '1L', 1L, lL, true , ''true'')";
+        List<String> strings = splitInvokeTarget(target);
+        System.out.println("1: " + strings);
+        System.out.println("2: " + parseParameter(strings.subList(2, strings.size())));
     }
 }
