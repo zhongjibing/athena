@@ -10,4 +10,8 @@ public class TestTask {
     public void test() {
         log.info("test run...");
     }
+
+    public void test(String param) {
+        log.info("test run [param: {}]...", param);
+    }
 }
