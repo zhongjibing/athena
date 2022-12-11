@@ -10,9 +10,9 @@ import org.springframework.util.Assert;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Stack;
 
 @Slf4j
 public class MethodInvokingJob extends QuartzJob {
@@ -21,10 +21,8 @@ public class MethodInvokingJob extends QuartzJob {
     protected void executeInternal(TaskInfo taskInfo) throws JobExecutionException {
         try {
             String invokeTarget = taskInfo.getInvokeTarget();
-            String executableName = extractExecutableName(invokeTarget);
-            String methodName = extractMethodName(invokeTarget);
-            List<Parameter> parameters = extractParameters(invokeTarget);
-            invokeTaskMethod(executableName, methodName, parameters);
+            List<String> args = splitInvokeTarget(invokeTarget);
+            invokeTaskMethod(args.get(0), args.get(1), parseParameter(args.subList(2, args.size())));
         } catch (Exception e) {
             throw new JobExecutionException(e);
         }
@@ -54,45 +52,125 @@ public class MethodInvokingJob extends QuartzJob {
         ReflectionUtils.invokeMethod(method, target, args);
     }
 
+    private static List<String> splitInvokeTarget(String invokeTarget) {
+        List<String> args = new ArrayList<>();
+        Stack<Character> stack = new Stack<>();
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < invokeTarget.length(); i++) {
+            char c = invokeTarget.charAt(i);
+            if (c == '(') {
+                if (!stack.isEmpty()) {
+                    throw new IllegalArgumentException("bad invokeTarget");
+                }
 
-    private String extractExecutableName(String invokeTarget) {
-        return StringUtils.substringBeforeLast(StringUtils.substringBefore(invokeTarget, "("), ".");
-    }
+                String executeTarget = popString(builder);
+                String executableName = StringUtils.substringBeforeLast(executeTarget, ".");
+                String methodName = StringUtils.substringAfterLast(executeTarget, ".");
+                if (StringUtils.isBlank(executableName) || StringUtils.isBlank(methodName)) {
+                    throw new IllegalArgumentException("bad invokeTarget");
+                }
+                args.add(executableName);
+                args.add(methodName);
 
-    private String extractMethodName(String invokeTarget) {
-        return StringUtils.substringAfterLast(StringUtils.substringBefore(invokeTarget, "("), ".");
-    }
+                stack.push(c);
+            } else if (c == ')') {
+                if (!stack.isEmpty() && stack.peek() == '(') {
+                    if (!builder.isEmpty()) {
+                        args.add(popString(builder));
+                    }
+                    stack.pop();
 
-    private List<Parameter> extractParameters(String invokeTarget) {
-        if (StringUtils.containsNone(invokeTarget, "()")) {
-            return List.of();
+                    if (StringUtils.isNotBlank(StringUtils.substring(invokeTarget, i + 1))) {
+                        throw new IllegalArgumentException("bad invokeTarget");
+                    }
+                } else {
+                    builder.append(c);
+                }
+            } else if (c == '\'') {
+                if (!stack.isEmpty()) {
+                    if (stack.peek() == '\'') {
+                        args.add('\'' + popString(builder) + '\'');
+                        stack.pop();
+                    } else if (stack.peek() == '"') {
+                        builder.append(c);
+                    } else {
+                        stack.push(c);
+                    }
+                } else {
+                    stack.push(c);
+                }
+            } else if (c == '"') {
+                if (!stack.isEmpty()) {
+                    if (stack.peek() == '"') {
+                        args.add('"' + popString(builder) + '"');
+                        stack.pop();
+                    } else if (stack.peek() == '\'') {
+                        builder.append(c);
+                    } else {
+                        stack.push(c);
+                    }
+                } else {
+                    stack.push(c);
+                }
+            } else if (c == ' ') {
+                if ((!stack.isEmpty() && stack.peek() != '(') || !builder.isEmpty()) {
+                    builder.append(c);
+                }
+            } else if (c == ',') {
+                if (!builder.isEmpty()) {
+                    args.add(popString(builder));
+                }
+            } else {
+                builder.append(c);
+            }
         }
 
-        String paramStr = StringUtils.substringBetween(invokeTarget, "(", ")");
-        if (paramStr == null) {
-            throw new IllegalArgumentException("invalid parameters: " + invokeTarget);
+        if (stack.isEmpty() && args.isEmpty() && !builder.isEmpty()) {
+            String executeTarget = popString(builder);
+            String executableName = StringUtils.substringBeforeLast(executeTarget, ".");
+            String methodName = StringUtils.substringAfterLast(executeTarget, ".");
+            if (StringUtils.isBlank(executableName) || StringUtils.isBlank(methodName)) {
+                throw new IllegalArgumentException("bad invokeTarget");
+            }
+            args.add(executableName);
+            args.add(methodName);
         }
 
-        return Arrays.stream(paramStr.split(",\s*")).map(item -> {
+
+        if (!stack.isEmpty() || !builder.isEmpty() || args.size() < 2) {
+            throw new IllegalArgumentException("bad invokeTarget");
+        }
+
+        return args;
+    }
+
+    private static String popString(StringBuilder builder) {
+        String str = builder.toString();
+        builder.delete(0, builder.length());
+        return str;
+    }
+
+    private static List<Parameter> parseParameter(List<String> parameterStrings) {
+        return parameterStrings.stream().map(item -> {
             if (StringUtils.equalsAnyIgnoreCase(item, "true", "false")) {
                 return new Parameter(boolean.class, Boolean.parseBoolean(item));
             } else if (StringUtils.startsWith(item, "'") && StringUtils.endsWith(item, "'")) {
-                return new Parameter(String.class, StringUtils.substringBetween(item, "'"));
+                return new Parameter(String.class, StringUtils.substring(item, 1, item.length() - 1));
             } else if (StringUtils.startsWith(item, "\"") && StringUtils.endsWith(item, "\"")) {
-                return new Parameter(String.class, StringUtils.substringBetween(item, "\""));
+                return new Parameter(String.class, StringUtils.substring(item, 1, item.length() - 1));
             } else if (NumberUtils.isCreatable(item)) {
                 Number number = NumberUtils.createNumber(item);
                 return new Parameter(number.getClass(), number);
             } else {
-                throw new IllegalArgumentException("invalid parameter: " + item);
+                return new Parameter(String.class, item);
             }
-        }).collect(Collectors.toList());
+        }).toList();
     }
 
     private record Parameter(Class<?> type, Object value) {
         @Override
         public String toString() {
-            return type == String.class ? "\"" + value + "\"" : String.valueOf(value);
+            return type.getName() + ": " + String.valueOf(value);
         }
     }
 }
