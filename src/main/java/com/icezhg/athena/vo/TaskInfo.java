@@ -3,7 +3,9 @@ package com.icezhg.athena.vo;
 
 import com.icezhg.athena.domain.Task;
 import lombok.Data;
+import org.quartz.CronExpression;
 
+import java.text.ParseException;
 import java.util.Date;
 
 @Data
@@ -62,6 +64,16 @@ public class TaskInfo {
      * 备注
      */
     private String remark;
+
+    public Date getNextFireTime() {
+        if (cronExpression != null) {
+            try {
+                return new CronExpression(cronExpression).getNextValidTimeAfter(new Date());
+            } catch (ParseException ignored) {
+            }
+        }
+        return null;
+    }
 
     public Task toTask() {
         Task task = new Task();

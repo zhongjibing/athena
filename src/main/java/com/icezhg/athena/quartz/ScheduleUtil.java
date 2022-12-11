@@ -98,6 +98,14 @@ public class ScheduleUtil implements Schedule {
         }
     }
 
+    public static boolean checkExists(TaskInfo taskInfo) {
+        try {
+            return scheduler.checkExists(jobKey(taskInfo));
+        } catch (SchedulerException e) {
+            throw new ErrorCodeException("", e.getMessage(), e);
+        }
+    }
+
     private static Class<? extends Job> getQuartzJobClass(TaskInfo taskInfo) {
         if (StringUtils.equals(taskInfo.getConcurrent(), DISALLOWED_CONCURRENT)) {
             return StatefulMethodInvokingJob.class;

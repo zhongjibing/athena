@@ -1,8 +1,10 @@
 package com.icezhg.athena.controller.monitor;
 
+import com.icezhg.athena.service.monitor.TaskLogService;
 import com.icezhg.athena.service.monitor.TaskService;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.TaskInfo;
+import com.icezhg.athena.vo.query.TaskLogQuery;
 import com.icezhg.athena.vo.query.TaskQuery;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +21,11 @@ public class TaskController {
 
     private final TaskService taskService;
 
-    public TaskController(TaskService taskService) {
+    private final TaskLogService taskLogService;
+
+    public TaskController(TaskService taskService, TaskLogService taskLogService) {
         this.taskService = taskService;
+        this.taskLogService = taskLogService;
     }
 
     @PostMapping
@@ -58,5 +63,9 @@ public class TaskController {
         taskService.runTask(taskId);
     }
 
+    @GetMapping("/log/list")
+    public PageResult listLogs(TaskLogQuery query) {
+        return new PageResult(taskLogService.count(query), taskLogService.find(query));
+    }
 
 }

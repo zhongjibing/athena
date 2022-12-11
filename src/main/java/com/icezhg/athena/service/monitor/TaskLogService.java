@@ -1,6 +1,7 @@
 package com.icezhg.athena.service.monitor;
 
 import com.icezhg.athena.domain.TaskLog;
+import com.icezhg.athena.vo.TaskLogInfo;
 import com.icezhg.athena.vo.query.Query;
 
 import java.util.List;
@@ -11,5 +12,5 @@ public interface TaskLogService {
 
     int count(Query query);
 
-    List<TaskLog> find(Query query);
+    List<TaskLogInfo> find(Query query);
 }

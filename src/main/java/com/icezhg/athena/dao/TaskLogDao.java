@@ -2,6 +2,7 @@ package com.icezhg.athena.dao;
 
 
 import com.icezhg.athena.domain.TaskLog;
+import com.icezhg.athena.vo.TaskLogInfo;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -14,6 +15,6 @@ public interface TaskLogDao {
 
     int count(Map<String, Object> query);
 
-    List<TaskLog> find(Map<String, Object> query);
+    List<TaskLogInfo> find(Map<String, Object> query);
 
 }

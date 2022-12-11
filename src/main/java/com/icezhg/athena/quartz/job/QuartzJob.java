@@ -75,7 +75,7 @@ public abstract class QuartzJob implements Job {
         taskLog.setStopTime(new Date());
         taskLog.setStatus(Constants.EXCEPTION);
         if (taskInfo != null) {
-            taskLog.setInvokeTarget(taskLog.getInvokeTarget());
+            taskLog.setInvokeTarget(taskInfo.getInvokeTarget());
         }
 
         long cost = taskLog.getStopTime().getTime() - taskLog.getStartTime().getTime();

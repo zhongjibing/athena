@@ -3,6 +3,7 @@ package com.icezhg.athena.service.monitor.impl;
 import com.icezhg.athena.dao.TaskLogDao;
 import com.icezhg.athena.domain.TaskLog;
 import com.icezhg.athena.service.monitor.TaskLogService;
+import com.icezhg.athena.vo.TaskLogInfo;
 import com.icezhg.athena.vo.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -33,7 +34,7 @@ public class TaskLogServiceImpl implements TaskLogService {
     }
 
     @Override
-    public List<TaskLog> find(Query query) {
+    public List<TaskLogInfo> find(Query query) {
         return taskLogDao.find(query.toMap());
     }
 }

@@ -93,6 +93,10 @@ public class TaskServiceImpl implements TaskService {
         if (task == null) {
             throw new InvalidParameterException("", "task not exist");
         }
+        if (!ScheduleUtil.checkExists(task)) {
+            ScheduleUtil.create(task);
+        }
+
         ScheduleUtil.runOnce(task);
     }
 }
