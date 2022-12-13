@@ -105,6 +105,7 @@ public class InvokeExpression {
             char chr = param.charAt(i);
             if (escape) {
                 builder.append(chr);
+                escape = false;
             } else if (chr == '\'') {
                 expectFlag = false;
                 if (stack.isEmpty()) {
