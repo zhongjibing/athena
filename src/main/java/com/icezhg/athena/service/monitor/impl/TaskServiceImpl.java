@@ -41,7 +41,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskInfo addTask(TaskInfo taskInfo) {
         if (!InvokeExpression.instanceOf(taskInfo.getInvokeTarget()).isValid()) {
-            throw new InvalidParameterException("bad invokeTarget");
+            throw new InvalidParameterException("", "bad invokeTarget");
         }
 
         Task task = taskInfo.toTask();
@@ -61,7 +61,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskInfo updateTask(TaskInfo taskInfo) {
         if (!InvokeExpression.instanceOf(taskInfo.getInvokeTarget()).isValid()) {
-            throw new InvalidParameterException("bad invokeTarget");
+            throw new InvalidParameterException("", "bad invokeTarget");
         }
 
         Task task = taskInfo.toTask();
