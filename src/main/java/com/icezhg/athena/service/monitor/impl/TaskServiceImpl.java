@@ -3,6 +3,7 @@ package com.icezhg.athena.service.monitor.impl;
 import com.icezhg.athena.dao.TaskDao;
 import com.icezhg.athena.domain.Task;
 import com.icezhg.athena.quartz.ScheduleUtil;
+import com.icezhg.athena.quartz.util.InvokeExpression;
 import com.icezhg.athena.service.monitor.TaskService;
 import com.icezhg.athena.vo.TaskInfo;
 import com.icezhg.athena.vo.query.Query;
@@ -39,6 +40,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskInfo addTask(TaskInfo taskInfo) {
+        if (!InvokeExpression.instanceOf(taskInfo.getInvokeTarget()).isValid()) {
+            throw new InvalidParameterException("bad invokeTarget");
+        }
+
         Task task = taskInfo.toTask();
         String username = SecurityUtil.currentUserName();
         task.setCreateBy(username);
@@ -55,6 +60,10 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public TaskInfo updateTask(TaskInfo taskInfo) {
+        if (!InvokeExpression.instanceOf(taskInfo.getInvokeTarget()).isValid()) {
+            throw new InvalidParameterException("bad invokeTarget");
+        }
+
         Task task = taskInfo.toTask();
         task.setUpdateBy(SecurityUtil.currentUserName());
         task.setUpdateTime(new Date());
