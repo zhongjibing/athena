@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.LoginRecordDao">
+
+    <resultMap id="BaseResultMap" type="com.icezhg.athena.domain.LoginRecord">
+        <id property="id" column="id" jdbcType="BIGINT"/>
+        <result property="userId" column="user_id" jdbcType="BIGINT"/>
+        <result property="username" column="username" jdbcType="VARCHAR"/>
+        <result property="loginIp" column="login_ip" jdbcType="VARCHAR"/>
+        <result property="loginLocation" column="login_location" jdbcType="VARCHAR"/>
+        <result property="agent" column="agent" jdbcType="VARCHAR"/>
+        <result property="browser" column="browser" jdbcType="VARCHAR"/>
+        <result property="os" column="os" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="msg" column="msg" jdbcType="VARCHAR"/>
+        <result property="loginTime" column="login_time" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,user_id,username,
+        login_ip,login_location,agent,
+        browser,os,status,
+        msg,login_time
+    </sql>
+
+    <sql id="findCondition">
+        <where>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="username != null">
+                and LOCATE(#{username,jdbcType=VARCHAR}, username) > 0
+            </if>
+            <if test="loginIp != null">
+                and login_ip = #{loginIp}
+            </if>
+            <if test="status != null">
+                and status = #{status}
+            </if>
+            <if test="beginTime != null and endTime != null">
+                and login_time between #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" parameterType="map" resultType="_int">
+        select count(*)
+        from sys_login_record
+        <include refid="findCondition" />
+    </select>
+
+    <select id="find" parameterType="map" resultMap="BaseResultMap">
+        select <include refid="Base_Column_List"/>
+        from sys_login_record
+        <include refid="findCondition" />
+        ORDER BY login_time DESC
+        LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+</mapper>
