@@ -17,6 +17,7 @@ import com.icezhg.commons.exception.InvalidDataStateException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -121,6 +122,7 @@ public class MenuServiceImpl implements MenuService {
         for (MenuInfo child : childList) {
             children.add(recursionFn(menus, child));
         }
+        children.sort(Comparator.comparingInt(menuTree -> menuTree.getMenu().getOrderNum()));
         treeNode.setChildren(children);
         return treeNode;
     }
