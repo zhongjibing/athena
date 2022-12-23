@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.UserService;
 import com.icezhg.authorization.core.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +28,7 @@ public class AuthController {
     }
 
     @GetMapping("/user/info")
+    @Operation(title = "current user info", type = OperationType.QUERY)
     public Object userInfo() {
         return SecurityUtil.currentUserInfo();
     }

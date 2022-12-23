@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.RouterService;
 import com.icezhg.athena.vo.Router;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +24,7 @@ public class RouterController {
     }
 
     @GetMapping
+    @Operation(title = "routers for current user", type = OperationType.LIST)
     public List<Router> routers() {
         return routerService.listRouters();
     }

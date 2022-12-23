@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.UserRoleService;
 import com.icezhg.athena.service.system.UserService;
 import com.icezhg.athena.vo.PageResult;
@@ -37,6 +39,7 @@ public class UserController {
     }
 
     @PostMapping
+    @Operation(title = "users addition", type = OperationType.INSERT)
     public UserInfo add(@Validated @RequestBody UserInfo user) {
         if (!userService.checkUnique(user)) {
             throw new ErrorCodeException("", "username is already exists");
@@ -45,6 +48,7 @@ public class UserController {
     }
 
     @PutMapping
+    @Operation(title = "users modification", type = OperationType.UPDATE)
     public UserInfo edit(@Validated @RequestBody UserInfo user) {
         if (!userService.checkUnique(user)) {
             throw new ErrorCodeException("", "username is already exists");
@@ -53,32 +57,38 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
+    @Operation(title = "users detail", type = OperationType.QUERY)
     public UserInfo get(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
 
     @GetMapping("/list")
+    @Operation(title = "users list", type = OperationType.LIST)
     public PageResult list(UserQuery query) {
         return new PageResult(userService.count(query), userService.find(query));
     }
 
     @PutMapping("/changeStatus")
+    @Operation(title = "user status change", type = OperationType.UPDATE)
     public int changeStatus(@RequestBody UserStatus userStatus) {
         return userService.changeStatus(userStatus);
     }
 
     @PutMapping("/resetPasswd")
+    @Operation(title = "user password reset", type = OperationType.UPDATE)
     public int resetPasswd(@RequestBody UserPasswd userPasswd) {
         return userService.resetPasswd(userPasswd);
     }
 
     @GetMapping("/{userId}/auth")
+    @Operation(title = "roles for the specified user", type = OperationType.QUERY)
     public UserAuth findUserAuth(@PathVariable Long userId) {
         return userRoleService.findAuth(userId);
     }
 
     @PutMapping("/{userId}/auth")
+    @Operation(title = "change roles of the specified user", type = OperationType.GRANT)
     public UserAuth updateUserAuth(@PathVariable Long userId, @RequestBody List<Integer> roleIds) {
         return userRoleService.updateUserAuth(userId, roleIds);
     }

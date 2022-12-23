@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller.monitor;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.monitor.LoginRecordService;
 import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.query.LoginQuery;
@@ -18,6 +20,7 @@ public class LoginRecordController {
     }
 
     @GetMapping("/records")
+    @Operation(title = "user login records list", type = OperationType.QUERY)
     public PageResult listLogs(LoginQuery query) {
         return new PageResult(loginRecordService.count(query), loginRecordService.find(query));
     }

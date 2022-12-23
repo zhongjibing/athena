@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller.monitor;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.monitor.TaskLogService;
 import com.icezhg.athena.service.monitor.TaskService;
 import com.icezhg.athena.vo.PageResult;
@@ -29,41 +31,49 @@ public class TaskController {
     }
 
     @PostMapping
+    @Operation(title = "tasks addition", type = OperationType.INSERT)
     public TaskInfo addTask(@RequestBody TaskInfo task) {
         return taskService.addTask(task);
     }
 
     @PutMapping
+    @Operation(title = "tasks modification", type = OperationType.UPDATE)
     public TaskInfo updateTask(@RequestBody TaskInfo task) {
         return taskService.updateTask(task);
     }
 
     @GetMapping("/{taskId}")
+    @Operation(title = "tasks detail", type = OperationType.QUERY)
     public TaskInfo taskInfo(@PathVariable Long taskId) {
         return taskService.findById(taskId);
     }
 
     @DeleteMapping("/{taskId}")
+    @Operation(title = "tasks deletion", type = OperationType.DELETE)
     public void removeTask(@PathVariable Long taskId) {
         taskService.removeTask(taskId);
     }
 
     @GetMapping("/list")
+    @Operation(title = "tasks list", type = OperationType.LIST)
     public PageResult list(TaskQuery query) {
         return new PageResult(taskService.count(query), taskService.find(query));
     }
 
     @PutMapping("/changeStatus")
+    @Operation(title = "task status change", type = OperationType.UPDATE)
     public void changeTaskStatus(@RequestBody TaskInfo task) {
         taskService.changeTaskStatus(task);
     }
 
     @PostMapping("/run")
+    @Operation(title = "tasks execution", type = OperationType.EXECUTE)
     public void runTask(Long taskId) {
         taskService.runTask(taskId);
     }
 
     @GetMapping("/log/list")
+    @Operation(title = "task logs list", type = OperationType.LIST)
     public PageResult listLogs(TaskLogQuery query) {
         return new PageResult(taskLogService.count(query), taskLogService.find(query));
     }

@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.DictTypeService;
 import com.icezhg.athena.vo.query.DictQuery;
 import com.icezhg.athena.vo.DictTypeInfo;
@@ -30,6 +32,7 @@ public class DictTypeController {
     }
 
     @PostMapping
+    @Operation(title = "dict types addition", type = OperationType.INSERT)
     public DictTypeInfo add(@Validated @RequestBody DictTypeInfo typeInfo) {
         if (!dictTypeService.checkUnique(typeInfo)) {
             throw new ErrorCodeException("", "dict type is already exists");
@@ -38,6 +41,7 @@ public class DictTypeController {
     }
 
     @PutMapping
+    @Operation(title = "dict types modification", type = OperationType.UPDATE)
     public DictTypeInfo edit(@Validated @RequestBody DictTypeInfo typeInfo) {
         if (!dictTypeService.checkUnique(typeInfo)) {
             throw new ErrorCodeException("", "dict type is already exists");
@@ -46,21 +50,25 @@ public class DictTypeController {
     }
 
     @DeleteMapping
+    @Operation(title = "dict types deletion", type = OperationType.DELETE)
     public int delete(@RequestBody List<Integer> dictTypeIds) {
         return dictTypeService.deleteByIds(dictTypeIds);
     }
 
     @GetMapping("/list")
+    @Operation(title = "dict types list", type = OperationType.LIST)
     public PageResult list(DictQuery query) {
         return new PageResult(dictTypeService.count(query), dictTypeService.find(query));
     }
 
     @GetMapping("/options")
+    @Operation(title = "dict types options", type = OperationType.QUERY)
     public List<DictTypeInfo> listOptions() {
         return dictTypeService.listOptions();
     }
 
     @GetMapping("/{id}")
+    @Operation(title = "dict types detail", type = OperationType.QUERY)
     public DictTypeInfo get(@PathVariable Integer id) {
         return dictTypeService.findById(id);
     }

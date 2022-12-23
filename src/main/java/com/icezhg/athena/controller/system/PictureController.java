@@ -1,6 +1,8 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
 import com.icezhg.athena.domain.Picture;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.PictureService;
 import com.icezhg.commons.exception.ErrorCodeException;
 import jakarta.servlet.ServletOutputStream;
@@ -34,11 +36,13 @@ public class PictureController {
     }
 
     @PostMapping("/upload")
+    @Operation(title = "pictures uploading", type = OperationType.UPLOAD)
     public Picture upload(MultipartFile file) {
         return pictureService.save(file);
     }
 
     @GetMapping("/{id}")
+    @Operation(title = "pictures viewing", type = OperationType.VIEW)
     public void readImage(@PathVariable String id, HttpServletResponse response) {
         Picture picture = pictureService.findById(id);
         if (picture == null) {

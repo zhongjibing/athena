@@ -1,9 +1,11 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.vo.ConfigInfo;
-import com.icezhg.athena.vo.query.ConfigQuery;
 import com.icezhg.athena.vo.PageResult;
+import com.icezhg.athena.vo.query.ConfigQuery;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,6 +32,7 @@ public class ConfigController {
     }
 
     @PostMapping
+    @Operation(title = "system config properties addition", type = OperationType.INSERT)
     public ConfigInfo add(@Validated @RequestBody ConfigInfo configInfo) {
         if (!configService.checkUnique(configInfo)) {
             throw new ErrorCodeException("", "config key is already exists");
@@ -38,6 +41,7 @@ public class ConfigController {
     }
 
     @PutMapping
+    @Operation(title = "system config properties modification", type = OperationType.UPDATE)
     public ConfigInfo edit(@Validated @RequestBody ConfigInfo configInfo) {
         if (!configService.checkUnique(configInfo)) {
             throw new ErrorCodeException("", "config key is already exists");
@@ -46,16 +50,19 @@ public class ConfigController {
     }
 
     @DeleteMapping
+    @Operation(title = "system config properties deletion", type = OperationType.DELETE)
     public int delete(@RequestBody List<Integer> dictTypeIds) {
         return configService.deleteByIds(dictTypeIds);
     }
 
     @GetMapping("/list")
+    @Operation(title = "system config properties list", type = OperationType.LIST)
     public PageResult list(ConfigQuery query) {
         return new PageResult(configService.count(query), configService.find(query));
     }
 
     @GetMapping("/{id}")
+    @Operation(title = "system config properties detail", type = OperationType.QUERY)
     public ConfigInfo get(@PathVariable Integer id) {
         return configService.findById(id);
     }

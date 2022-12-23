@@ -1,7 +1,9 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
 import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.Picture;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.service.system.PictureService;
 import com.icezhg.athena.service.system.ProfileService;
@@ -47,22 +49,26 @@ public class ProfileController {
     }
 
     @GetMapping
+    @Operation(title = "profile detail", type = OperationType.QUERY)
     public Profile profile() {
         return profileService.buildProfile();
     }
 
     @PutMapping
+    @Operation(title = "profile modification", type = OperationType.UPDATE)
     public Profile updateProfile(@Validated @RequestBody Profile profile) {
         return profileService.updateProfile(profile);
     }
 
 
     @PostMapping("/updatePasswd")
+    @Operation(title = "change password", type = OperationType.UPDATE)
     public void updatePasswd(@RequestBody ProfilePasswd profilePasswd) {
         profileService.updatePasswd(profilePasswd);
     }
 
     @PostMapping("/avatar")
+    @Operation(title = "avatar uploading", type = OperationType.UPLOAD)
     public Profile avatar(MultipartFile file) {
         UserInfo userInfo = SecurityUtil.currentUserInfo();
         Picture picture = pictureService.save(file);

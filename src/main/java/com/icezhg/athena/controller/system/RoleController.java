@@ -1,5 +1,7 @@
 package com.icezhg.athena.controller.system;
 
+import com.icezhg.athena.annotation.Operation;
+import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.system.RoleService;
 import com.icezhg.athena.service.system.UserRoleService;
 import com.icezhg.athena.vo.query.NameQuery;
@@ -36,6 +38,7 @@ public class RoleController {
     }
 
     @PostMapping
+    @Operation(title = "roles addition", type = OperationType.INSERT)
     public RoleInfo add(@Validated @RequestBody RoleInfo role) {
         if (!roleService.checkUnique(role)) {
             throw new ErrorCodeException("", "role name is already exists");
@@ -44,6 +47,7 @@ public class RoleController {
     }
 
     @PutMapping
+    @Operation(title = "roles modification", type = OperationType.UPDATE)
     public RoleInfo edit(@Validated @RequestBody RoleInfo role) {
         if (!roleService.checkUnique(role)) {
             throw new ErrorCodeException("", "role name is already exists");
@@ -52,41 +56,49 @@ public class RoleController {
     }
 
     @DeleteMapping
+    @Operation(title = "roles deletion", type = OperationType.DELETE)
     public int delete(@RequestBody List<Integer> roleIds) {
         return roleService.deleteRoles(roleIds);
     }
 
     @GetMapping("/list")
+    @Operation(title = "roles list", type = OperationType.LIST)
     public PageResult list(RoleQuery query) {
         return new PageResult(roleService.count(query), roleService.find(query));
     }
 
     @GetMapping("/{roleId}")
+    @Operation(title = "roles detail", type = OperationType.QUERY)
     public RoleInfo get(@PathVariable Integer roleId) {
         return roleService.findRoleInfo(roleId);
     }
 
     @PutMapping("/changeStatus")
+    @Operation(title = "role status change", type = OperationType.UPDATE)
     public int changeStatus(@RequestBody RoleInfo roleInfo) {
         return roleService.changeStatus(roleInfo);
     }
 
     @GetMapping("/{roleId}/allocatedUsers")
+    @Operation(title = "users who have the specified role", type = OperationType.LIST)
     public PageResult allocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
         return userRoleService.listAllocatedUsers(roleId, nameQuery);
     }
 
     @GetMapping("/{roleId}/unallocatedUsers")
+    @Operation(title = "users who do not have the specified role", type = OperationType.LIST)
     public PageResult unallocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
         return userRoleService.listUnallocatedUsers(roleId, nameQuery);
     }
 
     @PostMapping("/{roleId}/authUser")
+    @Operation(title = "grant the specified role to the specified users", type = OperationType.GRANT)
     public void authUser(@PathVariable Integer roleId, @RequestBody List<Long> userIds) {
         userRoleService.authUser(roleId, userIds);
     }
 
     @DeleteMapping("/{roleId}/authUser")
+    @Operation(title = "revoke the specified role from the specified users", type = OperationType.REVOKE)
     public void authUserCancel(@PathVariable Integer roleId, @RequestBody List<Long> userIds) {
         userRoleService.cancelAuth(roleId, userIds);
     }
