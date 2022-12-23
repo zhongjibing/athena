@@ -20,7 +20,7 @@ public class LoginRecordController {
     }
 
     @GetMapping("/records")
-    @Operation(title = "user login records list", type = OperationType.QUERY)
+    @Operation(title = "user login records list", type = OperationType.QUERY, saveResult = false)
     public PageResult listLogs(LoginQuery query) {
         return new PageResult(loginRecordService.count(query), loginRecordService.find(query));
     }

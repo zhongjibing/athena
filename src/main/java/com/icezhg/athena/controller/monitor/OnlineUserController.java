@@ -20,7 +20,7 @@ public class OnlineUserController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "online users list", type = OperationType.QUERY)
+    @Operation(title = "online users list", type = OperationType.QUERY, saveResult = false)
     public PageResult list(OnlineUserQuery query) {
         return onlineUserService.listOnlineUsers(query);
     }

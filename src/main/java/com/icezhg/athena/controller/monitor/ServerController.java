@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ServerController {
 
     @GetMapping
-    @Operation(title = "server monitoring information", type = OperationType.QUERY)
+    @Operation(title = "server monitoring information", type = OperationType.QUERY, saveResult = false)
     public Object serverInfo(String name) throws Exception {
         return StringUtils.hasText(name) ? Server.getInfo(name) : Server.getInfo(Server.ALL);
     }

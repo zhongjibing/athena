@@ -18,4 +18,8 @@ public @interface Operation {
     String title();
 
     OperationType type();
+
+    boolean saveParameter() default true;
+
+    boolean saveResult() default true;
 }

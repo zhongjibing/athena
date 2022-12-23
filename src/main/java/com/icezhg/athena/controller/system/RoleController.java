@@ -80,13 +80,13 @@ public class RoleController {
     }
 
     @GetMapping("/{roleId}/allocatedUsers")
-    @Operation(title = "users who have the specified role", type = OperationType.LIST)
+    @Operation(title = "users who have the specified role", type = OperationType.LIST, saveResult = false)
     public PageResult allocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
         return userRoleService.listAllocatedUsers(roleId, nameQuery);
     }
 
     @GetMapping("/{roleId}/unallocatedUsers")
-    @Operation(title = "users who do not have the specified role", type = OperationType.LIST)
+    @Operation(title = "users who do not have the specified role", type = OperationType.LIST, saveResult = false)
     public PageResult unallocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
         return userRoleService.listUnallocatedUsers(roleId, nameQuery);
     }

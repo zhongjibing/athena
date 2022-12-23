@@ -28,7 +28,7 @@ public class AuthController {
     }
 
     @GetMapping("/user/info")
-    @Operation(title = "current user info", type = OperationType.QUERY)
+    @Operation(title = "current user info", type = OperationType.QUERY, saveResult = false)
     public Object userInfo() {
         return SecurityUtil.currentUserInfo();
     }

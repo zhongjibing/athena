@@ -8,8 +8,8 @@ import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.UserAuth;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.UserPasswd;
-import com.icezhg.athena.vo.query.UserQuery;
 import com.icezhg.athena.vo.UserStatus;
+import com.icezhg.athena.vo.query.UserQuery;
 import com.icezhg.commons.exception.ErrorCodeException;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping
-    @Operation(title = "users addition", type = OperationType.INSERT)
+    @Operation(title = "users addition", type = OperationType.INSERT, saveParameter = false, saveResult = false)
     public UserInfo add(@Validated @RequestBody UserInfo user) {
         if (!userService.checkUnique(user)) {
             throw new ErrorCodeException("", "username is already exists");
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PutMapping
-    @Operation(title = "users modification", type = OperationType.UPDATE)
+    @Operation(title = "users modification", type = OperationType.UPDATE, saveParameter = false, saveResult = false)
     public UserInfo edit(@Validated @RequestBody UserInfo user) {
         if (!userService.checkUnique(user)) {
             throw new ErrorCodeException("", "username is already exists");
@@ -57,14 +57,14 @@ public class UserController {
     }
 
     @GetMapping("/{userId}")
-    @Operation(title = "users detail", type = OperationType.QUERY)
+    @Operation(title = "users detail", type = OperationType.QUERY, saveResult = false)
     public UserInfo get(@PathVariable Long userId) {
         return userService.findById(userId);
     }
 
 
     @GetMapping("/list")
-    @Operation(title = "users list", type = OperationType.LIST)
+    @Operation(title = "users list", type = OperationType.LIST, saveResult = false)
     public PageResult list(UserQuery query) {
         return new PageResult(userService.count(query), userService.find(query));
     }
@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @PutMapping("/resetPasswd")
-    @Operation(title = "user password reset", type = OperationType.UPDATE)
+    @Operation(title = "user password reset", type = OperationType.UPDATE, saveParameter = false)
     public int resetPasswd(@RequestBody UserPasswd userPasswd) {
         return userService.resetPasswd(userPasswd);
     }

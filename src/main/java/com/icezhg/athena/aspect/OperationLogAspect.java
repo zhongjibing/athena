@@ -66,9 +66,11 @@ public class OperationLogAspect {
         operationLog.setTitle(operation.title());
         operationLog.setOperationType(operation.type() != null ? operation.type().getValue() : "");
         operationLog.setMethod(jp.getSignature().toLongString());
-        operationLog.setParameter(StringUtils.substring(parameterString(jp.getArgs()), 0, 2000));
-        if (result != null) {
-            operationLog.setResult(StringUtils.substring(JsonUtil.toJson(result), 0, 4000));
+        if (operation.saveParameter()) {
+            operationLog.setParameter(StringUtils.substring(parameterString(jp.getArgs()), 0, 2000));
+        }
+        if (operation.saveResult() && result != null) {
+            operationLog.setResult(StringUtils.substring(JsonUtil.toJson(result), 0, 2000));
         }
         if (ex == null) {
             operationLog.setStatus(Constants.NORMAL);

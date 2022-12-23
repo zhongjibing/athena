@@ -57,7 +57,7 @@ public class MenuController {
 
 
     @GetMapping("/tree")
-    @Operation(title = "system menus for current user", type = OperationType.QUERY)
+    @Operation(title = "system menus for current user", type = OperationType.QUERY, saveResult = false)
     public List<MenuTree> roleFilteredMenuTree() {
         return menuService.buildMenuTreeSelect();
     }
@@ -69,7 +69,7 @@ public class MenuController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "system menus list", type = OperationType.LIST)
+    @Operation(title = "system menus list", type = OperationType.LIST, saveResult = false)
     public Object list(MenuQuery query) {
         return menuService.list(query);
     }

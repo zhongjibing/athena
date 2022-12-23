@@ -19,7 +19,7 @@ public class CacheController {
     }
 
     @GetMapping
-    @Operation(title = "cache server monitoring information", type = OperationType.QUERY)
+    @Operation(title = "cache server monitoring information", type = OperationType.QUERY, saveResult = false)
     public Object getInfo() {
         return cacheService.getCacheInfo();
     }

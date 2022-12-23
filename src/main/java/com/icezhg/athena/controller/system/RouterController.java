@@ -24,7 +24,7 @@ public class RouterController {
     }
 
     @GetMapping
-    @Operation(title = "routers for current user", type = OperationType.LIST)
+    @Operation(title = "routers for current user", type = OperationType.LIST, saveResult = false)
     public List<Router> routers() {
         return routerService.listRouters();
     }

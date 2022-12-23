@@ -4,7 +4,6 @@ import com.icezhg.athena.annotation.Operation;
 import com.icezhg.athena.domain.AvatarPicture;
 import com.icezhg.athena.domain.Picture;
 import com.icezhg.athena.enums.OperationType;
-import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.service.system.PictureService;
 import com.icezhg.athena.service.system.ProfileService;
 import com.icezhg.athena.vo.Profile;
@@ -32,8 +31,6 @@ public class ProfileController {
 
     private PictureService pictureService;
 
-    private ConfigService configService;
-
     public ProfileController(ProfileService profileService) {
         this.profileService = profileService;
     }
@@ -43,32 +40,27 @@ public class ProfileController {
         this.pictureService = pictureService;
     }
 
-    @Autowired
-    public void setConfigService(ConfigService configService) {
-        this.configService = configService;
-    }
-
     @GetMapping
-    @Operation(title = "profile detail", type = OperationType.QUERY)
+    @Operation(title = "profile detail", type = OperationType.QUERY, saveResult = false)
     public Profile profile() {
         return profileService.buildProfile();
     }
 
     @PutMapping
-    @Operation(title = "profile modification", type = OperationType.UPDATE)
+    @Operation(title = "profile modification", type = OperationType.UPDATE, saveParameter = false, saveResult = false)
     public Profile updateProfile(@Validated @RequestBody Profile profile) {
         return profileService.updateProfile(profile);
     }
 
 
     @PostMapping("/updatePasswd")
-    @Operation(title = "change password", type = OperationType.UPDATE)
+    @Operation(title = "change password", type = OperationType.UPDATE, saveParameter = false)
     public void updatePasswd(@RequestBody ProfilePasswd profilePasswd) {
         profileService.updatePasswd(profilePasswd);
     }
 
     @PostMapping("/avatar")
-    @Operation(title = "avatar uploading", type = OperationType.UPLOAD)
+    @Operation(title = "avatar uploading", type = OperationType.UPLOAD, saveResult = false)
     public Profile avatar(MultipartFile file) {
         UserInfo userInfo = SecurityUtil.currentUserInfo();
         Picture picture = pictureService.save(file);
