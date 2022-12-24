@@ -43,7 +43,6 @@ public class TaskController {
     }
 
     @GetMapping("/{taskId}")
-    @Operation(title = "tasks detail", type = OperationType.QUERY)
     public TaskInfo taskInfo(@PathVariable Long taskId) {
         return taskService.findById(taskId);
     }
@@ -55,7 +54,6 @@ public class TaskController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "tasks list", type = OperationType.LIST)
     public PageResult list(TaskQuery query) {
         return new PageResult(taskService.count(query), taskService.find(query));
     }
@@ -73,7 +71,6 @@ public class TaskController {
     }
 
     @GetMapping("/log/list")
-    @Operation(title = "task logs list", type = OperationType.LIST)
     public PageResult listLogs(TaskLogQuery query) {
         return new PageResult(taskLogService.count(query), taskLogService.find(query));
     }

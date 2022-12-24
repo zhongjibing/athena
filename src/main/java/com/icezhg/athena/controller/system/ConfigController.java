@@ -56,13 +56,11 @@ public class ConfigController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "system config properties list", type = OperationType.LIST)
     public PageResult list(ConfigQuery query) {
         return new PageResult(configService.count(query), configService.find(query));
     }
 
     @GetMapping("/{id}")
-    @Operation(title = "system config properties detail", type = OperationType.QUERY)
     public ConfigInfo get(@PathVariable Integer id) {
         return configService.findById(id);
     }

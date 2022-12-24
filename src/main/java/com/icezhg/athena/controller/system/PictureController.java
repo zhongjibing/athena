@@ -42,7 +42,6 @@ public class PictureController {
     }
 
     @GetMapping("/{id}")
-    @Operation(title = "pictures viewing", type = OperationType.VIEW)
     public void readImage(@PathVariable String id, HttpServletResponse response) {
         Picture picture = pictureService.findById(id);
         if (picture == null) {

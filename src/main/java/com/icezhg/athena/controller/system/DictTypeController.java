@@ -56,19 +56,16 @@ public class DictTypeController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "dict types list", type = OperationType.LIST)
     public PageResult list(DictQuery query) {
         return new PageResult(dictTypeService.count(query), dictTypeService.find(query));
     }
 
     @GetMapping("/options")
-    @Operation(title = "dict types options", type = OperationType.QUERY)
     public List<DictTypeInfo> listOptions() {
         return dictTypeService.listOptions();
     }
 
     @GetMapping("/{id}")
-    @Operation(title = "dict types detail", type = OperationType.QUERY)
     public DictTypeInfo get(@PathVariable Integer id) {
         return dictTypeService.findById(id);
     }

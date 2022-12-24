@@ -41,7 +41,6 @@ public class ProfileController {
     }
 
     @GetMapping
-    @Operation(title = "profile detail", type = OperationType.QUERY, saveResult = false)
     public Profile profile() {
         return profileService.buildProfile();
     }

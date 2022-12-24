@@ -40,7 +40,6 @@ public class DictDataController {
      * 根据字典类型查询字典数据信息
      */
     @GetMapping(value = "/type/{dictType}")
-    @Operation(title = "dict data options", type = OperationType.QUERY)
     public List<DictData> dictType(@PathVariable String dictType) {
         return dictTypeService.findDictDataByType(dictType);
     }
@@ -64,13 +63,11 @@ public class DictDataController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "dict data list", type = OperationType.LIST)
     public PageResult list(DictQuery query) {
         return new PageResult(dictDataService.count(query), dictDataService.find(query));
     }
 
     @GetMapping("/{id}")
-    @Operation(title = "dict data detail", type = OperationType.QUERY)
     public DictDataInfo get(@PathVariable Integer id) {
         return dictDataService.findById(id);
     }

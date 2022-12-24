@@ -32,7 +32,6 @@ public class MenuController {
     }
 
     @GetMapping("/{menuId}")
-    @Operation(title = "system menus detail", type = OperationType.QUERY)
     public MenuInfo get(@PathVariable Integer menuId) {
         return menuService.findMenu(menuId);
     }
@@ -57,19 +56,16 @@ public class MenuController {
 
 
     @GetMapping("/tree")
-    @Operation(title = "system menus for current user", type = OperationType.QUERY, saveResult = false)
     public List<MenuTree> roleFilteredMenuTree() {
         return menuService.buildMenuTreeSelect();
     }
 
     @GetMapping("/roleMenuTree/{roleId}")
-    @Operation(title = "system menus for the specified role", type = OperationType.QUERY)
     public RoleMenuTree roleMenuTree(@PathVariable Integer roleId) {
         return menuService.buildRoleMenuTreeSelect(roleId);
     }
 
     @GetMapping("/list")
-    @Operation(title = "system menus list", type = OperationType.LIST, saveResult = false)
     public Object list(MenuQuery query) {
         return menuService.list(query);
     }

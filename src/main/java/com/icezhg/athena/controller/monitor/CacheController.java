@@ -1,8 +1,6 @@
 package com.icezhg.athena.controller.monitor;
 
 
-import com.icezhg.athena.annotation.Operation;
-import com.icezhg.athena.enums.OperationType;
 import com.icezhg.athena.service.monitor.CacheService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +17,6 @@ public class CacheController {
     }
 
     @GetMapping
-    @Operation(title = "cache server monitoring information", type = OperationType.QUERY, saveResult = false)
     public Object getInfo() {
         return cacheService.getCacheInfo();
     }

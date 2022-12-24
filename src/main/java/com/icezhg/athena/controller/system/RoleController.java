@@ -62,13 +62,11 @@ public class RoleController {
     }
 
     @GetMapping("/list")
-    @Operation(title = "roles list", type = OperationType.LIST)
     public PageResult list(RoleQuery query) {
         return new PageResult(roleService.count(query), roleService.find(query));
     }
 
     @GetMapping("/{roleId}")
-    @Operation(title = "roles detail", type = OperationType.QUERY)
     public RoleInfo get(@PathVariable Integer roleId) {
         return roleService.findRoleInfo(roleId);
     }
@@ -80,13 +78,11 @@ public class RoleController {
     }
 
     @GetMapping("/{roleId}/allocatedUsers")
-    @Operation(title = "users who have the specified role", type = OperationType.LIST, saveResult = false)
     public PageResult allocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
         return userRoleService.listAllocatedUsers(roleId, nameQuery);
     }
 
     @GetMapping("/{roleId}/unallocatedUsers")
-    @Operation(title = "users who do not have the specified role", type = OperationType.LIST, saveResult = false)
     public PageResult unallocatedUsers(@PathVariable Integer roleId, NameQuery nameQuery) {
         return userRoleService.listUnallocatedUsers(roleId, nameQuery);
     }

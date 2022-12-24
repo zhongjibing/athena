@@ -65,7 +65,7 @@ public class OperationLogAspect {
         operationLog.setUserId(SecurityUtil.currentUserId());
         operationLog.setTitle(operation.title());
         operationLog.setOperationType(operation.type() != null ? operation.type().getValue() : "");
-        operationLog.setMethod(jp.getSignature().toLongString());
+        operationLog.setMethod(jp.getSignature().toString());
         if (operation.saveParameter()) {
             operationLog.setParameter(StringUtils.substring(parameterString(jp.getArgs()), 0, 2000));
         }
