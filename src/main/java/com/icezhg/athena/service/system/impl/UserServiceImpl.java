@@ -9,11 +9,11 @@ import com.icezhg.athena.domain.User;
 import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.service.system.UserService;
 import com.icezhg.athena.util.MaskSensitiveUtil;
-import com.icezhg.athena.vo.query.Query;
 import com.icezhg.athena.vo.UserInfo;
 import com.icezhg.athena.vo.UserPasswd;
-import com.icezhg.athena.vo.query.UserQuery;
 import com.icezhg.athena.vo.UserStatus;
+import com.icezhg.athena.vo.query.Query;
+import com.icezhg.athena.vo.query.UserQuery;
 import com.icezhg.authorization.core.SecurityUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
         UserQuery query = new UserQuery();
         query.setUsername(userInfo.getUsername());
         List<UserInfo> users = find(query);
-        return users.isEmpty() || Objects.equals(userInfo.getId(), users.get(0).getId());
+        return users.isEmpty() || (users.size() == 1 && Objects.equals(userInfo.getId(), users.get(0).getId()));
     }
 
     @Override
