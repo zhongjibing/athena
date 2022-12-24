@@ -71,13 +71,13 @@ public class UserController {
 
     @PutMapping("/changeStatus")
     @Operation(title = "user status change", type = OperationType.UPDATE)
-    public int changeStatus(@RequestBody UserStatus userStatus) {
+    public int changeStatus(@Validated @RequestBody UserStatus userStatus) {
         return userService.changeStatus(userStatus);
     }
 
     @PutMapping("/resetPasswd")
     @Operation(title = "user password reset", type = OperationType.UPDATE, saveParameter = false)
-    public int resetPasswd(@RequestBody UserPasswd userPasswd) {
+    public int resetPasswd(@Validated @RequestBody UserPasswd userPasswd) {
         return userService.resetPasswd(userPasswd);
     }
 
