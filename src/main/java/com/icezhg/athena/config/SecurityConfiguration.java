@@ -28,10 +28,4 @@ public class SecurityConfiguration {
                 .requestMatchers(HttpMethod.GET, "/picture/*").permitAll()
                 .anyRequest().authenticated();
     }
-
-    public static void main(String[] args) {
-        PasswordEncoder passwordEncoder = PasswordEncoderFactories.createDelegatingPasswordEncoder();
-
-        System.out.println(passwordEncoder.encode("@zeuskb34M2051"));
-    }
 }
