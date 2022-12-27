@@ -115,7 +115,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private String defaultPasswd() {
-        return StringUtils.defaultString(configService.findConfig(SysConfig.INIT_PASSWD), Constants.DEFAULT_PASSWD);
+        return StringUtils.defaultString(configService.findConfig(SysConfig.INIT_USER_PASSWD), Constants.DEFAULT_USER_PASSWD);
     }
 
     @Override

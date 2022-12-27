@@ -39,7 +39,7 @@ public class UserController {
     }
 
     @PostMapping
-    @Operation(title = "users addition", type = OperationType.INSERT, saveParameter = false, saveResult = false)
+    @Operation(title = "users addition", type = OperationType.INSERT, saveResult = false)
     public UserInfo add(@Validated @RequestBody UserInfo user) {
         if (!userService.checkUnique(user)) {
             throw new ErrorCodeException("", "username is already exists");
@@ -48,7 +48,7 @@ public class UserController {
     }
 
     @PutMapping
-    @Operation(title = "users modification", type = OperationType.UPDATE, saveParameter = false, saveResult = false)
+    @Operation(title = "users modification", type = OperationType.UPDATE, saveResult = false)
     public UserInfo edit(@Validated @RequestBody UserInfo user) {
         if (!userService.checkUnique(user)) {
             throw new ErrorCodeException("", "username is already exists");

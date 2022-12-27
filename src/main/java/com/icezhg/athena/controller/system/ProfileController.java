@@ -46,7 +46,7 @@ public class ProfileController {
     }
 
     @PutMapping
-    @Operation(title = "profile modification", type = OperationType.UPDATE, saveParameter = false, saveResult = false)
+    @Operation(title = "profile modification", type = OperationType.UPDATE, saveResult = false)
     public Profile updateProfile(@Validated @RequestBody Profile profile) {
         return profileService.updateProfile(profile);
     }

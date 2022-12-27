@@ -6,10 +6,10 @@ import com.icezhg.athena.dao.PictureDao;
 import com.icezhg.athena.domain.BinaryData;
 import com.icezhg.athena.domain.Picture;
 import com.icezhg.athena.service.system.PictureService;
-import com.icezhg.athena.util.IdGenerator;
 import com.icezhg.athena.vo.query.NameQuery;
 import com.icezhg.authorization.core.SecurityUtil;
 import com.icezhg.commons.exception.ErrorCodeException;
+import com.icezhg.commons.util.IdGenerator;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -50,7 +50,7 @@ public class PictureServiceImpl implements PictureService {
         BinaryData binaryData = saveImage(file);
 
         Picture picture = new Picture();
-        picture.setId(IdGenerator.generateId());
+        picture.setId(IdGenerator.nextId());
         picture.setName(truncFileName(file.getOriginalFilename()));
         picture.setType(file.getContentType());
         picture.setMd5(binaryData.getMd5());

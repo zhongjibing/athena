@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.icezhg.athena.dao.ClientDao">
+
+    <resultMap id="BaseResultMap" type="com.icezhg.athena.vo.ClientInfo">
+        <id property="id" column="id" jdbcType="VARCHAR"/>
+        <result property="clientName" column="client_name" jdbcType="VARCHAR"/>
+        <result property="authorizationGrantTypes" column="authorization_grant_types" jdbcType="VARCHAR"/>
+        <result property="redirectUris" column="redirect_uris" jdbcType="VARCHAR"/>
+        <result property="scopes" column="scopes" jdbcType="VARCHAR"/>
+        <result property="status" column="status" jdbcType="CHAR"/>
+        <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="remark" column="remark" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,client_name,authorization_grant_types,redirect_uris,
+        scopes,status,create_by,create_time,
+        update_by,update_time,remark
+    </sql>
+
+    <select id="findById" parameterType="string" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List" />
+        from oauth2_registered_client
+        where  id = #{id,jdbcType=VARCHAR}
+    </select>
+
+    <insert id="insert" parameterType="com.icezhg.athena.domain.Client">
+        insert into oauth2_registered_client
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="clientId != null">client_id,</if>
+            <if test="clientIdIssuedAt != null">client_id_issued_at,</if>
+            <if test="clientSecret != null">client_secret,</if>
+            <if test="clientSecretExpiresAt != null">client_secret_expires_at,</if>
+            <if test="clientName != null">client_name,</if>
+            <if test="clientAuthenticationMethods != null">client_authentication_methods,</if>
+            <if test="authorizationGrantTypes != null">authorization_grant_types,</if>
+            <if test="redirectUris != null">redirect_uris,</if>
+            <if test="scopes != null">scopes,</if>
+            <if test="clientSettings != null">client_settings,</if>
+            <if test="tokenSettings != null">token_settings,</if>
+            <if test="status != null">status,</if>
+            <if test="createBy != null">create_by,</if>
+            <if test="createTime != null">create_time,</if>
+            <if test="updateBy != null">update_by,</if>
+            <if test="updateTime != null">update_time,</if>
+            <if test="remark != null">remark,</if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id,jdbcType=VARCHAR},</if>
+            <if test="clientId != null">#{clientId,jdbcType=VARCHAR},</if>
+            <if test="clientIdIssuedAt != null">#{clientIdIssuedAt,jdbcType=TIMESTAMP},</if>
+            <if test="clientSecret != null">#{clientSecret,jdbcType=VARCHAR},</if>
+            <if test="clientSecretExpiresAt != null">#{clientSecretExpiresAt,jdbcType=TIMESTAMP},</if>
+            <if test="clientName != null">#{clientName,jdbcType=VARCHAR},</if>
+            <if test="clientAuthenticationMethods != null">#{clientAuthenticationMethods,jdbcType=VARCHAR},</if>
+            <if test="authorizationGrantTypes != null">#{authorizationGrantTypes,jdbcType=VARCHAR},</if>
+            <if test="redirectUris != null">#{redirectUris,jdbcType=VARCHAR},</if>
+            <if test="scopes != null">#{scopes,jdbcType=VARCHAR},</if>
+            <if test="clientSettings != null">#{clientSettings,jdbcType=VARCHAR},</if>
+            <if test="tokenSettings != null">#{tokenSettings,jdbcType=VARCHAR},</if>
+            <if test="status != null">#{status,jdbcType=CHAR},</if>
+            <if test="createBy != null">#{createBy,jdbcType=VARCHAR},</if>
+            <if test="createTime != null">#{createTime,jdbcType=TIMESTAMP},</if>
+            <if test="updateBy != null">#{updateBy,jdbcType=VARCHAR},</if>
+            <if test="updateTime != null">#{updateTime,jdbcType=TIMESTAMP},</if>
+            <if test="remark != null">#{remark,jdbcType=VARCHAR},</if>
+        </trim>
+    </insert>
+
+    <update id="update" parameterType="com.icezhg.athena.domain.Client">
+        update oauth2_registered_client
+        <set>
+            <if test="clientId != null">
+                client_id = #{clientId,jdbcType=VARCHAR},
+            </if>
+            <if test="clientSecret != null">
+                client_secret = #{clientSecret,jdbcType=VARCHAR},
+            </if>
+            <if test="clientName != null">
+                client_name = #{clientName,jdbcType=VARCHAR},
+            </if>
+            <if test="clientAuthenticationMethods != null">
+                client_authentication_methods = #{clientAuthenticationMethods,jdbcType=VARCHAR},
+            </if>
+            <if test="authorizationGrantTypes != null">
+                authorization_grant_types = #{authorizationGrantTypes,jdbcType=VARCHAR},
+            </if>
+            <if test="redirectUris != null">
+                redirect_uris = #{redirectUris,jdbcType=VARCHAR},
+            </if>
+            <if test="scopes != null">
+                scopes = #{scopes,jdbcType=VARCHAR},
+            </if>
+            <if test="clientSettings != null">
+                client_settings = #{clientSettings,jdbcType=VARCHAR},
+            </if>
+            <if test="tokenSettings != null">
+                token_settings = #{tokenSettings,jdbcType=VARCHAR},
+            </if>
+            <if test="status != null">
+                status = #{status,jdbcType=CHAR},
+            </if>
+            <if test="updateBy != null">
+                update_by = #{updateBy,jdbcType=VARCHAR},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime,jdbcType=TIMESTAMP},
+            </if>
+            <if test="remark != null">
+                remark = #{remark,jdbcType=VARCHAR},
+            </if>
+        </set>
+        where id = #{id,jdbcType=VARCHAR}
+    </update>
+
+    <sql id="findCondition">
+        <where>
+            <if test="clientName != null">
+                and client_id = #{clientName,jdbcType=VARCHAR}
+            </if>
+            <if test="status != null">
+                and status = #{status,jdbcType=CHAR}
+            </if>
+            <if test="beginTime != null and endTime != null">
+                and create_time between #{beginTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+            </if>
+        </where>
+    </sql>
+
+    <select id="count" parameterType="map" resultType="int">
+        select
+        count(*)
+        from oauth2_registered_client
+        <include refid="findCondition" />
+    </select>
+
+    <select id="find" parameterType="map" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from oauth2_registered_client
+        <include refid="findCondition" />
+        ORDER BY create_time ASC
+        LIMIT #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+</mapper>
