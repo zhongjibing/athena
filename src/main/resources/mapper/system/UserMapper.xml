@@ -89,7 +89,7 @@
                 username = #{username,jdbcType=VARCHAR},
             </if>
             <if test="password != null">
-                password = #{password,jdbcType=VARCHAR},
+                `password` = #{password,jdbcType=VARCHAR},
             </if>
             <if test="nickname != null">
                 nickname = #{nickname,jdbcType=VARCHAR},
@@ -131,14 +131,14 @@
                 remark = #{remark,jdbcType=VARCHAR},
             </if>
         </set>
-        where id = #{id,jdbcType=BIGINT}
+        where id = #{id,jdbcType=BIGINT} and ((id > 0 and default_user = 0) or default_user = 1)
     </update>
 
     <select id="findById" parameterType="long" resultMap="BaseResultMap">
         select
           <include refid="BaseColumns"/>
         from sys_user
-        where id = #{id,jdbcType=BIGINT} and id > 0 and default_user = 0
+        where id = #{id,jdbcType=BIGINT} and ((id > 0 and default_user = 0) or default_user = 1)
     </select>
 
     <sql id="findCondition">
@@ -193,7 +193,7 @@
     </select>
 
     <select id="findUserPasswd" parameterType="long" resultType="string">
-        select password from sys_user where id = #{userId,jdbcType=BIGINT}
+        select password from sys_user where id = #{userId,jdbcType=BIGINT} and ((id > 0 and default_user = 0) or default_user = 1)
     </select>
 
 </mapper>
