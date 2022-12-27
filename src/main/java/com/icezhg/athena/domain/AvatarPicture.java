@@ -1,6 +1,7 @@
 package com.icezhg.athena.domain;
 
-import com.icezhg.athena.util.IdGenerator;
+
+import com.icezhg.commons.util.IdGenerator;
 
 /**
  * Created by zhongjibing on 2022/09/07.
@@ -11,6 +12,6 @@ public record AvatarPicture(
 ) {
 
     public AvatarPicture(String pictureId) {
-        this(IdGenerator.generateId(), pictureId);
+        this(IdGenerator.nextId(), pictureId);
     }
 }
