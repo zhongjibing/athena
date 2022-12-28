@@ -27,4 +27,5 @@ public interface ConfigService {
 
     ConfigInfo findById(Integer id);
 
+    ConfigInfo findByKey(String key);
 }

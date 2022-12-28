@@ -81,6 +81,11 @@ public class ConfigServiceImpl implements ConfigService {
         return buildConfigInfo(configDao.findById(id));
     }
 
+    @Override
+    public ConfigInfo findByKey(String key) {
+        return buildConfigInfo(configDao.findByKey(key));
+    }
+
     private Config buildConfig(ConfigInfo configInfo) {
         Config config = new Config();
         config.setId(configInfo.getId());
