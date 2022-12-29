@@ -13,9 +13,12 @@ public class PasswdConfig {
 
     private static ClientPasswdConfig clientPasswdConfig;
 
-    public PasswdConfig(UserPasswdConfig userPasswdConfig, ClientPasswdConfig clientPasswdConfig) {
+    private static Configs configs;
+
+    public PasswdConfig(UserPasswdConfig userPasswdConfig, ClientPasswdConfig clientPasswdConfig, Configs configs) {
         PasswdConfig.userPasswdConfig = userPasswdConfig;
         PasswdConfig.clientPasswdConfig = clientPasswdConfig;
+        PasswdConfig.configs = configs;
     }
 
     public static String userInitPasswd() {
@@ -24,6 +27,14 @@ public class PasswdConfig {
 
     public static String clientInitPasswd() {
         return clientPasswdConfig.passwd;
+    }
+
+    public static String getSecret() {
+        return configs.secret;
+    }
+
+    public static String getSalt() {
+        return configs.salt;
     }
 
     @Component
@@ -43,6 +54,22 @@ public class PasswdConfig {
 
         public void setPasswd(String passwd) {
             this.passwd = passwd;
+        }
+    }
+
+    @Component
+    @ConfigurationProperties(prefix = "sys.pw")
+    public static class Configs {
+        private String secret;
+
+        private String salt;
+
+        public void setSecret(String secret) {
+            this.secret = secret;
+        }
+
+        public void setSalt(String salt) {
+            this.salt = salt;
         }
     }
 }
