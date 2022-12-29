@@ -1,6 +1,6 @@
 package com.icezhg.athena.service.system.impl;
 
-import com.icezhg.athena.constant.Constants;
+import com.icezhg.athena.constant.PasswdConfig;
 import com.icezhg.athena.constant.SysConfig;
 import com.icezhg.athena.dao.ClientDao;
 import com.icezhg.athena.domain.Client;
@@ -151,7 +151,7 @@ public class ClientServiceImpl implements ClientService {
 
     private String defaultPasswd() {
         String initClientPasswd = configService.findConfig(SysConfig.INIT_CLIENT_PASSWD);
-        return StringUtils.defaultString(initClientPasswd, Constants.DEFAULT_CLIENT_PASSWD);
+        return StringUtils.defaultString(initClientPasswd, PasswdConfig.clientInitPasswd());
     }
 
 

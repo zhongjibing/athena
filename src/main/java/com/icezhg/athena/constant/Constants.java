@@ -80,11 +80,7 @@ public interface Constants {
     int YES = 1;
     int NO = 0;
 
-    String DEFAULT_USER_PASSWD = "QFrUaaCteu%8";
-    String DEFAULT_CLIENT_PASSWD = "Y2Mhl#Hf%Jac";
-
     int MAX_UPLOAD_FILENAME_LEN = 64;
-
 
     String HTTP_SCHEMA = "http://";
     String HTTPS_SCHEMA = "https://";

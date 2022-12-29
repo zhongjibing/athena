@@ -1,6 +1,6 @@
 package com.icezhg.athena.service.system.impl;
 
-import com.icezhg.athena.constant.Constants;
+import com.icezhg.athena.constant.PasswdConfig;
 import com.icezhg.athena.constant.SysConfig;
 import com.icezhg.athena.dao.AvatarPictureDao;
 import com.icezhg.athena.dao.UserDao;
@@ -115,7 +115,8 @@ public class UserServiceImpl implements UserService {
     }
 
     private String defaultPasswd() {
-        return StringUtils.defaultString(configService.findConfig(SysConfig.INIT_USER_PASSWD), Constants.DEFAULT_USER_PASSWD);
+        String initUserPasswd = configService.findConfig(SysConfig.INIT_USER_PASSWD);
+        return StringUtils.defaultString(initUserPasswd, PasswdConfig.clientInitPasswd());
     }
 
     @Override
