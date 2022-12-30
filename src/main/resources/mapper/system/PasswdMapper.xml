@@ -8,6 +8,7 @@
         <id property="id" column="id" jdbcType="VARCHAR"/>
         <result property="title" column="title" jdbcType="VARCHAR"/>
         <result property="passwd" column="passwd" jdbcType="VARCHAR"/>
+        <result property="salt" column="salt" jdbcType="VARCHAR"/>
         <result property="createBy" column="create_by" jdbcType="VARCHAR"/>
         <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
         <result property="updateBy" column="update_by" jdbcType="VARCHAR"/>
@@ -16,7 +17,7 @@
     </resultMap>
 
     <sql id="Base_Column_List">
-        id,title,concat(salt, passwd) passwd,create_by,create_time,
+        id,title,passwd,salt,create_by,create_time,
         update_by,update_time,remark
     </sql>
 
@@ -27,9 +28,12 @@
         where id = #{id,jdbcType=VARCHAR}
     </select>
 
-    <delete id="deleteById" parameterType="string">
+    <delete id="deleteByIds" parameterType="list">
         delete from sys_passwd
-        where id = #{id,jdbcType=VARCHAR}
+        where id in
+        <foreach collection="list" item="item" open="(" separator=", " close=")">
+            #{item,jdbcType=INTEGER}
+        </foreach>
     </delete>
 
     <insert id="insert" parameterType="com.icezhg.athena.domain.Passwd">

@@ -1,8 +1,10 @@
 package com.icezhg.athena.service.system.impl;
 
 import com.icezhg.athena.constant.PasswdConfig;
+import com.icezhg.athena.constant.SysConfig;
 import com.icezhg.athena.dao.PasswdDao;
 import com.icezhg.athena.domain.Passwd;
+import com.icezhg.athena.service.system.ConfigService;
 import com.icezhg.athena.service.system.PasswdService;
 import com.icezhg.athena.util.PasswdGenerator;
 import com.icezhg.athena.vo.PasswdInfo;
@@ -28,10 +30,17 @@ public class PasswdServiceImpl implements PasswdService {
 
     private final PasswdDao passwdDao;
 
+    private ConfigService configService;
+
     private PasswordEncoder passwordEncoder;
 
     public PasswdServiceImpl(PasswdDao passwdDao) {
         this.passwdDao = passwdDao;
+    }
+
+    @Autowired
+    public void setConfigService(ConfigService configService) {
+        this.configService = configService;
     }
 
     @Autowired
@@ -41,11 +50,7 @@ public class PasswdServiceImpl implements PasswdService {
 
     @Override
     public PasswdInfo save(PasswdInfo entity) {
-        Passwd passwd = entity.toPasswd();
-        SM4 sm4 = SM4.getInstance(PasswdConfig.getSalt());
-        String encrypt = sm4.encrypt(entity.getPasswd());
-        passwd.setSalt(encrypt.substring(0, 8));
-        passwd.setPasswd(encrypt.substring(8));
+        Passwd passwd = encrypt(entity).toPasswd();
         passwd.setId(IdGenerator.nextId());
         String username = SecurityUtil.currentUserName();
         passwd.setCreateBy(username);
@@ -53,32 +58,34 @@ public class PasswdServiceImpl implements PasswdService {
         passwd.setCreateTime(new Date());
         passwd.setUpdateTime(new Date());
         passwdDao.insert(passwd);
-        return passwdDao.findById(passwd.getId());
+        return erasePasswd(passwdDao.findById(passwd.getId()));
     }
 
     @Override
     public PasswdInfo update(PasswdInfo entity) {
-        Passwd passwd = entity.toPasswd();
-        if (StringUtils.isBlank(entity.getPasswd())) {
-            SM4 sm4 = SM4.getInstance(PasswdConfig.getSalt());
-            String encrypt = sm4.encrypt(entity.getPasswd());
-            passwd.setSalt(encrypt.substring(0, 8));
-            passwd.setPasswd(encrypt.substring(8));
-        }
+        Passwd passwd = encrypt(entity).toPasswd();
         String username = SecurityUtil.currentUserName();
         passwd.setUpdateBy(username);
         passwd.setUpdateTime(new Date());
         passwdDao.update(passwd);
-        return passwdDao.findById(passwd.getId());
+        return erasePasswd(passwdDao.findById(passwd.getId()));
+    }
+
+    @Override
+    public PasswdInfo findById(String id) {
+        return erasePasswd(passwdDao.findById(id));
     }
 
     @Override
     public PasswdInfo findPasswd(String id, String secretKey) {
-        if (!passwordEncoder.matches(secretKey, PasswdConfig.getSecret())) {
+        String ds = configService.findConfig(SysConfig.PASSWD_SM4_SALT);
+        SM4 decrypter = SM4.getInstance(ds.substring(1 << 1 + 1));
+        String decrypt = decrypter.decrypt(secretKey);
+        if (!passwordEncoder.matches(decrypt, PasswdConfig.getSecret())) {
             throw new InvalidAccessException("", "access denied");
         }
 
-        return passwdDao.findById(id);
+        return decrypt(passwdDao.findById(id));
     }
 
     @Override
@@ -88,7 +95,9 @@ public class PasswdServiceImpl implements PasswdService {
 
     @Override
     public List<PasswdInfo> find(Query query) {
-        return passwdDao.find(query.toMap());
+        List<PasswdInfo> passwdList = passwdDao.find(query.toMap());
+        passwdList.forEach(this::erasePasswd);
+        return passwdList;
     }
 
     @Override
@@ -100,4 +109,55 @@ public class PasswdServiceImpl implements PasswdService {
         }
         return result;
     }
+
+    @Override
+    public int deleteByIds(List<String> ids) {
+        return passwdDao.deleteByIds(ids);
+    }
+
+    private PasswdInfo decrypt(PasswdInfo passwd) {
+        if (passwd == null) {
+            return null;
+        }
+
+        char[] cipher = passwd.getSalt().toCharArray();
+        for (int i = 0; i < cipher.length; i++) {
+            cipher[i] = (char) (cipher[i] - i % 2);
+        }
+        SM4 encryptor = SM4.getInstance(PasswdConfig.getSalt());
+        String ds = configService.findConfig(SysConfig.PASSWD_SM4_SALT);
+        SM4 decrypter = SM4.getInstance(ds.substring(1 << 1 + 1));
+        String encrypt = decrypter.encrypt(encryptor.decrypt(new String(cipher) + passwd.getPasswd()));
+        passwd.setSalt(encrypt.substring(0, 8));
+        passwd.setPasswd(encrypt.substring(8));
+        return passwd;
+    }
+
+    private PasswdInfo encrypt(PasswdInfo passwd) {
+        if (StringUtils.isBlank(passwd.getPasswd()) || StringUtils.isBlank(passwd.getSalt())) {
+            return erasePasswd(passwd);
+        }
+
+        String ds = configService.findConfig(SysConfig.PASSWD_SM4_SALT);
+        SM4 decrypter = SM4.getInstance(ds.substring(1 << 1 + 1));
+        String decrypt = decrypter.decrypt(passwd.getSalt() + passwd.getPasswd());
+        SM4 encryptor = SM4.getInstance(PasswdConfig.getSalt());
+        char[] bytes = encryptor.encrypt(decrypt).toCharArray();
+        for (int i = 0; i < 8; i++) {
+            bytes[i] = (char) (bytes[i] + i % 2);
+        }
+        String cipher = new String(bytes);
+        passwd.setSalt(cipher.substring(0, 8));
+        passwd.setPasswd(cipher.substring(8));
+        return passwd;
+    }
+
+    private PasswdInfo erasePasswd(PasswdInfo passwdInfo) {
+        if (passwdInfo != null) {
+            passwdInfo.setPasswd(null);
+            passwdInfo.setSalt(null);
+        }
+        return passwdInfo;
+    }
+
 }

@@ -1,9 +1,6 @@
 package com.icezhg.athena.vo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.icezhg.athena.domain.Passwd;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
 import lombok.Data;
 
 import java.util.Date;
@@ -22,10 +19,9 @@ public class PasswdInfo {
      */
     private String title;
 
-    @NotBlank
-    @JsonIgnore
-    @Size(min = 6, max = 32)
     private transient String passwd;
+
+    private transient String salt;
 
     /**
      * 创建人
@@ -56,7 +52,8 @@ public class PasswdInfo {
         Passwd result = new Passwd();
         result.setId(id);
         result.setTitle(title);
-        result.setPasswd(passwd);
+        result.setPasswd(passwd != null && !passwd.isBlank() ? passwd : null);
+        result.setSalt(salt != null && !salt.isBlank() ? salt : null);
         result.setRemark(remark);
         return result;
     }

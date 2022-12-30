@@ -15,8 +15,6 @@ public interface PasswdDao {
 
     PasswdInfo findById(String id);
 
-    int deleteById(String id);
-
     int insert(Passwd record);
 
     int update(Passwd record);
@@ -25,4 +23,5 @@ public interface PasswdDao {
 
     List<PasswdInfo> find(Map<String, Object> query);
 
+    int deleteByIds(List<String> ids);
 }

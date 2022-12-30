@@ -13,6 +13,8 @@ public interface PasswdService {
 
     PasswdInfo update(PasswdInfo entity);
 
+    PasswdInfo findById(String id);
+
     PasswdInfo findPasswd(String id, String secretKey);
 
     int count(Query query);
@@ -20,4 +22,6 @@ public interface PasswdService {
     List<PasswdInfo> find(Query query);
 
     List<String> generate(int size);
+
+    int deleteByIds(List<String> ids);
 }
