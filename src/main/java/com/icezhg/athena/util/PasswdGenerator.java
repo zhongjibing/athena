@@ -32,7 +32,7 @@ public class PasswdGenerator {
     }
 
     public PasswdGenerator(int length) {
-        this.length = length;
+        this.length = Math.max(length, DEFAULT_LENGTH);
         this.random = new SecureRandom((SEED + System.currentTimeMillis()).getBytes());
     }
 

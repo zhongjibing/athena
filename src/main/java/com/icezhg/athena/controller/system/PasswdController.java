@@ -7,7 +7,6 @@ import com.icezhg.athena.vo.PageResult;
 import com.icezhg.athena.vo.PasswdInfo;
 import com.icezhg.athena.vo.query.NameQuery;
 import com.icezhg.commons.exception.InvalidParameterException;
-import jakarta.validation.constraints.Min;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -80,7 +79,7 @@ public class PasswdController {
     }
 
     @GetMapping("/generate")
-    public Object generate(@Validated @Min(1) int size) {
+    public Object generate(int size) {
         return passwdService.generate(size);
     }
 }
