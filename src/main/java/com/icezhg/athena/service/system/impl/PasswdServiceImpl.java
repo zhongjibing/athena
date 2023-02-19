@@ -12,7 +12,7 @@ import com.icezhg.athena.vo.query.Query;
 import com.icezhg.authorization.core.SecurityUtil;
 import com.icezhg.commons.exception.InvalidAccessException;
 import com.icezhg.commons.util.IdGenerator;
-import com.icezhg.encryptor.SM4;
+import com.icezhg.encryptor.SMUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,8 +79,7 @@ public class PasswdServiceImpl implements PasswdService {
     @Override
     public PasswdInfo findPasswd(String id, String secretKey) {
         String ds = configService.findConfig(SysConfig.PASSWD_SM4_SALT);
-        SM4 decrypter = SM4.getInstance(ds.substring(1 << 1 + 1));
-        String decrypt = decrypter.decrypt(secretKey);
+        String decrypt = SMUtil.sm4Decrypt(ds.substring(1 << 1 + 1), secretKey);
         if (!passwordEncoder.matches(decrypt, PasswdConfig.getSecret())) {
             throw new InvalidAccessException("", "access denied");
         }
@@ -124,10 +123,10 @@ public class PasswdServiceImpl implements PasswdService {
         for (int i = 0; i < cipher.length; i++) {
             cipher[i] = (char) (cipher[i] - i % 2);
         }
-        SM4 encryptor = SM4.getInstance(PasswdConfig.getSalt());
+        String data = new String(cipher) + passwd.getPasswd();
+        String plain = SMUtil.sm4Decrypt(PasswdConfig.getSalt(), data);
         String ds = configService.findConfig(SysConfig.PASSWD_SM4_SALT);
-        SM4 decrypter = SM4.getInstance(ds.substring(1 << 1 + 1));
-        String encrypt = decrypter.encrypt(encryptor.decrypt(new String(cipher) + passwd.getPasswd()));
+        String encrypt = new String(SMUtil.sm4Encrypt(ds.substring(1 << 1 + 1), plain));
         passwd.setSalt(encrypt.substring(0, 8));
         passwd.setPasswd(encrypt.substring(8));
         return passwd;
@@ -138,11 +137,10 @@ public class PasswdServiceImpl implements PasswdService {
             return erasePasswd(passwd);
         }
 
+        String data = passwd.getSalt() + passwd.getPasswd();
         String ds = configService.findConfig(SysConfig.PASSWD_SM4_SALT);
-        SM4 decrypter = SM4.getInstance(ds.substring(1 << 1 + 1));
-        String decrypt = decrypter.decrypt(passwd.getSalt() + passwd.getPasswd());
-        SM4 encryptor = SM4.getInstance(PasswdConfig.getSalt());
-        char[] bytes = encryptor.encrypt(decrypt).toCharArray();
+        String plain = SMUtil.sm4Decrypt(ds.substring(1 << 1 + 1), data);
+        char[] bytes = new String(SMUtil.sm4Encrypt(PasswdConfig.getSalt(), plain)).toCharArray();
         for (int i = 0; i < 8; i++) {
             bytes[i] = (char) (bytes[i] + i % 2);
         }
