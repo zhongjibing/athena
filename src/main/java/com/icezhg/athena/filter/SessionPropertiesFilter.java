@@ -29,10 +29,17 @@ public class SessionPropertiesFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
             throws ServletException, IOException {
         HttpSession session = request.getSession(false);
-        if (session != null && session.getAttribute(SessionKey.REQUEST_IP) == null) {
-            String ipAddr = IpUtil.getRequestIp();
-            session.setAttribute(SessionKey.REQUEST_IP, ipAddr);
-            session.setAttribute(SessionKey.REQUEST_LOCATION, ipLocationService.search(ipAddr));
+        if (session != null) {
+            String ipAddr = (String) session.getAttribute(SessionKey.REQUEST_IP);
+            if (ipAddr == null) {
+                ipAddr = IpUtil.getRequestIp();
+                session.setAttribute(SessionKey.REQUEST_IP, ipAddr);
+            }
+
+            if (session.getAttribute(SessionKey.REQUEST_LOCATION) == null) {
+                String ipLocation = ipLocationService.search(ipAddr);
+                session.setAttribute(SessionKey.REQUEST_LOCATION, ipLocation);
+            }
         }
 
         chain.doFilter(request, response);
