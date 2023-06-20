@@ -5,6 +5,7 @@ package com.icezhg.athena.constant;
  */
 public interface SessionKey {
 
+    String SPRING_SECURITY_CONTEXT = "SPRING_SECURITY_CONTEXT";
     String REQUEST_IP = "servlet.request.remote.ip";
     String REQUEST_LOCATION = "servlet.request.remote.location";
 }

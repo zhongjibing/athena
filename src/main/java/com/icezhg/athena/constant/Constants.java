@@ -88,4 +88,8 @@ public interface Constants {
     String DEFAULT_DATETIME_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ssZ";
 
     Locale DEFAULT_LOCALE = Locale.CHINA;
+
+    String ATTRIBUTE_IP = "ip";
+    String ATTRIBUTE_IP_LOCATION = "loc";
+    String ATTRIBUTE_AGENT = "agent";
 }
