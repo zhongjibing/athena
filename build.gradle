@@ -53,6 +53,7 @@ dependencies {
 
     implementation 'com.icezhg:commons:2.0.1'
     implementation 'com.icezhg:encryptor:1.0.0'
+    implementation 'com.icezhg:generator:1.0.0'
     implementation 'com.icezhg:spring-boot-starter-authorization-client:1.0.0'
     implementation 'com.icezhg:spring-boot-starter-encryptor:1.0.0'
     implementation 'com.github.oshi:oshi-core:6.3.2'
