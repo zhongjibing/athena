@@ -21,14 +21,24 @@ public class ConfigFactory {
         this.properties = properties;
     }
 
-    public static ConfigBuilder create() {
+    public ConfigBuilder create() {
         return new ConfigBuilder();
     }
 
-    public static ConfigBuilder defaultBuilder() {
-       return null;
+    public ConfigBuilder defaultBuilder() {
+        return new ConfigBuilder()
+                .author(properties.getAuthor())
+                .packageName(properties.getPackageName())
+                .lombokEnable(properties.isLombokEnable())
+                .swaggerEnable(properties.isSwaggerEnable())
+                .jpaEnable(properties.isJpaEnable())
+                .idStrategy(properties.getIdStrategy())
+                .path(properties.getPath())
+                .dataSource(properties.getDataSource())
+                .name(properties.getName())
+                .tables(properties.getTables())
+                .ignoreTablePrefix(properties.getIgnoreTablePrefix());
     }
-
 
 
     public static class ConfigBuilder {
