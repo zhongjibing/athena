@@ -29,3 +29,30 @@ mybatis:
     jdbc-type-for-null: null
   mapper-locations: classpath:mapper/**/*.xml
 
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+generator:
+  author: zhongjibing
+  packageName: com.icezhg.
+  lombokEnable: true
+  swaggerEnable: false
+  jpaEnable: false
+  idStrategy: AUTO
+  path:
+    entity: entity
+    controller: controller
+    service: service
+    serviceImpl: service.impl
+    dao: dao
+    mapper: mapper
+  name:
+    entity: $s
+    controller: $sController
+    service: $sService
+    serviceImpl: $sServiceImpl
+    dao: $sDao
+    mapper: $sMapper
+  ignoreTablePrefix: t_,sys_
