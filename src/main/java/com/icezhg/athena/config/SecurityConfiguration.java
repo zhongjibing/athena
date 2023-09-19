@@ -26,6 +26,8 @@ public class SecurityConfiguration {
                 .requestMatchers("/authenticated").permitAll()
                 .requestMatchers("/favicon.*", "/css/**", "/fonts/**", "/img/**").permitAll()
                 .requestMatchers(HttpMethod.GET, "/picture/*").permitAll()
+                .requestMatchers(HttpMethod.POST, "/proxy").permitAll()
+                .requestMatchers(HttpMethod.GET, "/proxy/test").permitAll()
                 .anyRequest().authenticated();
     }
 }
