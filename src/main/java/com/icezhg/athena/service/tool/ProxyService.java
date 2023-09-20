@@ -12,6 +12,8 @@ public interface ProxyService {
 
     void addProxy(ProxyInfo data);
 
+    void updateAvailable(ProxyInfo data, Boolean available);
+
     int count(Query query);
 
     List<ProxyInfo> find(Query query);

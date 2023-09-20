@@ -11,6 +11,11 @@ import java.util.Date;
 @Data
 public class ProxyInfo {
     /**
+     * 自增主键
+     */
+    private Long id;
+
+    /**
      * ip地址
      */
     private String ip;

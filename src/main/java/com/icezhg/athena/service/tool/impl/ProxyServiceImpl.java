@@ -44,6 +44,16 @@ public class ProxyServiceImpl implements ProxyService {
     }
 
     @Override
+    public void updateAvailable(ProxyInfo data, Boolean available) {
+        Proxy record = new Proxy();
+        record.setId(data.getId());
+        record.setAvailable(available != null && available);
+        record.setLastCheck(new Date());
+        record.setUpdateTime(new Date());
+        proxyDao.update(record);
+    }
+
+    @Override
     public int count(Query query) {
         return proxyDao.count(query.toMap());
     }
@@ -61,6 +71,7 @@ public class ProxyServiceImpl implements ProxyService {
 
     private ProxyInfo buildProxyInfo(Proxy proxy) {
         ProxyInfo info = new ProxyInfo();
+        info.setId(proxy.getId());
         info.setIp(proxy.getIp());
         info.setPort(proxy.getPort());
         info.setType(proxy.getType());
@@ -74,6 +85,7 @@ public class ProxyServiceImpl implements ProxyService {
 
     private Proxy buildProxy(ProxyInfo data) {
         Proxy proxy = new Proxy();
+        proxy.setId(data.getId());
         proxy.setIp(data.getIp());
         proxy.setPort(Optional.ofNullable(data.getPort()).orElse(0));
         proxy.setType(data.getType());
@@ -81,7 +93,7 @@ public class ProxyServiceImpl implements ProxyService {
         proxy.setLocation(data.getLocation());
         proxy.setLastCheck(data.getLastCheck());
         proxy.setAnonymity(data.getAnonymity());
-        proxy.setAvailable(false);
+        proxy.setAvailable(data.getAvailable());
         proxy.setCreateTime(new Date());
         proxy.setUpdateTime(new Date());
         return proxy;
