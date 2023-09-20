@@ -61,6 +61,14 @@
             </if>
             <if test="available != null">
                 available = #{available,jdbcType=TINYINT},
+                <choose>
+                    <when test="available">
+                        fail_count = 0,
+                    </when>
+                    <otherwise>
+                        fail_count = fail_count + 1,
+                    </otherwise>
+                </choose>
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -79,6 +87,9 @@
             </if>
             <if test="anonymity != null">
                 and anonymity = #{anonymity,jdbcType=VARCHAR}
+            </if>
+            <if test="maxFailCount != null">
+                and fail_count &lt; #{maxFailCount,jdbcType=INTEGER},
             </if>
             <if test="available != null">
                 and available = #{available,jdbcType=TINYINT}

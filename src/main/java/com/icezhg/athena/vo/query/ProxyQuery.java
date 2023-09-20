@@ -32,6 +32,11 @@ public class ProxyQuery extends PageQuery {
      */
     private Boolean available;
 
+    /**
+     * 最多检查失败次数
+     */
+    private Integer maxFailCount;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date beginTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd")

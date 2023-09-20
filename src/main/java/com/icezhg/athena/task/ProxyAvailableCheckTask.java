@@ -36,6 +36,7 @@ public class ProxyAvailableCheckTask {
     public void check() {
         log.info("start check proxy available status...");
         ProxyQuery query = new ProxyQuery();
+        query.setMaxFailCount(10);
         query.setPageSize(100);
         List<ProxyInfo> proxies;
         while (!(proxies = proxyService.find(query)).isEmpty()) {
