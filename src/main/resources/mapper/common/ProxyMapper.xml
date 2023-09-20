@@ -59,17 +59,22 @@
             <if test="lastCheck != null">
                 last_check = #{lastCheck,jdbcType=TIMESTAMP},
             </if>
-            <if test="available != null">
-                available = #{available,jdbcType=TINYINT},
-                <choose>
-                    <when test="available">
-                        fail_count = 0,
-                    </when>
-                    <otherwise>
-                        fail_count = fail_count + 1,
-                    </otherwise>
-                </choose>
-            </if>
+            <choose>
+                <when test="available != null">
+                    available = #{available,jdbcType=TINYINT},
+                    <choose>
+                        <when test="available">
+                            fail_count = 0,
+                        </when>
+                        <otherwise>
+                            fail_count = fail_count + 1,
+                        </otherwise>
+                    </choose>
+                </when>
+                <otherwise>
+                    fail_count = 0,
+                </otherwise>
+            </choose>
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
             </if>
