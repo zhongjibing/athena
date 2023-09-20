@@ -89,7 +89,7 @@
                 and anonymity = #{anonymity,jdbcType=VARCHAR}
             </if>
             <if test="maxFailCount != null">
-                and fail_count &lt; #{maxFailCount,jdbcType=INTEGER},
+                and fail_count &lt; #{maxFailCount,jdbcType=INTEGER}
             </if>
             <if test="available != null">
                 and available = #{available,jdbcType=TINYINT}
