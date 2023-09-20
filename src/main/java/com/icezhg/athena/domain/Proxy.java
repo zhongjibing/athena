@@ -54,7 +54,7 @@ public class Proxy {
     /**
      * 是否可用
      */
-    private boolean available;
+    private Boolean available;
 
     /**
      * 创建时间

@@ -78,7 +78,7 @@ public class ProxyServiceImpl implements ProxyService {
         info.setSpeed(proxy.getSpeed());
         info.setLocation(proxy.getLocation());
         info.setAnonymity(proxy.getAnonymity());
-        info.setAvailable(proxy.isAvailable());
+        info.setAvailable(proxy.getAvailable());
         info.setLastCheck(proxy.getLastCheck());
         return info;
     }
