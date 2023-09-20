@@ -6,7 +6,7 @@
 
     <sql id="Base_Column_List">
         id, ip, `port`,
-        type, speed, location,
+        `type`, speed, location,
         anonymity, last_check, available,
         create_time, update_time
     </sql>
@@ -17,7 +17,7 @@
             <if test="id != null">id,</if>
             <if test="ip != null">ip,</if>
             <if test="port != null">`port`,</if>
-            <if test="type != null">type,</if>
+            <if test="type != null">`type`,</if>
             <if test="speed != null">speed,</if>
             <if test="location != null">location,</if>
             <if test="anonymity != null">anonymity,</if>
@@ -29,7 +29,7 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="id != null">#{id,jdbcType=BIGINT},</if>
             <if test="ip != null">#{ip,jdbcType=VARCHAR},</if>
-            <if test="port != null">#{port,jdbcType=OTHER},</if>
+            <if test="port != null">#{port,jdbcType=SMALLINT},</if>
             <if test="type != null">#{type,jdbcType=VARCHAR},</if>
             <if test="speed != null">#{speed,jdbcType=BIGINT},</if>
             <if test="location != null">#{location,jdbcType=VARCHAR},</if>
@@ -44,14 +44,8 @@
     <update id="update" parameterType="com.icezhg.athena.domain.Proxy">
         update t_proxy
         <set>
-            <if test="ip != null">
-                ip = #{ip,jdbcType=VARCHAR},
-            </if>
-            <if test="port != null">
-                `port` = #{port,jdbcType=OTHER},
-            </if>
             <if test="type != null">
-                type = #{type,jdbcType=VARCHAR},
+                `type` = #{type,jdbcType=VARCHAR},
             </if>
             <if test="speed != null">
                 speed = #{speed,jdbcType=BIGINT},
@@ -67,9 +61,6 @@
             </if>
             <if test="available != null">
                 available = #{available,jdbcType=TINYINT},
-            </if>
-            <if test="createTime != null">
-                create_time = #{createTime,jdbcType=TIMESTAMP},
             </if>
             <if test="updateTime != null">
                 update_time = #{updateTime,jdbcType=TIMESTAMP},
@@ -110,5 +101,11 @@
         <include refid="findCondition"/>
         order by id desc
         limit #{offset,jdbcType=INTEGER}, #{pageSize,jdbcType=INTEGER}
+    </select>
+
+    <select id="findByIpAndPort" resultType="com.icezhg.athena.domain.Proxy">
+        select <include refid="Base_Column_List"/>
+        from t_proxy
+        where ip = #{ip,jdbcType=VARCHAR} and `port` = #{port,jdbcType=SMALLINT}
     </select>
 </mapper>

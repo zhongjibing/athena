@@ -2,6 +2,7 @@ package com.icezhg.athena.dao;
 
 
 import com.icezhg.athena.domain.Proxy;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -20,4 +21,6 @@ public interface ProxyDao {
     int count(Map<String, Object> query);
 
     List<Proxy> find(Map<String, Object> query);
+
+    Proxy findByIpAndPort(@Param("ip") String ip, @Param("port") int port);
 }

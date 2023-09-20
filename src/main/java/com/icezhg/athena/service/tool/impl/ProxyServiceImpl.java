@@ -32,7 +32,14 @@ public class ProxyServiceImpl implements ProxyService {
     @Override
     public void addProxy(ProxyInfo data) {
         if (isValid(data)) {
-            proxyDao.insert(buildProxy(data));
+            Proxy record = buildProxy(data);
+            Proxy existing = proxyDao.findByIpAndPort(record.getIp(), record.getPort());
+            if (existing == null) {
+                proxyDao.insert(record);
+            } else {
+                record.setId(existing.getId());
+                proxyDao.update(record);
+            }
         }
     }
 
