@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StopWatch;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -68,12 +69,18 @@ public class ProxyAvailableCheckTask {
                 .GET()
                 .build();
 
+        StopWatch watch = new StopWatch();
+        watch.start();
+
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
                 .thenApply(res -> res.statusCode() == HttpStatus.OK.value())
                 .exceptionally(throwable -> false)
                 .thenAccept(available -> {
-                    log.info("check proxy {}/{}:{} available: {}", proxy.getIp(), proxy.getType(), proxy.getPort(),
-                            available);
+                    watch.stop();
+                    proxy.setSpeed(watch.getTotalTimeMillis());
+
+                    log.info("check proxy {}/{}:{} available: {}, speed: {}", proxy.getIp(), proxy.getType(),
+                            proxy.getPort(), available, proxy.getSpeed());
                     proxyService.updateAvailable(proxy, available);
                 });
     }

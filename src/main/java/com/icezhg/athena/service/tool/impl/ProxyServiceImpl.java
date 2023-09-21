@@ -46,6 +46,7 @@ public class ProxyServiceImpl implements ProxyService {
         Proxy record = new Proxy();
         record.setId(data.getId());
         record.setAvailable(available != null && available);
+        record.setSpeed(available != null && available ? data.getSpeed() : null);
         record.setLastCheck(new Date());
         record.setUpdateTime(new Date());
         proxyDao.update(record);

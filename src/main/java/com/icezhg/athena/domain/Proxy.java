@@ -34,7 +34,7 @@ public class Proxy {
     /**
      * 响应速度
      */
-    private long speed;
+    private Long speed;
 
     /**
      * 位置
