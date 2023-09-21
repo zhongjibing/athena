@@ -5,6 +5,7 @@ import com.icezhg.athena.vo.ProxyInfo;
 import com.icezhg.athena.vo.query.ProxyQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 
@@ -28,6 +29,9 @@ public class ProxyAvailableCheckTask {
     private static final Logger log = LoggerFactory.getLogger(ProxyAvailableCheckTask.class);
 
     private ProxyService proxyService;
+
+    @Value("${proxy.request.url}")
+    private String requestUrl;
 
     public ProxyAvailableCheckTask(ProxyService proxyService) {
         this.proxyService = proxyService;
@@ -59,7 +63,7 @@ public class ProxyAvailableCheckTask {
                 .build();
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://icezhg.com/athena/proxy/test"))
+                .uri(URI.create(this.requestUrl))
                 .timeout(Duration.ofSeconds(10))
                 .GET()
                 .build();
