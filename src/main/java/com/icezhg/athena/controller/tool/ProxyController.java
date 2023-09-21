@@ -44,9 +44,4 @@ public class ProxyController {
                 .map(item -> Map.of("ip", item.getIp(), "port", item.getPort(), "type", item.getType()))
                 .toList();
     }
-
-    @GetMapping("/test")
-    public Object test() {
-        return proxyService.test();
-    }
 }

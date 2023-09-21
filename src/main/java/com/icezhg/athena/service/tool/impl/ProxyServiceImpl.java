@@ -5,7 +5,6 @@ import com.icezhg.athena.domain.Proxy;
 import com.icezhg.athena.service.tool.ProxyService;
 import com.icezhg.athena.vo.ProxyInfo;
 import com.icezhg.athena.vo.query.Query;
-import com.icezhg.authorization.core.util.IpUtil;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -61,12 +59,6 @@ public class ProxyServiceImpl implements ProxyService {
     @Override
     public List<ProxyInfo> find(Query query) {
         return proxyDao.find(query.toMap()).stream().map(this::buildProxyInfo).toList();
-    }
-
-    @Override
-    public Object test() {
-        log.info("proxy test from remote: {}", IpUtil.getRequestIp());
-        return Map.of("timestamp", new Date());
     }
 
     private ProxyInfo buildProxyInfo(Proxy proxy) {
