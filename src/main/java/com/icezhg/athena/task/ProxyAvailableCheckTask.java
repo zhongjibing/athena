@@ -1,5 +1,6 @@
 package com.icezhg.athena.task;
 
+import com.alibaba.fastjson2.JSONObject;
 import com.icezhg.athena.service.tool.ProxyService;
 import com.icezhg.athena.vo.ProxyInfo;
 import com.icezhg.athena.vo.query.ProxyQuery;
@@ -21,6 +22,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.time.Duration;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by zhongjibing on 2023/09/20.
@@ -29,10 +31,16 @@ import java.util.List;
 public class ProxyAvailableCheckTask {
     private static final Logger log = LoggerFactory.getLogger(ProxyAvailableCheckTask.class);
 
-    private ProxyService proxyService;
+    private final ProxyService proxyService;
 
     @Value("${proxy.request.url}")
     private String requestUrl;
+
+    @Value("${proxy.local-address:}")
+    private Set<String> localAddress;
+
+    @Value("${proxy.update-disabled:false}")
+    private boolean updateDisabled;
 
     public ProxyAvailableCheckTask(ProxyService proxyService) {
         this.proxyService = proxyService;
@@ -73,7 +81,14 @@ public class ProxyAvailableCheckTask {
         watch.start();
 
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString())
-                .thenApply(res -> res.statusCode() == HttpStatus.OK.value())
+                .thenApply(res -> {
+                    if (res.statusCode() != HttpStatus.OK.value()) {
+                        return false;
+                    }
+
+                    JSONObject body = JSONObject.parseObject(res.body());
+                    return body != null && !localAddress.contains(body.getString("address"));
+                })
                 .exceptionally(throwable -> false)
                 .thenAccept(available -> {
                     watch.stop();
@@ -81,7 +96,9 @@ public class ProxyAvailableCheckTask {
 
                     log.info("check proxy {}/{}:{} available: {}, speed: {}", proxy.getIp(), proxy.getType(),
                             proxy.getPort(), available, proxy.getSpeed());
-                    proxyService.updateAvailable(proxy, available);
+                    if (!updateDisabled) {
+                        proxyService.updateAvailable(proxy, available);
+                    }
                 });
     }
 

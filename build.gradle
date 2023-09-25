@@ -16,11 +16,11 @@ targetCompatibility = '17'
 compileJava.options.encoding = 'utf-8'
 compileTestJava.options.encoding = 'utf-8'
 
-tasks.withType(JavaCompile) {
+tasks.withType(JavaCompile).configureEach {
     options.encoding = 'UTF-8'
 }
 
-tasks.withType(Javadoc) {
+tasks.withType(Javadoc).configureEach {
     options.encoding = 'UTF-8'
 }
 
@@ -51,6 +51,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    implementation 'com.alibaba.fastjson2:fastjson2:2.0.40'
     implementation 'com.icezhg:commons:2.0.1'
     implementation 'com.icezhg:encryptor:1.0.0'
     implementation 'com.icezhg:generator:1.0.0'
@@ -66,7 +67,7 @@ dependencies {
 
 }
 
-configurations.all() {
+configurations.configureEach() {
     Configuration configuration ->
         configuration.resolutionStrategy.failOnVersionConflict()
 }
