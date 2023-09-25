@@ -87,7 +87,7 @@ public class ProxyAvailableCheckTask {
                     }
 
                     JSONObject body = JSONObject.parseObject(res.body());
-                    return body != null && !localAddress.contains(body.getString("address"));
+                    return body != null && !localAddress.contains((String) body.getOrDefault("address", "<None>"));
                 })
                 .exceptionally(throwable -> false)
                 .thenAccept(available -> {
