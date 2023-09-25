@@ -47,7 +47,9 @@ public class ProxyAvailableCheckTask {
     }
 
     public void cleanUnavailableProxies() {
+        log.info("start clean unavailable proxies...");
         this.proxyService.cleanUnavailableProxies();
+        log.info("finish clean unavailable proxies");
     }
 
 
