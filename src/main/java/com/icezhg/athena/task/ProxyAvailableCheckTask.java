@@ -46,10 +46,15 @@ public class ProxyAvailableCheckTask {
         this.proxyService = proxyService;
     }
 
+    public void cleanUnavailableProxies() {
+        this.proxyService.cleanUnavailableProxies();
+    }
+
+
     public void check() {
         log.info("start check proxy available status...");
         ProxyQuery query = new ProxyQuery();
-        query.setMaxFailCount(10);
+        query.setMaxFailCount(3);
         query.setPageSize(100);
         List<ProxyInfo> proxies;
         while (!(proxies = proxyService.find(query)).isEmpty()) {

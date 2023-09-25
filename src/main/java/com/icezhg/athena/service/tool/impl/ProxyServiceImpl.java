@@ -62,6 +62,11 @@ public class ProxyServiceImpl implements ProxyService {
         return proxyDao.find(query.toMap()).stream().map(this::buildProxyInfo).toList();
     }
 
+    @Override
+    public void cleanUnavailableProxies() {
+        proxyDao.deleteUnavailable();
+    }
+
     private ProxyInfo buildProxyInfo(Proxy proxy) {
         ProxyInfo info = new ProxyInfo();
         info.setId(proxy.getId());

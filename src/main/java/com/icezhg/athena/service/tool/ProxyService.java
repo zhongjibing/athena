@@ -18,4 +18,6 @@ public interface ProxyService {
 
     List<ProxyInfo> find(Query query);
 
+    void cleanUnavailableProxies();
+
 }

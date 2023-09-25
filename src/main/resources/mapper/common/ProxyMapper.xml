@@ -124,4 +124,9 @@
         from t_proxy
         where ip = #{ip,jdbcType=VARCHAR} and `port` = #{port,jdbcType=SMALLINT}
     </select>
+
+    <delete id="deleteUnavailable">
+        delete from t_proxy
+        where available = 0 and last_check &lt; curdate()
+    </delete>
 </mapper>

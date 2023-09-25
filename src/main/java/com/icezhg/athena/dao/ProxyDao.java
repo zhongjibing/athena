@@ -23,4 +23,6 @@ public interface ProxyDao {
     List<Proxy> find(Map<String, Object> query);
 
     Proxy findByIpAndPort(@Param("ip") String ip, @Param("port") int port);
+
+    int deleteUnavailable();
 }
