@@ -13,7 +13,7 @@ public class PasswdGenerator {
             'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'};
     private static final char[] UPPERCASE = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N',
             'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'};
-    private static final char[] SYMBOL = {'@', '#', '%', '&'};
+    private static final char[] SYMBOL = {'@', '#', '%', '&', '_', '.', '?'};
     private static final char[][] DICT = {DIGITAL, LOWERCASE, UPPERCASE, SYMBOL};
 
     private static final int CHECK = (1 << DICT.length) - 1;
@@ -39,8 +39,13 @@ public class PasswdGenerator {
         char[] buf = new char[length];
         while (true) {
             int check = 0, pos = 0;
+            int[] counter = new int[DICT.length];
             while (pos < buf.length) {
                 int dictIdx = random.nextInt(DICT.length);
+                if (dictIdx == DICT.length - 1 && counter[dictIdx] << 3 > pos) {
+                    continue;
+                }
+                counter[dictIdx]++;
                 char[] dict = DICT[dictIdx];
                 char chr = dict[random.nextInt(dict.length)];
                 buf[pos++] = chr;
