@@ -10,8 +10,10 @@ group = 'com.icezhg'
 version = '1.0.0'
 description = 'athena'
 
-sourceCompatibility = '17'
-targetCompatibility = '17'
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
+}
 
 compileJava.options.encoding = 'utf-8'
 compileTestJava.options.encoding = 'utf-8'
@@ -50,6 +52,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     testImplementation 'org.springframework.security:spring-security-test'
+    testImplementation("org.junit.jupiter:junit-jupiter")
+    testRuntimeOnly("org.junit.platform:junit-platform-launcher")
 
     implementation 'com.alibaba.fastjson2:fastjson2:2.0.40'
     implementation 'com.icezhg:commons:2.0.1'
@@ -72,7 +76,7 @@ configurations.configureEach() {
         configuration.resolutionStrategy.failOnVersionConflict()
 }
 
-tasks.named('test') {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
 }
 
