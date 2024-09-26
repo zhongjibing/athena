@@ -1,8 +1,8 @@
 plugins {
     id 'java'
     id 'java-library'
-    id 'org.springframework.boot' version '3.0.0'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.3.4'
+    id 'io.spring.dependency-management' version '1.1.6'
     id 'maven-publish'
 }
 
@@ -40,11 +40,11 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
     implementation 'org.springframework.boot:spring-boot-starter-quartz'
     implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.security:spring-security-oauth2-core:6.0.0'
+    implementation 'org.springframework.security:spring-security-oauth2-core:6.3.3'
     implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.0'
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
     implementation 'org.springframework.session:spring-session-data-redis'
     developmentOnly 'org.springframework.boot:spring-boot-devtools'
     runtimeOnly 'com.mysql:mysql-connector-j'
@@ -55,19 +55,19 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
-    implementation 'com.alibaba.fastjson2:fastjson2:2.0.40'
+    implementation 'com.alibaba.fastjson2:fastjson2:2.0.53'
     implementation 'com.icezhg:commons:2.0.1'
     implementation 'com.icezhg:encryptor:1.0.0'
     implementation 'com.icezhg:generator:1.0.0'
     implementation 'com.icezhg:spring-boot-starter-authorization-client:1.0.0'
     implementation 'com.icezhg:spring-boot-starter-encryptor:1.0.0'
-    implementation 'com.github.oshi:oshi-core:6.3.2'
-    implementation 'com.nimbusds:nimbus-jose-jwt:9.24.4'
-    implementation 'commons-codec:commons-codec:1.15'
-    implementation 'commons-io:commons-io:2.11.0'
-    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'com.github.oshi:oshi-core:6.6.4'
+    implementation 'com.nimbusds:nimbus-jose-jwt:9.41.1'
+    implementation 'commons-codec:commons-codec:1.17.1'
+    implementation 'commons-io:commons-io:2.17.0'
+    implementation 'org.apache.commons:commons-lang3:3.17.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
-    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.1.0'
 
 }
 
