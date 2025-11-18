@@ -1,0 +1,51 @@
+package com.example.agent.enhancer;
+
+import com.example.agent.annotation.ExceptionHandler;
+import com.example.agent.handler.ExceptionRecorder;
+import com.example.agent.handler.ExceptionRecorderImpl;
+import net.bytebuddy.implementation.bind.annotation.*;
+
+import java.lang.reflect.Method;
+import java.util.concurrent.Callable;
+
+public class ExceptionInterceptor {
+    
+    @RuntimeType
+    public static Object intercept(@This Object self,
+                                 @Origin Method method,
+                                 @AllArguments Object[] args,
+                                 @SuperCall Callable<?> callable) throws Exception {
+        
+        ExceptionRecorder recorder = getOrCreateRecorder(self);
+        
+        boolean hasMethodAnnotation = method.isAnnotationPresent(ExceptionHandler.class);
+        boolean hasClassAnnotation = self.getClass().isAnnotationPresent(ExceptionHandler.class);
+        
+        if (hasMethodAnnotation || hasClassAnnotation) {
+            try {
+                return callable.call();
+            } catch (Exception e) {
+                recorder.recordException(e, method.getName(), args);
+                throw e;
+            }
+        } else {
+            return callable.call();
+        }
+    }
+    
+    private static ExceptionRecorder getOrCreateRecorder(Object self) {
+        try {
+            if (self instanceof ExceptionRecorder) {
+                ExceptionRecorder recorder = ((ExceptionRecorder) self).getExceptionRecorder();
+                if (recorder == null) {
+                    recorder = new ExceptionRecorderImpl();
+                    ((ExceptionRecorder) self).setExceptionRecorder(recorder);
+                }
+                return recorder;
+            }
+        } catch (Exception e) {
+            // 忽略初始化异常
+        }
+        return new ExceptionRecorderImpl(); // 回退
+    }
+}

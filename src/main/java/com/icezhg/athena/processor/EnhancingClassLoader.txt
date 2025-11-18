@@ -1,0 +1,130 @@
+package com.example.loader;
+
+import com.example.enhancer.ByteBuddyEnhancer;
+import com.example.annotation.ExceptionHandler;
+
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * 增强类加载器 - 自动增强带有ExceptionHandler注解的类
+ */
+public class EnhancingClassLoader extends URLClassLoader {
+    
+    private final Map<String, Class<?>> enhancedClasses = new HashMap<>();
+    
+    public EnhancingClassLoader(URL[] urls, ClassLoader parent) {
+        super(urls, parent);
+    }
+    
+    public EnhancingClassLoader(ClassLoader parent) {
+        this(new URL[0], parent);
+    }
+    
+    @Override
+    protected Class<?> loadClass(String name, boolean resolve) throws ClassNotFoundException {
+        synchronized (getClassLoadingLock(name)) {
+            // 首先检查是否已经加载过
+            Class<?> loadedClass = findLoadedClass(name);
+            if (loadedClass != null) {
+                if (resolve) {
+                    resolveClass(loadedClass);
+                }
+                return loadedClass;
+            }
+            
+            // 检查是否是增强过的类
+            if (enhancedClasses.containsKey(name)) {
+                Class<?> enhancedClass = enhancedClasses.get(name);
+                if (resolve) {
+                    resolveClass(enhancedClass);
+                }
+                return enhancedClass;
+            }
+            
+            // 优先使用父类加载器加载系统类
+            if (name.startsWith("java.") || name.startsWith("javax.") || 
+                name.startsWith("sun.") || name.startsWith("com.sun.") ||
+                name.startsWith("net.bytebuddy.")) {
+                return super.loadClass(name, resolve);
+            }
+            
+            try {
+                // 尝试加载原始类
+                Class<?> originalClass = findClass(name);
+                
+                // 检查是否需要增强
+                if (shouldEnhance(originalClass)) {
+                    Class<?> enhancedClass = ByteBuddyEnhancer.enhanceClass(originalClass);
+                    enhancedClasses.put(name, enhancedClass);
+                    
+                    if (resolve) {
+                        resolveClass(enhancedClass);
+                    }
+                    return enhancedClass;
+                } else {
+                    if (resolve) {
+                        resolveClass(originalClass);
+                    }
+                    return originalClass;
+                }
+            } catch (ClassNotFoundException e) {
+                // 如果找不到，委托给父类加载器
+                return super.loadClass(name, resolve);
+            }
+        }
+    }
+    
+    /**
+     * 检查类是否需要增强
+     */
+    private boolean shouldEnhance(Class<?> clazz) {
+        // 检查类级别的注解
+        if (clazz.isAnnotationPresent(ExceptionHandler.class)) {
+            return true;
+        }
+        
+        // 检查方法级别的注解
+        try {
+            for (java.lang.reflect.Method method : clazz.getDeclaredMethods()) {
+                if (method.isAnnotationPresent(ExceptionHandler.class)) {
+                    return true;
+                }
+            }
+        } catch (NoClassDefFoundError e) {
+            // 忽略由于依赖缺失导致的错误
+            return false;
+        }
+        
+        return false;
+    }
+    
+    /**
+     * 创建增强类的实例
+     */
+    @SuppressWarnings("unchecked")
+    public <T> T createEnhancedInstance(String className) throws Exception {
+        Class<?> clazz = loadClass(className);
+        if (enhancedClasses.containsValue(clazz)) {
+            return (T) ByteBuddyEnhancer.createEnhancedInstance(clazz);
+        } else {
+            return (T) clazz.newInstance();
+        }
+    }
+    
+    /**
+     * 获取增强的类
+     */
+    public Class<?> getEnhancedClass(String className) throws ClassNotFoundException {
+        return loadClass(className);
+    }
+    
+    @Override
+    public void close() throws IOException {
+        super.close();
+        enhancedClasses.clear();
+    }
+}

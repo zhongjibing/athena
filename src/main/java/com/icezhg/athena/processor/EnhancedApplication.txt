@@ -1,0 +1,101 @@
+package com.example.demo;
+
+import com.example.handler.ExceptionRecorder;
+import com.example.service.UserService;
+import com.example.service.OrderService;
+
+public class EnhancedApplication {
+    
+    public static void main(String[] args) {
+        System.out.println("=== 使用自定义类加载器自动增强 ===");
+        
+        try {
+            // 直接创建实例 - 由于类加载器的增强，这些实例已经是增强后的版本
+            UserService userService = new UserService();
+            OrderService orderService = new OrderService();
+            
+            System.out.println("UserService类: " + userService.getClass().getName());
+            System.out.println("OrderService类: " + orderService.getClass().getName());
+            
+            // 测试UserService（类级别注解）
+            testUserService(userService);
+            
+            // 测试OrderService（方法级别注解）
+            testOrderService(orderService);
+            
+            // 测试异常记录器功能
+            testExceptionRecorder(userService);
+            
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+    
+    private static void testUserService(UserService userService) {
+        System.out.println("\n--- 测试UserService ---");
+        
+        try {
+            // 正常调用
+            userService.processUser("张三");
+            
+            // 会抛出异常的方法
+            userService.processUser("error");
+        } catch (RuntimeException e) {
+            System.out.println("捕获到预期异常: " + e.getMessage());
+        }
+        
+        try {
+            // 除法运算 - 会抛出异常
+            userService.divide(10, 0);
+        } catch (ArithmeticException e) {
+            System.out.println("捕获到算术异常: " + e.getMessage());
+        }
+        
+        try {
+            // 调用私有方法 - 也会被增强
+            userService.callPrivateMethod();
+        } catch (IllegalStateException e) {
+            System.out.println("捕获到私有方法异常: " + e.getMessage());
+        }
+        
+        System.out.println("方法调用次数: " + userService.getCallCount());
+    }
+    
+    private static void testOrderService(OrderService orderService) {
+        System.out.println("\n--- 测试OrderService ---");
+        
+        try {
+            // 正常创建订单
+            orderService.createOrder("ORDER001", 100.0);
+            
+            // 会抛出异常的创建订单
+            orderService.createOrder("ORDER002", -50.0);
+        } catch (IllegalArgumentException e) {
+            System.out.println("捕获到参数异常: " + e.getMessage());
+        }
+        
+        try {
+            // 取消订单 - 会抛出异常
+            orderService.cancelOrder("cannot-cancel");
+        } catch (UnsupportedOperationException e) {
+            System.out.println("捕获到操作异常: " + e.getMessage());
+        }
+        
+        // 正常查询订单（这个方法没有注解）
+        orderService.queryOrder("ORDER001");
+    }
+    
+    private static void testExceptionRecorder(UserService userService) {
+        System.out.println("\n--- 测试异常记录器 ---");
+        
+        // 转换为ExceptionRecorder来访问记录器功能
+        ExceptionRecorder recorder = (ExceptionRecorder) userService;
+        
+        // 查看记录的异常
+        System.out.println("--- 记录的异常列表 ---");
+        recorder.printRecordedExceptions();
+        
+        // 清除记录
+        recorder.clearRecordedExceptions();
+    }
+}

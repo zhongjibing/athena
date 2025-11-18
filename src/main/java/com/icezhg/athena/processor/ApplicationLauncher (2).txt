@@ -1,0 +1,13 @@
+package com.example;
+
+import com.example.launcher.ApplicationLauncher;
+
+/**
+ * 应用入口 - 使用自定义类加载器启动
+ */
+public class Main {
+    public static void main(String[] args) throws Exception {
+        // 使用自定义类加载器启动应用
+        ApplicationLauncher.launch("com.example.demo.EnhancedApplication", args);
+    }
+}

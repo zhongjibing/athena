@@ -1,0 +1,93 @@
+package com.example.agent.enhancer;
+
+import com.example.agent.annotation.ExceptionHandler;
+import com.example.agent.handler.ExceptionRecorder;
+import com.example.agent.handler.ExceptionRecorderImpl;
+import net.bytebuddy.ByteBuddy;
+import net.bytebuddy.agent.ByteBuddyAgent;
+import net.bytebuddy.agent.builder.AgentBuilder;
+import net.bytebuddy.description.type.TypeDescription;
+import net.bytebuddy.dynamic.DynamicType;
+import net.bytebuddy.implementation.FieldAccessor;
+import net.bytebuddy.implementation.MethodDelegation;
+import net.bytebuddy.matcher.ElementMatchers;
+import net.bytebuddy.utility.JavaModule;
+
+import java.lang.instrument.Instrumentation;
+import java.security.ProtectionDomain;
+
+import static net.bytebuddy.matcher.ElementMatchers.*;
+
+public class ExceptionHandlerAgent {
+    
+    private static volatile boolean installed = false;
+    
+    public static void premain(String args, Instrumentation inst) {
+        install(inst);
+    }
+    
+    public static void agentmain(String args, Instrumentation inst) {
+        install(inst);
+    }
+    
+    public static synchronized void install() {
+        if (!installed) {
+            Instrumentation inst = ByteBuddyAgent.install();
+            install(inst);
+        }
+    }
+    
+    private static void install(Instrumentation inst) {
+        if (installed) {
+            return;
+        }
+        
+        new AgentBuilder.Default()
+            .with(AgentBuilder.TypeStrategy.Default.REDEFINE)
+            .with(AgentBuilder.RedefinitionStrategy.RETRANSFORMATION)
+            .with(AgentBuilder.InitializationStrategy.NoOp.INSTANCE)
+            .with(AgentBuilder.InjectionStrategy.UsingUnsafe.INSTANCE)
+            .ignore(none().and(ElementMatchers.nameStartsWith("net.bytebuddy.")))
+            .ignore(none().and(ElementMatchers.nameStartsWith("java.")))
+            .ignore(none().and(ElementMatchers.nameStartsWith("sun.")))
+            .ignore(none().and(ElementMatchers.nameStartsWith("com.sun.")))
+            .ignore(none().and(ElementMatchers.nameStartsWith("javax.")))
+            .type(hasAnnotation(ExceptionHandler.class).or(declaresMethod(isAnnotatedWith(ExceptionHandler.class))))
+            .transform((builder, type, classLoader, module, protectionDomain) -> 
+                builder
+                    .defineField("_agentExceptionRecorder", ExceptionRecorder.class)
+                    .implement(ExceptionRecorder.class)
+                    .intercept(FieldAccessor.ofBeanProperty())
+                    .method(isMethod()
+                        .and(not(isDeclaredBy(Object.class)))
+                        .and(not(isDeclaredBy(ExceptionRecorder.class)))
+                        .and(not(isStatic())))
+                    .intercept(MethodDelegation.to(ExceptionInterceptor.class))
+            )
+            .with(new AgentBuilder.Listener() {
+                @Override
+                public void onTransformation(TypeDescription typeDescription, ClassLoader classLoader, 
+                                           JavaModule module, boolean loaded, DynamicType dynamicType) {
+                    System.out.println("[Agent] Enhanced class: " + typeDescription.getName());
+                }
+                
+                @Override
+                public void onIgnored(TypeDescription typeDescription, ClassLoader classLoader, 
+                                    JavaModule module, boolean loaded) {}
+                
+                @Override
+                public void onError(String typeName, ClassLoader classLoader, JavaModule module, 
+                                  boolean loaded, Throwable throwable) {
+                    System.err.println("[Agent] Failed to enhance: " + typeName);
+                    throwable.printStackTrace();
+                }
+                
+                @Override
+                public void onComplete(String typeName, ClassLoader classLoader, JavaModule module, boolean loaded) {}
+            })
+            .installOn(inst);
+        
+        installed = true;
+        System.out.println("[Agent] Exception handler agent installed successfully");
+    }
+}

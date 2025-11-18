@@ -1,0 +1,80 @@
+package com.example.service;
+
+import com.example.annotation.ExceptionHandler;
+import com.example.handler.ExceptionRecorder;
+
+@ExceptionHandler("用户服务全局异常处理")
+public class UserService {
+    
+    private String serviceName = "UserService";
+    private int callCount = 0;
+    
+    public void processUser(String username) {
+        callCount++;
+        System.out.println("处理用户[" + callCount + "]: " + username);
+        if ("error".equals(username)) {
+            throw new RuntimeException("处理用户时发生错误: " + username);
+        }
+    }
+    
+    @ExceptionHandler("特定的除法方法")
+    public int divide(int a, int b) {
+        System.out.println("计算: " + a + " / " + b);
+        return a / b; // 可能抛出ArithmeticException
+    }
+    
+    private void privateMethod() {
+        System.out.println("这是私有方法");
+        throw new IllegalStateException("私有方法异常");
+    }
+    
+    public void callPrivateMethod() {
+        privateMethod();
+    }
+    
+    public String getServiceName() {
+        return serviceName;
+    }
+    
+    public int getCallCount() {
+        return callCount;
+    }
+}
+
+// 订单服务 - 只有方法级别注解
+package com.example.service;
+
+import com.example.annotation.ExceptionHandler;
+
+public class OrderService {
+    
+    private String serviceName = "OrderService";
+    
+    @ExceptionHandler
+    public void createOrder(String orderId, double amount) {
+        System.out.println("创建订单: " + orderId + ", 金额: " + amount);
+        if (amount < 0) {
+            throw new IllegalArgumentException("订单金额不能为负数: " + amount);
+        }
+        if (orderId == null || orderId.trim().isEmpty()) {
+            throw new RuntimeException("订单ID不能为空");
+        }
+    }
+    
+    @ExceptionHandler
+    public void cancelOrder(String orderId) {
+        System.out.println("取消订单: " + orderId);
+        if ("cannot-cancel".equals(orderId)) {
+            throw new UnsupportedOperationException("该订单无法取消: " + orderId);
+        }
+    }
+    
+    public void queryOrder(String orderId) {
+        System.out.println("查询订单: " + orderId);
+        // 这个方法没有注解，不会被增强（除非类有注解）
+    }
+    
+    public String getServiceName() {
+        return serviceName;
+    }
+}

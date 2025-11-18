@@ -1,0 +1,35 @@
+package com.example.launcher;
+
+import com.example.loader.EnhancingClassLoader;
+
+import java.lang.reflect.Method;
+
+/**
+ * 应用启动器 - 使用自定义类加载器启动应用
+ */
+public class ApplicationLauncher {
+    
+    public static void launch(String mainClassName, String[] args) throws Exception {
+        // 获取当前类加载器
+        ClassLoader currentLoader = ApplicationLauncher.class.getClassLoader();
+        
+        // 创建增强类加载器
+        EnhancingClassLoader enhancingLoader = new EnhancingClassLoader(currentLoader);
+        
+        // 使用增强类加载器加载主类
+        Class<?> mainClass = enhancingLoader.loadClass(mainClassName);
+        
+        // 获取main方法
+        Method mainMethod = mainClass.getMethod("main", String[].class);
+        
+        // 设置上下文类加载器
+        Thread.currentThread().setContextClassLoader(enhancingLoader);
+        
+        // 调用main方法
+        mainMethod.invoke(null, new Object[]{args});
+    }
+    
+    public static void launch(Class<?> mainClass, String[] args) throws Exception {
+        launch(mainClass.getName(), args);
+    }
+}

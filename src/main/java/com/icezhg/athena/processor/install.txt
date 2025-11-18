@@ -1,0 +1,135 @@
+java -javaagent:exception-handler-agent-1.0.0.jar -jar your-app.jar
+
+// 在你的应用启动类中
+public class MyApplication {
+    public static void main(String[] args) {
+        // 安装Agent
+        com.example.agent.enhancer.ExceptionHandlerAgent.install();
+        
+        // 你的业务代码
+        UserService userService = new UserService();
+        userService.processUser("test");
+    }
+}
+
+<!-- pom.xml -->
+<dependency>
+    <groupId>com.example</groupId>
+    <artifactId>exception-handler-agent</artifactId>
+    <version>1.0.0</version>
+</dependency>
+
+创建src/main/resources/META-INF/spring.factories
+
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+com.example.agent.spring.AgentAutoConfiguration
+
+```
+package com.example.service;
+
+import com.example.agent.annotation.ExceptionHandler;
+import com.example.agent.handler.ExceptionRecorder;
+import org.springframework.stereotype.Service;
+
+@Service
+@ExceptionHandler("订单服务")
+public class OrderService {
+    
+    public void createOrder(String orderId, double amount) {
+        System.out.println("创建订单: " + orderId);
+        if (amount <= 0) {
+            throw new IllegalArgumentException("金额必须大于0");
+        }
+    }
+    
+    public void cancelOrder(String orderId) {
+        System.out.println("取消订单: " + orderId);
+        throw new RuntimeException("取消订单失败");
+    }
+    
+    // Spring Bean中也可以使用异常记录器
+    public void showExceptionStats() {
+        if (this instanceof ExceptionRecorder) {
+            ExceptionRecorder recorder = (ExceptionRecorder) this;
+            System.out.println("异常数量: " + recorder.getExceptionCount());
+            recorder.printRecordedExceptions();
+        }
+    }
+}
+```
+
+```
+package com.example.controller;
+
+import com.example.agent.annotation.ExceptionHandler;
+import com.example.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api")
+@ExceptionHandler("API控制器")
+public class OrderController {
+    
+    @Autowired
+    private OrderService orderService;
+    
+    @PostMapping("/orders")
+    public String createOrder(@RequestParam String orderId, 
+                             @RequestParam double amount) {
+        orderService.createOrder(orderId, amount);
+        return "订单创建成功";
+    }
+    
+    @DeleteMapping("/orders/{orderId}")
+    public String cancelOrder(@PathVariable String orderId) {
+        orderService.cancelOrder(orderId);
+        return "订单取消成功";
+    }
+    
+    @GetMapping("/exceptions")
+    public String getExceptions() {
+        // 查看记录的异常
+        orderService.showExceptionStats();
+        return "查看异常记录";
+    }
+}
+```
+
+
+```
+package com.example.test;
+
+import com.example.agent.annotation.ExceptionHandler;
+import org.junit.Test;
+
+@ExceptionHandler("测试服务")
+public class TestService {
+    
+    @Test
+    public void testWithExceptionHandling() {
+        TestService service = new TestService();
+        
+        try {
+            service.throwException();
+        } catch (RuntimeException e) {
+            System.out.println("异常被捕获并记录: " + e.getMessage());
+        }
+        
+        // 异常已经被自动记录
+    }
+    
+    @ExceptionHandler
+    public void throwException() {
+        throw new RuntimeException("测试异常");
+    }
+}
+```
+
+
+```
+# application-agent.properties
+agent.enabled=true
+agent.log-level=INFO
+agent.enhance-private-methods=true
+```

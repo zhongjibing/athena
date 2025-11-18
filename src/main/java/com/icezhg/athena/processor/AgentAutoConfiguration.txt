@@ -1,0 +1,17 @@
+package com.example.agent.spring;
+
+import com.example.agent.enhancer.ExceptionHandlerAgent;
+import org.springframework.boot.context.event.ApplicationStartedEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AgentAutoConfiguration implements ApplicationListener<ApplicationStartedEvent> {
+    
+    @Override
+    public void onApplicationEvent(ApplicationStartedEvent event) {
+        // 在Spring Boot启动后安装Agent
+        ExceptionHandlerAgent.install();
+        System.out.println("[Spring Agent] Exception handler agent initialized");
+    }
+}
